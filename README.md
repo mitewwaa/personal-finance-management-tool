@@ -1,4 +1,4 @@
-# Personal_Finance_Management_Tool
+# Personal Finance Management Tool
 A web application to manage budgets and transactions. It allows users to create, update, and view budgets and transactions.
 
 ## Features
