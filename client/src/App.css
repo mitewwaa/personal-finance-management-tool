@@ -1,0 +1,10 @@
+:root {
+  text-align: center;
+  font-size: 16px;
+  background-color: var(--primary-bg-color);
+  --primary-bg-color: rgb(242, 145, 161);
+  --secondary-bg-color: rgb(224, 105, 125);
+  --tertiary-bg-color: #fff;
+  --font-main: #ffffff;
+  --btn-color:rgb(170, 43, 64); 
+}

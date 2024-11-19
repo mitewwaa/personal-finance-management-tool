@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import CategoryRoutes from './routes/CategoryRoutes';
 import BudgetRoutes from './routes/BudgetRoutes';
 import UserRoutes from './routes/UserRoutes';
@@ -8,6 +9,8 @@ import TransactionRoutes from './routes/TransactionRoutes';
 dotenv.config();
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 

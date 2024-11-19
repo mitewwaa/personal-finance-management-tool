@@ -1,0 +1,51 @@
+.container{
+    display: flex;
+}
+
+.buttonContainer{
+    color: var(--font-main);
+    margin: 2rem;
+    margin-top: 0.2rem;
+}
+
+h1{
+    font-size: 6rem;
+    font-family: "Damion", cursive;
+    font-weight: 400;
+    font-style: normal;   
+    margin-bottom: 0;
+}
+
+h2{
+    font-size: 3rem;
+    font-family: "Funnel Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 4rem;
+}
+
+a{
+    color: var(--font-main);
+    text-decoration: none;
+}
+
+.button{
+    background-color: var(--btn-color);
+    border-radius: 2rem;
+    border: none;
+    width: 8rem;
+    height: 3rem;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-right: 4rem;
+}
+
+.imageContainer{
+    margin-right: 8rem;
+}
+
+#image{
+    width: 48rem;
+    height: 48rem;
+}
