@@ -78,6 +78,7 @@
     width: 24rem;
     height: 2rem;
     padding: 0 1rem;
+    color: var(--btn-color);
 }
 
 .input:focus {
@@ -90,6 +91,7 @@
 }
 
 .inputName {
+    color: var(--btn-color);
     border-radius: 5rem;
     border: 0.1rem solid var(--primary-bg-color);
     width: 10rem;
@@ -99,6 +101,14 @@
 
 .inputName:focus {
     outline: 0.1rem dotted var(--primary-bg-color);
+}
+
+#dateOfBirth::-webkit-calendar-picker-indicator {
+    background-color: var(--primary-bg-color);
+    height: 1.2rem;
+    width: 1.2rem;
+    border-radius: 25%;
+    cursor: pointer;
 }
 
 .buttonSubmit {
