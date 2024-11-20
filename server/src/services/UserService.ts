@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import UserData from '../interfaces/UserData';
+import jwt from 'jsonwebtoken';
 import bcrypt from "bcryptjs";
 
 class UserService {
@@ -85,19 +86,26 @@ class UserService {
             if (!user) {
                 throw new Error('User not found');
             }
-
+    
             const userPassword = user.dataValues.password;
             const isPasswordValid = bcrypt.compareSync(password, userPassword);
             if (!isPasswordValid) {
                 throw new Error('Invalid email or password');
             }
-
-            return user;
+    
+            // Генериране на JWT токен след успешен вход
+            const token = jwt.sign(
+                { userId: user.id, email: user.email }, 
+                process.env.JWT_SECRET!, 
+                { expiresIn: process.env.JWT_EXPIRES_IN || '1h' } 
+            );
+    
+            return { token }; 
         } catch (error) {
             console.error('Error occurred while trying to login:', error);
             throw new Error('Error occurred during login');
         }
-    }
+    }    
 };
 
 export default UserService;

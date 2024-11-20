@@ -69,11 +69,11 @@ class UserController {
       const { email, password } = req.body;
       console.log(email,password);
       const user = await UserService.loginUser(email, password);
-      if (user) {
-        res.status(200).json(user); // Maybe should implement JWS and this should return token
-      } else {
+      if (user.token) {
+        res.status(200).json({ token: user.token });
+    } else {
         res.status(401).json({ message: "Invalid email or password." });
-      }
+    }
     } catch (error) {
       console.error("Error logging in user:", error);
       res.status(500).json({ message: "Internal server error." });
