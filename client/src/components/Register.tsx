@@ -118,6 +118,7 @@ const RegisterPage: React.FC = () => {
         <img src="./images/rb_22006.png" alt="lady-doing-finances" id="image" />
       </div>
       <div className="form">
+        <Link to="/" className='icon'><FaArrowCircleLeft /></Link>
         <h2 className="title">Register</h2>
         <form onSubmit={handleRegister}>
           <div className="name">
