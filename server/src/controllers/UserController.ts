@@ -5,8 +5,37 @@ import UserData from "../interfaces/UserData";
 class UserController {
   static async createUser(req: Request, res: Response): Promise<void> {
     try {
-      console.log("Request Body:", req.body);
       const userData: UserData = req.body;
+
+      if (!userData.first_name || !userData.last_name || !userData.email || !userData.password) {
+        res.status(400).json({ message: "All fields are required!" });
+        return;
+      }
+
+      const isEmailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(userData.email);
+      if (!isEmailValid) {
+        res.status(400).json({ message: "Invalid email format!" });
+        return;
+      }
+
+      const isNameValid = /^[a-zA-Z-]+$/.test(userData.first_name) && /^[a-zA-Z-]+$/.test(userData.last_name);
+      if (!isNameValid) {
+        res.status(400).json({ message: "Invalid first name or last name! Only letters and hyphens are allowed." });
+        return;
+      }
+
+      const isPasswordStrong = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/.test(userData.password);
+      if (!isPasswordStrong) {
+        res.status(400).json({ message: "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character!" });
+        return;
+      }
+
+      const existingUser = await UserService.getUserByEmail(userData.email);
+      if (existingUser) {
+        res.status(400).json({ message: "User with this email already exists." });
+        return;
+      }
+
       const newUser = await UserService.createUser(userData);
       if (newUser) {
         res.status(201).json(newUser);

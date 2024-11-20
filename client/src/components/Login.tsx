@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaArrowCircleLeft } from "react-icons/fa";
-import { Link, useNavigate } from 'react-router-dom';  // Добавен useNavigate
+import { Link, useNavigate } from 'react-router-dom';  
 import '../styles/Form.css';
 
 const LoginPage: React.FC = () => {
@@ -8,7 +8,7 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate(); // Добавен useNavigate hook
+  const navigate = useNavigate(); 
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,8 +30,7 @@ const LoginPage: React.FC = () => {
       console.log("Successful login:", data);
       setLoading(false);
       
-      // Пренасочване към dashboard след успешно логване
-      navigate('/dashboard');  // Пренасочване към новата страница
+      navigate('/dashboard');  
 
     } catch (error: any) {
       setLoading(false);
