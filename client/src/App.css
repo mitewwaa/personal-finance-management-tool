@@ -6,5 +6,17 @@
   --secondary-bg-color: rgb(224, 105, 125);
   --tertiary-bg-color: #fff;
   --font-main: #ffffff;
-  --btn-color:rgb(170, 43, 64); 
+  --btn-color: rgb(170, 43, 64);
+}
+
+@media screen and (max-width: 768px) {
+  :root {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  :root {
+    font-size: 12px;
+  }
 }

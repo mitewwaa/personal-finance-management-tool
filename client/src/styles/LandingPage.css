@@ -1,14 +1,17 @@
-.container{
+.pageContainer{
     display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 6rem;
 }
 
-.buttonContainer{
+.textContainer{
     color: var(--font-main);
     margin: 2rem;
     margin-top: 0.2rem;
 }
 
-h1{
+.textContainer h1{
     font-size: 6rem;
     font-family: "Damion", cursive;
     font-weight: 400;
@@ -16,7 +19,7 @@ h1{
     margin-bottom: 0;
 }
 
-h2{
+.textContainer h2{
     font-size: 3rem;
     font-family: "Funnel Sans", sans-serif;
     font-optical-sizing: auto;
@@ -25,9 +28,17 @@ h2{
     margin-bottom: 4rem;
 }
 
-a{
+.button a{
     color: var(--font-main);
     text-decoration: none;
+}
+
+.buttonContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin: 0 6rem;
 }
 
 .button{
@@ -38,14 +49,117 @@ a{
     height: 3rem;
     font-weight: bold;
     font-size: 1rem;
-    margin-right: 4rem;
 }
 
 .imageContainer{
     margin-right: 8rem;
 }
 
-#image{
-    width: 48rem;
-    height: 48rem;
+.imageContainer #image{
+    width: 36rem;
+    height: 36rem;
+}
+
+@media (max-width: 1024px) {
+    .pageContainer{
+        margin: 3.6rem;
+    }
+
+    .textContainer{
+        margin-top: 0.2rem;
+    }
+    
+    .textContainer h1{
+        font-size: 5.4rem;   
+    }
+    
+    .textContainer h2{
+        font-size: 2.4rem;
+        margin-bottom: 3.6rem;
+    }
+    
+    .buttonContainer{
+        margin: 0 0.6rem;
+        gap: 1.6rem;
+    }
+    
+    .button{
+        height: 3rem;
+        font-size: 1rem;
+    }
+    
+    .imageContainer{
+        margin-right: 2.8rem;
+    }
+    
+    .imageContainer #image{
+        width: 28rem;
+        height: 28rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .pageContainer {
+        flex-direction: column; 
+        margin: 2rem;
+    }
+
+    .textContainer {
+        text-align: center; 
+        margin: 1rem;
+    }
+
+    .textContainer h1{
+        font-size: 4rem;  
+        margin-bottom: 0;
+    }
+    
+    .textContainer h2{
+        font-size: 2rem;
+        margin-bottom: 2.4rem;
+    }
+
+    .buttonContainer {
+        margin: 1rem 0; 
+        gap: 1.2rem; 
+    }
+
+    .imageContainer {
+        margin: 1rem 0;
+        text-align: center;
+    }
+
+    .imageContainer #image {
+        width: 24rem;
+        height: 24rem;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .textContainer h1{
+        font-size: 6rem;  
+        margin: 0;
+    }
+    
+    .textContainer h2{
+        font-size: 2rem;
+        margin-bottom: 2.4rem;
+    }
+
+    .buttonContainer {
+        margin: 1rem 0; 
+        gap: 1.2rem; 
+    }
+
+    .button {
+        width: 100%; 
+        height: 2.5rem;
+        font-size: 1rem;
+    }
+
+    .imageContainer #image {
+        width: 25rem;
+        height: 25rem;
+    }
 }
