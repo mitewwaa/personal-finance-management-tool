@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import UserData from '../shared/interfaces/UserData';
 
 export const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
     const authHeader = req.headers['authorization'];
@@ -10,12 +11,13 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
         return;
     }
 
-    jwt.verify(token, process.env.JWT_SECRET!, (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET!, (err, decoded: any) => {
         if (err) {
             return res.status(403).json({ message: "Invalid token." });
         }
-
-        req.body.user = user; 
+        console.log(decoded.userId);
+        req.body.userId = decoded.userId; 
+        console.log(req.body.userId);
         next();
     });
 };

@@ -1,15 +1,14 @@
 import { Op } from 'sequelize';
 import Transaction from '../models/Transaction';
 import User from '../models/User';
-import TransactionData from '../interfaces/TransactionData';
+import TransactionData from '../shared/interfaces/TransactionData';
 import Category from '../models/Category';
 
 class TransactionService {
 
-    static async createTransaction(transactionData: TransactionData): Promise<Transaction | null> {
+    static async createTransaction(transactionData: Partial<TransactionData>, user_id: string): Promise<Transaction | null> {
         try {
-            const { name, amount, type, user_id, category_id, location, notes, date } = transactionData;
-
+            const { amount, currency, type, category_id, location, notes, date } = transactionData;
             const user = await User.findByPk(user_id);
             if (!user) {
                 console.error('User not found');
@@ -22,14 +21,14 @@ class TransactionService {
                 return null;
             }
 
-            if (amount < 0) {
+            if (amount && amount < 0) {
                 console.error('Amount should be a valid positive number')
                 return null;
             }
 
             const newTransaction = await Transaction.create({
-                name,
                 amount,
+                currency,
                 type,
                 user_id: user_id,
                 category_id: category_id,

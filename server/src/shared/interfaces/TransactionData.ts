@@ -1,12 +1,13 @@
 interface TransactionData {
-    name: string;
+    id: string;
     amount: number;
+    currency: string;
     type: 'income' | 'expense'; 
     user_id: string;  
     category_id: string;
     location?: string;
     notes?: string;
-    date: Date;
+    timestamp: Date;
 }
 
 export default TransactionData;

@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';  
-import '../styles/Form.css';
+import '../../styles/Form.css';
 
-const LoginPage: React.FC = () => {
+interface LoginPageProps {
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>; // Accept the function to update login state
+}
+
+const LoginPage: React.FC<LoginPageProps> = ({setIsLoggedIn}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,8 +31,15 @@ const LoginPage: React.FC = () => {
       }
 
       const data = await response.json();
+      console.log(data.token);
+      if (data.token) {
+        localStorage.setItem('jwt_token', data.token); 
+    }
+
       console.log("Successful login:", data);
       setLoading(false);
+
+      setIsLoggedIn(true);
       
       navigate('/dashboard');  
 
@@ -75,7 +86,7 @@ const LoginPage: React.FC = () => {
           </button>
         </form>
 
-        {error && <div className='error-message'>{error}</div>}
+        {error && <div className='error-message' style={{color: "red"}}>{error}</div>}
       </div>
     </div>
   );

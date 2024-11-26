@@ -9,10 +9,10 @@ html{
   text-align: center;
   font-size: 16px;
   background-color: var(--primary-bg-color);
-  --primary-bg-color: rgb(242, 145, 161);
-  --secondary-bg-color: rgb(224, 105, 125);
-  --tertiary-bg-color: #fff;
-  --font-main: #ffffff;
+  --primary-bg-color: rgb(248, 240, 241);
+  /* --secondary-bg-color: rgb(224, 105, 125); */
+  --tertiary-bg-color: #fff; 
+  --font-main: #d39b9b;
   --btn-color: rgb(170, 43, 64);
 }
 

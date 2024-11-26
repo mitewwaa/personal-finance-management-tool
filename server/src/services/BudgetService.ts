@@ -1,7 +1,8 @@
+import BudgetData from '../shared/interfaces/BudgetData';
 import Budget from '../models/Budget';
 import Category from '../models/Category';
 import User from '../models/User';
-import BudgetData from '../interfaces/BudgetData';
+
 
 class BudgetService {
 

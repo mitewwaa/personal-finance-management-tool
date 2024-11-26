@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import BudgetService from '../services/BudgetService';
-import BudgetData from '../interfaces/BudgetData';
+import BudgetData from '../shared/interfaces/BudgetData'
 
 class BudgetController {
 

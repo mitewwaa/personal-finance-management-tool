@@ -1,0 +1,89 @@
+#navContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color: #eeecec;
+    padding: 10px;
+    padding-bottom: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 25x;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    gap: 20px;
+    width: 25px; /* Match this with margin-left in .page-container */
+   
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Ensure navbar is above other elements */
+}
+
+#navList {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 20px;
+    flex-grow: 0.95;
+}
+
+.navItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+}
+
+.navItem:hover::after {
+    content: attr(data-tooltip); /* Use the data-tooltip attribute for the tooltip text */
+    position: absolute;
+    top: 50%;
+    left: 110%; /* Position the tooltip to the right of the icon */
+    transform: translateY(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap; /* Prevent text wrapping */
+    z-index: 10;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.navItem::after {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.icon {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.pageContent {
+    margin-left: 220px;
+    padding: 20px;
+}
+
+#bottomNavItems {
+    margin-top: auto; 
+    display: flex;
+    flex-direction: column; 
+    gap: 20px; 
+    align-items: flex-start; 
+}
+
+#bottom .navItem {
+    font-size: 14px; 
+    display: flex;
+    align-items: center; 
+    color: #333;
+}

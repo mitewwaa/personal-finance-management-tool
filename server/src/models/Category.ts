@@ -4,8 +4,9 @@ import { sequelize } from '../database';
 
 class Category extends Model {
     public id!: string;
-    public user_id!: string;
-    public name!: string | null; 
+    public user_id!: string | null;
+    public name!: string; 
+    public type!: 'income' |' expense' | 'other';
 }
 
 Category.init(
@@ -26,6 +27,10 @@ Category.init(
         },
         name: {
             type: DataTypes.STRING,
+            allowNull: false,
+        }, 
+        type: {
+            type: DataTypes.ENUM('income', 'expense', 'other'),
             allowNull: false,
         }, 
     },

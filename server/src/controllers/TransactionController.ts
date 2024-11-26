@@ -1,23 +1,26 @@
 import { Request, Response } from 'express';
 import TransactionService from '../services/TransactionService';
-import TransactionData from '../interfaces/TransactionData';
+import TransactionData from '../shared/interfaces/TransactionData';
+import User from '../models/User';
 
 class TransactionController {
 
     static async createTransaction(req: Request, res: Response): Promise<void> {
         try {
-            const transactionData: TransactionData = req.body;
-            console.log(transactionData)
-            const newTransaction = await TransactionService.createTransaction(transactionData);
-            
-            if (newTransaction) {
-                res.status(201).json(newTransaction);
-            } else {
-                res.status(400).json({ message: 'Failed to create transaction.' });
+            const { amount, currency, type, category_id, location, notes, date } = req.body;
+            const userId = req.body.user_id; 
+    
+            if (!userId) {
+                res.status(400).json({ message: "User ID not found." });
+                return;
             }
+    
+            const transaction = await TransactionService.createTransaction({ amount, currency, type, category_id, location, notes, date }, userId);
+    
+            res.status(201).json({ message: "Transaction created successfully", transaction });
         } catch (error) {
-            console.error('Error creating transaction:', error);
-            res.status(500).json({ message: 'Internal server error.' });
+            console.error("Error occurred while creating transaction:", error);
+            res.status(500).json({ message: "Error creating transaction" });
         }
     }
 

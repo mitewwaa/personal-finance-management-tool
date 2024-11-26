@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/Form.css";
+import "../../styles/Form.css";
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 

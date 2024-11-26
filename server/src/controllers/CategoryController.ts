@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import CategoryService from "../services/CategoryService";
-import CategoryData from "../interfaces/CategoryData";
+import CategoryData from "../shared/interfaces/CategoryData";
 
 class CategoryController {
   static async createCategory(req: Request, res: Response): Promise<void> {

@@ -1,16 +1,17 @@
 import Category from "../models/Category";
 import User from "../models/User";
-import CategoryData from "../interfaces/CategoryData";
+import CategoryData from "../shared/interfaces/CategoryData";
 
 class CategoryService {
   static async createCategory(
     categoryData: CategoryData
   ): Promise<Category | null> {
     try {
-      const { name } = categoryData;
+      const { name, type } = categoryData;
 
       const newCategory = await Category.create({
         name,
+        type,
       });
 
       return newCategory;
@@ -87,6 +88,7 @@ class CategoryService {
       if (category) {
         return await category.update({
           name: newData.name,
+          type: newData.type,
         });
       }
       return null;
