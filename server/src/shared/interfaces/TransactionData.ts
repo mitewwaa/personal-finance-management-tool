@@ -7,7 +7,7 @@ interface TransactionData {
     category_id: string;
     location?: string;
     notes?: string;
-    timestamp: Date;
+    date: Date;
 }
 
 export default TransactionData;

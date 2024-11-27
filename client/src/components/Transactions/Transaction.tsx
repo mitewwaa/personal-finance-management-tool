@@ -8,13 +8,17 @@ import axios from "axios";
 import Dropdown from "../Utils/Dropdown";
 import { jwtDecode } from "jwt-decode";
 import TransactionData from "../../../../server/src/shared/interfaces/TransactionData";
+import CategoryData from "../../../../server/src/shared/interfaces/CategoryData";
 
 
 interface TransactionProps {
+    categories: CategoryData[];
     onAddTransaction: (newTransaction: TransactionData) => void;
+    transactionToEdit: TransactionData | null;
+    onUpdateTransaction: (toUpdateTransaction: TransactionData) => void;
 }
 
-function Transaction({ onAddTransaction }: TransactionProps) {
+function Transaction({ onAddTransaction, categories, transactionToEdit, onUpdateTransaction }: TransactionProps) {
     const [type, setType] = useState<string>("expense"); // Default to expense
     const [category, setCategory] = useState<string>("");
     const [amount, setAmount] = useState<number>(0);
@@ -23,20 +27,30 @@ function Transaction({ onAddTransaction }: TransactionProps) {
     const [note, setNote] = useState<string>("");
     const [timestamp, setTimeStamp] = useState<Date>(new Date());
     const [notification, setNotification] = useState<string>("");
-    const [categories, setCategories] = useState<{ id: string; name: string; type: string }[]>([]);
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await axios.get("http://localhost:3000/categories");
-                setCategories(response.data);
-            } catch (error) {
-                console.error("Error fetching categories:", error);
-            }
-        };
-        fetchCategories();
-    }, []);
+        if (transactionToEdit !== null) {
+            setType(transactionToEdit.type);
+            setCategory(categories.find((categ) => categ.id === transactionToEdit.category_id)?.name || "");
+            setAmount(transactionToEdit.amount);
+            setCurrency(transactionToEdit.currency);
+            setLocation(transactionToEdit.location || "");
+            setNote(transactionToEdit.notes || "");
+            setTimeStamp(new Date(transactionToEdit.date));
+        } else {
+            resetForm();
+        }
+    }, [transactionToEdit, categories]);
 
+    const resetForm = () => {
+        setType("expense");
+        setCategory("");
+        setAmount(0);
+        setCurrency("BGN");
+        setLocation("");
+        setNote("");
+        setTimeStamp(new Date());
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -55,11 +69,13 @@ function Transaction({ onAddTransaction }: TransactionProps) {
             return;
         }
 
-        if(!amount) {
+        if (!amount) {
             setNotification('Please enter a valid amount.');
             return;
         }
-        
+
+        const formattedTimestamp = timestamp.toISOString();
+
         const decodedToken: any = jwtDecode(token);
         const userId = decodedToken.userId;
 
@@ -70,30 +86,35 @@ function Transaction({ onAddTransaction }: TransactionProps) {
             amount,
             currency,
             location,
-            note,
-            timestamp,
+            notes: note,
+            date: formattedTimestamp,
         };
-
-        console.log(newTransaction);
+        
+        
         try {
-            const response = await axios.post('http://localhost:3000/transactions', newTransaction, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            if (transactionToEdit === null) {
+                const response = await axios.post('http://localhost:3000/transactions', newTransaction, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                console.log("Adding new transaction:", newTransaction);
+                setNotification("Successfully added transaction!");
+                onAddTransaction(response.data);
+            } else {
+                const response = await axios.put(`http://localhost:3000/transactions/${transactionToEdit.id}`, newTransaction, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                setNotification("Successfully updated transaction!");
+                onUpdateTransaction(response.data);
+            }
 
-            setNotification("Successfully added transaction!");
-
-            setType("expense");
-            setCategory("");
-            setAmount(0);
-            setLocation("");
-            setNote("");
-            setTimeStamp(new Date());
-            setNotification("");
+            resetForm();
 
         } catch (error) {
-            setNotification("Can't create transaction. Please try again!");
+            setNotification("Can't create or modify transaction. Please try again!");
             console.error("Error creating transaction:", error);
         }
     }
@@ -220,7 +241,7 @@ function Transaction({ onAddTransaction }: TransactionProps) {
                 </div>
 
             </div>
-            <button id="add-transaction-btn" type="submit" onClick={handleSubmit}>Add Transaction</button>
+            <button id="add-transaction-btn" type="submit" onClick={handleSubmit}>{transactionToEdit === null ? `Add Transaction` : `Save`}</button>
             {notification && <div className="notification">{notification}</div>}
         </form>
     );

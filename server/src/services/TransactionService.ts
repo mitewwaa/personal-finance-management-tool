@@ -110,7 +110,6 @@ class TransactionService {
         }
     }
 
-    // Get all transactions (for admins or reports)
     static async getAllTransactions(): Promise<Transaction[] | null> {
         try {
             return await Transaction.findAll({

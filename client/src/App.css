@@ -9,9 +9,9 @@ html{
   text-align: center;
   font-size: 16px;
   background-color: var(--primary-bg-color);
-  --primary-bg-color: rgb(248, 240, 241);
+  --primary-bg-color: #ffffff; ;
   /* --secondary-bg-color: rgb(224, 105, 125); */
-  --tertiary-bg-color: #fff; 
+  --tertiary-bg-color: #e4d2d2; 
   --font-main: #d39b9b;
   --btn-color: rgb(170, 43, 64);
 }
