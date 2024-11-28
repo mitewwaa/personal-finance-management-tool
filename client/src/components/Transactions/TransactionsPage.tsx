@@ -206,11 +206,12 @@ function TransactionPage() {
                                     hour: 'numeric',
                                     minute: 'numeric',
                                 })}</td>
-                                <div className="update-icons">
-                                    <td><CiEdit onClick={() => handleEditTransaction(transaction)} />
-                                        <MdDelete onClick={() => handleDeleteTransaction(transaction.id)} />
+                                    <td>
+                                        <div className="update-icons">
+                                            <CiEdit onClick={() => handleEditTransaction(transaction)} />
+                                            <MdDelete onClick={() => handleDeleteTransaction(transaction.id)} />
+                                        </div>
                                     </td>
-                                </div>
                             </tr>
                         ))}
                     </tbody>
