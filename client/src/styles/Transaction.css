@@ -205,6 +205,54 @@ label {
     margin-top: 10px;
 }
 
+.filter-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f5f5f5;
+  padding: 10px 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+#filter-icon {
+  color: var(--btn-color); 
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+select {
+  width: 80%;
+  padding: 8px 12px;
+  border: 1px solid var(--btn-color);
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+}
+
+.date-picker-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  width: 70%;
+  max-width: 300px; 
+}
+
+#datepicker {
+  width: 80%;
+  padding: 8px 12px;
+  border: 1px solid var(--btn-color);
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -284,12 +332,17 @@ table {
     background: #f1f1f1;
     transition: background 0.3s;
   }
-  
-  .update-icons svg {
+
+  .update-icons {
     display: flex;
     flex-direction: row;
+    gap: 20px;
+  }
+  
+  .update-icons svg {
     color: var(--btn-color);
-    font-size: 1.5rem; 
+    font-size: 1.5rem;
     cursor: pointer;
+    display: inline-flex; 
   }
   

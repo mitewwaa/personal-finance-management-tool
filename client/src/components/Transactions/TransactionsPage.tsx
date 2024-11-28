@@ -4,16 +4,21 @@ import '../../styles/Transaction.css'
 import { IoIosAddCircle } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
+import { FaFilter } from "react-icons/fa";
 import TransactionData from "../../../../server/src/shared/interfaces/TransactionData";
 import CategoryData from "../../../../server/src/shared/interfaces/CategoryData";
 import Category from "../Categories/Category";
 import axios from "axios";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 
 function TransactionPage() {
     const [transactions, setTransactions] = useState<TransactionData[]>([]);
     const [categories, setCategories] = useState<CategoryData[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [transactionToEdit, setTransactionToEdit] = useState<TransactionData | null>(null);
+    const [filterType, setFilterType] = useState<string>('daily');
+    const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
     useEffect(() => {
         fetchTransactions();
@@ -76,6 +81,49 @@ function TransactionPage() {
         setCategories(categories);
     }, []);;
 
+    const filterTransactions = (transactions: TransactionData[]) => {
+        const today = new Date();
+        if (!selectedDate || selectedDate === today) return transactions;
+
+        const userSelectedDate = new Date(selectedDate);
+
+        return transactions.filter((transaction) => {
+            const transactionDate = new Date(transaction.date);
+
+            switch (filterType) {
+                case 'daily':
+                    return transactionDate.toDateString() === userSelectedDate.toDateString();
+
+                case 'weekly':
+                    const startOfSelectedWeek = new Date(userSelectedDate);
+                    // Get the start of the week (Sunday)
+                    startOfSelectedWeek.setDate(userSelectedDate.getDate() - userSelectedDate.getDay());
+                    startOfSelectedWeek.setHours(0, 0, 0, 0); // Reset time to 00:00:00
+
+                    const endOfSelectedWeek = new Date(startOfSelectedWeek);
+                    // Set end of the week (Saturday)
+                    endOfSelectedWeek.setDate(startOfSelectedWeek.getDate() + 6);
+                    endOfSelectedWeek.setHours(23, 59, 59, 999); // Set time to 23:59:59
+
+                    // Check if the transaction date falls within the week range
+                    return transactionDate >= startOfSelectedWeek && transactionDate <= endOfSelectedWeek;
+
+                case 'monthly':
+                    return (
+                        transactionDate.getMonth() === userSelectedDate.getMonth() &&
+                        transactionDate.getFullYear() === userSelectedDate.getFullYear()
+                    );
+
+                case 'yearly':
+                    return transactionDate.getFullYear() === userSelectedDate.getFullYear();
+
+                default:
+                    return transactionDate.toDateString() === userSelectedDate.toDateString();
+            }
+        });
+    };
+
+
     const handleOpenModal = () => {
         setTransactionToEdit(null);
         setIsModalOpen(true);
@@ -86,6 +134,8 @@ function TransactionPage() {
         setIsModalOpen(false);
     };
 
+    const displayedTransactions = filterTransactions(transactions);
+
     return (
         <>
             <div className={`page-container ${isModalOpen ? "blurred" : ""}`}>
@@ -94,6 +144,36 @@ function TransactionPage() {
                     <button id="add-transaction-icon" title="Add Transaction" onClick={handleOpenModal}>
                         <IoIosAddCircle />
                     </button>
+                </div>
+
+                <div className="filter-container">
+                    <FaFilter id="filter-icon" />
+                    <div className="date-picker-container">
+                        <select
+                            id="filter"
+                            value={filterType}
+                            onChange={(e) => setFilterType(e.target.value)}
+                        >
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                        <DatePicker id="datepicker"
+                            selected={selectedDate}
+                            onChange={(date) => setSelectedDate(date)}
+                            dateFormat={
+                                filterType === "daily" ? "dd/MM/yyyy" :
+                                    filterType === "monthly" ? "MM/yyyy" :
+                                        filterType === "yearly" ? "yyyy" :
+                                            "dd/MM/yyyy"
+                            }
+
+                            showMonthYearPicker={filterType === "monthly"}
+                            showYearPicker={filterType === "yearly"}
+
+                        />
+                    </div>
                 </div>
 
                 <table>
@@ -109,9 +189,9 @@ function TransactionPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {transactions.map((transaction) => (
+                        {displayedTransactions.map((transaction) => (
                             <tr key={transaction.id}>
-                                <td>{transaction.type}</td>
+                                <td>{transaction.type.toUpperCase()}</td>
                                 <td>
                                     {categories.map((cat) =>
                                         cat.id === transaction.category_id ? cat.name : null)}
