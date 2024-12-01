@@ -12,10 +12,14 @@ import Dashboard from './components/Home/Dashboard';
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
+  const handleLogout = () => {
+    setIsLoggedIn(false); // Изход на потребителя
+  };
+
   return (
       <Router>
       <div>
-        {isLoggedIn && <NavBar />} {/* Render NavBar only if the user is logged in */}
+        {isLoggedIn && <NavBar onLogout={handleLogout}/> } {/* Render NavBar only if the user is logged in */}
         
         <Routes>
           <Route path="/" element={<LandingPage />} />

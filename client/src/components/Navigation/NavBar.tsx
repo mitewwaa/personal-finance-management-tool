@@ -3,7 +3,11 @@ import { BiLogOutCircle } from 'react-icons/bi';
 import { BrowserRouter as Router, Link, useNavigate } from 'react-router-dom';
 import '../../styles/NavBar.css';
 
-const NavBar: React.FC = () => {
+interface NavBarProps {
+    onLogout: () => void; // Пропс за функция за изход
+  }
+  
+const NavBar: React.FC<NavBarProps> = ({ onLogout }) => {
 
     return (
         <nav id='navContainer'>
@@ -29,8 +33,8 @@ const NavBar: React.FC = () => {
                             <FaUserCircle className='icon' />
                         </Link>
                     </li>
-                    <li className='navItem' title='Log Out'>
-                        <Link to="/login">
+                    <li className='navItem' title='Log Out' onClick={onLogout}>
+                        <Link to="/">
                             <BiLogOutCircle className='icon' />
                         </Link>
                     </li>

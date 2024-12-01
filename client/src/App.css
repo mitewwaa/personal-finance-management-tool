@@ -9,10 +9,11 @@ html{
   text-align: center;
   font-size: 16px;
   background-color: var(--primary-bg-color);
-  --primary-bg-color: #ffffff; ;
-  /* --secondary-bg-color: rgb(224, 105, 125); */
-  --tertiary-bg-color: #e4d2d2; 
-  --font-main: #d39b9b;
+  --primary-bg-color: #FFDFDF;
+  --secondary-bg-color: #FFB3C1;
+  --tertiary-bg-color: #FFF6F6; 
+  --font-main: #D14D72;
+  --font-secondary: #fff; 
   --btn-color: rgb(170, 43, 64);
 }
 

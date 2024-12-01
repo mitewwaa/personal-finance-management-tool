@@ -31,7 +31,7 @@
 }
 
 .button a{
-    color: var(--font-main);
+    color: var(--font-secondary);
     text-decoration: none;
 }
 
