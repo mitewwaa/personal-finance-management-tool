@@ -5,10 +5,11 @@ import '../../styles/Form.css';
 import axios from 'axios';
 
 interface LoginPageProps {
-  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>; // Accept the function to update login state
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  setUserId: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const LoginPage: React.FC<LoginPageProps> = ({setIsLoggedIn}) => {
+const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,15 +20,14 @@ const LoginPage: React.FC<LoginPageProps> = ({setIsLoggedIn}) => {
     e.preventDefault();
     const payload = { email, password };
     setLoading(true);
-
+    setError('');
     try {
       const response = await axios.post("http://localhost:3000/users/login", payload);
       
-      console.log(response.data.token);
       if (response.data.token) {
-        localStorage.setItem('jwt_token', response.data.token);
-        console.log("Successful login:", response.data);
-        setIsLoggedIn(true);
+        localStorage.setItem('jwt_token', response.data.token); // Записване на токен в localStorage
+        setUserId(response.data.userId);
+        setIsLoggedIn(true); // Обновяване на състоянието веднага след успешен вход
         navigate('/dashboard');
       }
     } catch (error: any) {
