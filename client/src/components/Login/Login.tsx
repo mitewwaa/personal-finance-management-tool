@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';  
 import '../../styles/Form.css';
+import axios from 'axios';
 
 interface LoginPageProps {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>; // Accept the function to update login state
@@ -20,32 +21,19 @@ const LoginPage: React.FC<LoginPageProps> = ({setIsLoggedIn}) => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        throw new Error("Invalid email or password");
-      }
-
-      const data = await response.json();
-      console.log(data.token);
-      if (data.token) {
-        localStorage.setItem('jwt_token', data.token); 
-    }
-
-      console.log("Successful login:", data);
-      setLoading(false);
-
-      setIsLoggedIn(true);
+      const response = await axios.post("http://localhost:3000/users/login", payload);
       
-      navigate('/dashboard');  
-
+      console.log(response.data.token);
+      if (response.data.token) {
+        localStorage.setItem('jwt_token', response.data.token);
+        console.log("Successful login:", response.data);
+        setIsLoggedIn(true);
+        navigate('/dashboard');
+      }
     } catch (error: any) {
+      setError(error.response?.data?.message || "Login failed, please try again");
+    } finally {
       setLoading(false);
-      setError(error.message || "Login failed, please try again");
     }
   };
 
