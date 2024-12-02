@@ -1,0 +1,53 @@
+.budgetsContainer{
+    margin: 0 2rem;
+    width: 96%;
+    height: 96%;
+}
+
+.mainTitle{
+    color: var(--font-main);
+}
+
+.budgetList{
+    list-style: none;
+    width: 96%;
+    height: 96;
+}
+
+.budgetItem{
+    background-color: var(--tertiary-bg-color);
+    border-radius: 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 2rem;
+    margin-bottom: 1.2rem;
+    width: 96%;
+}
+.budgetName{
+    color: var(--btn-color);
+    align-self: center;
+    margin: 0;
+}
+
+.budgetType{
+    color: var(--font-main);
+}
+
+.amountContainer, .dateContainer{
+    width: 96%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.amount:last-child{
+    align-self: flex-end;
+}
+
+.date:last-child{
+    align-self: flex-end;
+}
+
+.budgetFilter{
+    margin: 2rem;
+}

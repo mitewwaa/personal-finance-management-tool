@@ -14,13 +14,13 @@ import './App.css';
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
     const token = localStorage.getItem('jwt_token');
-    return !!token; // Проверка дали има токен в localStorage
+    return !!token; 
   });
   const [userId, setUserId] = useState<string>('');
 
   const handleLogout = () => {
     localStorage.removeItem('jwt_token');
-    setIsLoggedIn(false); // Обновяваме състоянието на изход
+    setIsLoggedIn(false); 
     setUserId('');
   };
 
