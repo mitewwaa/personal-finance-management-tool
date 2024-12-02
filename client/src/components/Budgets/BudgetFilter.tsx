@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FaFilter } from 'react-icons/fa';
 
 interface BudgetFilterProps {
   onChange: (criteria: { type: string; amount: number; amountLeft: number; startDate: string; endDate: string }) => void;
@@ -23,8 +24,9 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange }) => {
 
   return (
     <div className="budgetFilter">
-      <label>
-        Type:
+      <FaFilter className="filterIcon" />
+      <label className='filterLabel'>
+        Type
         <select value={type} onChange={(e) => setType(e.target.value)}>
           <option value="">All</option>
           <option value="goal">Goal</option>
@@ -32,8 +34,8 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange }) => {
         </select>
       </label>
 
-      <label>
-        Amount:
+      <label className='filterLabel'>
+        Amount
         <input
           type="number"
           value={amount}
@@ -41,8 +43,8 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange }) => {
         />
       </label>
 
-      <label>
-        Amount Left:
+      <label className='filterLabel'>
+        Amount Left
         <input
           type="number"
           value={amountLeft}
@@ -50,8 +52,8 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange }) => {
         />
       </label>
 
-      <label>
-        Start Date:
+      <label className='filterLabel'>
+        Start Date
         <input
           type="date"
           value={startDate}
@@ -59,8 +61,8 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange }) => {
         />
       </label>
 
-      <label>
-        End Date:
+      <label className='filterLabel'>
+        End Date
         <input
           type="date"
           value={endDate}

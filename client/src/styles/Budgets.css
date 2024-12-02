@@ -49,5 +49,20 @@
 }
 
 .budgetFilter{
-    margin: 2rem;
+    background-color: var(--tertiary-bg-color) ;
+    border-radius: 5rem;
+    width: 92%;
+    height: 3rem;
+    margin: 2rem 4rem;
+    display: flex;
+}
+
+.filterIcon{
+    margin-left: 1.2rem;
+    color: var(--btn-color);
+    align-self: center;
+}
+
+.filterLabel{
+    margin-left: 2rem;
 }
