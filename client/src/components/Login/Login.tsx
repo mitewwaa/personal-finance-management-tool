@@ -5,9 +5,10 @@ import '../../styles/Form.css';
 
 interface LoginPageProps {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>; // Accept the function to update login state
+  setName: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const LoginPage: React.FC<LoginPageProps> = ({setIsLoggedIn}) => {
+const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setName }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -31,9 +32,9 @@ const LoginPage: React.FC<LoginPageProps> = ({setIsLoggedIn}) => {
       }
 
       const data = await response.json();
-      console.log(data.token);
       if (data.token) {
         localStorage.setItem('jwt_token', data.token); 
+        setName(data.name);
     }
 
       console.log("Successful login:", data);

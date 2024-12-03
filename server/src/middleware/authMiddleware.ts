@@ -1,24 +1,27 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import UserData from '../shared/interfaces/UserData';
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import UserData from "../shared/interfaces/UserData";
 
-export const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+export const authenticateToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
 
-    if (!token) {
-        res.status(401).json({ message: "Access denied. No token provided." });
-        return;
+  if (!token) {
+    res.status(401).json({ message: "Access denied. No token provided." });
+    return;
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET!, (err, decoded: any) => {
+    if (err) {
+      return res.status(403).json({ message: "Invalid token." });
     }
-
-    jwt.verify(token, process.env.JWT_SECRET!, (err, decoded: any) => {
-        if (err) {
-            return res.status(403).json({ message: "Invalid token." });
-        }
-        console.log(decoded.userId);
-        req.body.userId = decoded.userId; 
-        console.log(req.body.userId);
-        next();
-    });
+    req.body.userId = decoded.userId;
+    req.body.email = decoded.email;
+    req.body.name = decoded.name;
+    next();
+  });
 };
-

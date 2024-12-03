@@ -1,9 +1,18 @@
 import React from "react";
+import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import TransactionData from "../../../../server/src/shared/interfaces/TransactionData";
+import Header from "../Utils/Header";
 
-const Dashboard: React.FC = () => {
+interface DashboardProps {
+  name: string;
+  //transactions: TransactionData[] | null;
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ name } : DashboardProps) => {
   return (
     <div className="page">
-      <h1>Dashboard</h1>
+      <Header name={name} />
+      
     </div>
   );
 };

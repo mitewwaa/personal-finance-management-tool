@@ -11,17 +11,18 @@ import Dashboard from './components/Home/Dashboard';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [name, setName] = useState<string>("");
 
   return (
       <Router>
       <div>
-        {isLoggedIn && <NavBar />} {/* Render NavBar only if the user is logged in */}
+        {isLoggedIn && <NavBar />} 
         
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} setName={setName} />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/dashboard" element={isLoggedIn && <Dashboard />} />
+          <Route path="/dashboard" element={isLoggedIn && <Dashboard name={name} />} />
           <Route path="/transactions" element={isLoggedIn && <TransactionsPage />} />
         </Routes>
       </div>

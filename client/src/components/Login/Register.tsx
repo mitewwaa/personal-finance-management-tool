@@ -20,7 +20,7 @@ const RegisterPage: React.FC = () => {
   };
 
   const isNameValid = (name: string): boolean => {
-    return /^[a-zA-Z-]+$/.test(name); // само латински букви и тирета
+    return /^[a-zA-Z-]+$/.test(name); 
   };
 
   const isPasswordStrong = (password: string): boolean => {
@@ -32,7 +32,7 @@ const RegisterPage: React.FC = () => {
     const birthDate = new Date(dateOfBirth);
     const today = new Date();
     const age = today.getFullYear() - birthDate.getFullYear();
-    return age >= 18;  // Потребителят трябва да е на 18 или повече години
+    return age >= 18;  
   };
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -77,7 +77,7 @@ const RegisterPage: React.FC = () => {
       password: password,
       date_of_birth: dateOfBirth,
     };
-  
+    
     setLoading(true);
   
     try {

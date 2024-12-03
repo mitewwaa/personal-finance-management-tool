@@ -97,12 +97,14 @@ class UserService {
       }
 
       const token = jwt.sign(
-        { userId: user.dataValues.id, email: user.dataValues.email },
+        { userId: user.dataValues.id, email: user.dataValues.email, name: user.dataValues.first_name },
         process.env.JWT_SECRET!,
         { expiresIn: process.env.JWT_EXPIRES_IN || "1h" }
       );
 
-      return { token };
+      console.log({ token, name: user.dataValues.first_name });
+
+      return ({ token, name: user.dataValues.first_name });
     } catch (error) {
       console.error("Error occurred while trying to login:", error);
       return null;
