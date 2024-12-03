@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';  
 import '../../styles/Form.css';
+import axios from 'axios';
 
 interface LoginPageProps {
-  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>; // Accept the function to update login state
-  setName: React.Dispatch<React.SetStateAction<string>>;
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  setUserId: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setName }) => {
+const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,34 +20,20 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setName }) => {
     e.preventDefault();
     const payload = { email, password };
     setLoading(true);
-
+    setError('');
     try {
-      const response = await fetch("http://localhost:3000/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        throw new Error("Invalid email or password");
-      }
-
-      const data = await response.json();
-      if (data.token) {
-        localStorage.setItem('jwt_token', data.token); 
-        setName(data.name);
-    }
-
-      console.log("Successful login:", data);
-      setLoading(false);
-
-      setIsLoggedIn(true);
+      const response = await axios.post("http://localhost:3000/users/login", payload);
       
-      navigate('/dashboard');  
-
+      if (response.data.token) {
+        localStorage.setItem('jwt_token', response.data.token); // Записване на токен в localStorage
+        setUserId(response.data.userId);
+        setIsLoggedIn(true); // Обновяване на състоянието веднага след успешен вход
+        navigate('/dashboard');
+      }
     } catch (error: any) {
+      setError(error.response?.data?.message || "Login failed, please try again");
+    } finally {
       setLoading(false);
-      setError(error.message || "Login failed, please try again");
     }
   };
 

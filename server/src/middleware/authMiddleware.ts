@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import UserData from "../shared/interfaces/UserData";
+=======
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+>>>>>>> f50377c64bc458d942965703ef89bb28ce153f33
 
 export const authenticateToken = (
   req: Request,

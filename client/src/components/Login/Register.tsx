@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../../styles/Form.css";
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ const RegisterPage: React.FC = () => {
   };
 
   const isNameValid = (name: string): boolean => {
-    return /^[a-zA-Z-]+$/.test(name); 
+    return /^[a-zA-Z-]+$/.test(name); // only latin letters and dashes
   };
 
   const isPasswordStrong = (password: string): boolean => {
@@ -32,44 +33,44 @@ const RegisterPage: React.FC = () => {
     const birthDate = new Date(dateOfBirth);
     const today = new Date();
     const age = today.getFullYear() - birthDate.getFullYear();
-    return age >= 18;  
+    return age >= 18;  // User should be at least 18 years old
   };
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
-  
+
     if (!firstName || !lastName || !email || !password || !confirmPassword || !dateOfBirth) {
       setErrorMessage('All fields are required!');
       return;
     }
-  
+
     if (!isEmailValid(email)) {
       setErrorMessage('Invalid email format!');
       return;
     }
-  
+
     if (!isNameValid(firstName) || !isNameValid(lastName)) {
       setErrorMessage('Invalid first name or last name!');
       return;
     }
-  
+
     if (!isPasswordStrong(password)) {
       setErrorMessage('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character!');
       return;
     }
-  
+
     if (password !== confirmPassword) {
       setErrorMessage('Passwords do not match!');
       return;
     }
-  
+
     if (!isAdult(dateOfBirth)) {
       setErrorMessage('You must be at least 18 years old to register.');
       return;
     }
-  
+
     const formData = {
       first_name: firstName,
       last_name: lastName,
@@ -77,36 +78,26 @@ const RegisterPage: React.FC = () => {
       password: password,
       date_of_birth: dateOfBirth,
     };
-    
     setLoading(true);
-  
+
     try {
-      const response = await fetch("http://localhost:3000/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-  
-      const data = await response.json();
-      console.log("API Response:", data);
-  
+      const response = await axios.post("http://localhost:3000/users", formData);
+
       setLoading(false);
-  
-      if (response.ok) {
+
+      if (response.status === 201) {
         setSuccessMessage("Successful registration!");
-        console.log("User registered successfully:", data);
-  
-        setTimeout(() => { navigate('/login'); }, 8000);
-      } else {
-        setErrorMessage(data.message || "Failed to register user.");
-        console.error("Error registering user:", data.message);
+        console.log("User registered successfully:", response.data);
+
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
       }
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
-      setErrorMessage("An error occurred while registering.");
-      console.error("Error:", error);
+      const message = error.response?.data?.message || "An error occurred while registering.";
+      setErrorMessage(message);
+      console.error("Error registering user:", message);
     }
   };
   
