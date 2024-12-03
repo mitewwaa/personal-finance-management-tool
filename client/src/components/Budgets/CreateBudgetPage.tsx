@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
+import Category from '../Categories/Category'; 
 
 import '../../styles/Budgets.css';
 
@@ -10,7 +11,7 @@ const CreateBudgetPage: React.FC = () => {
   const [type, setType] = useState<'goal' | 'category_limit'>('goal');
   const [amount, setAmount] = useState(0);
   const [categoryId, setCategoryId] = useState('');
-  const [categories, setCategories] = useState<{ id: string; name: string }[]>([]); // Състояние за категориите
+  const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -18,7 +19,6 @@ const CreateBudgetPage: React.FC = () => {
 
   const getUserIdFromToken = (): string | null => {
     const token = localStorage.getItem('jwt_token');
-
     if (token) {
       try {
         const decoded: any = jwtDecode(token);
@@ -39,53 +39,40 @@ const CreateBudgetPage: React.FC = () => {
     }
   }, [userId, navigate]);
 
-  // loading categories from server
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/categories/user/${userId}`);
-        setCategories(response.data);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-        setError('Something went wrong when fetching the categories.');
-      }
+  const handleCreateBudget = async () => {
+    if (!userId) {
+      setError('You are not logged in!');
+      return;
+    }
+
+    if (!name || !type || !amount || !categoryId || !startDate || !endDate) {
+      setError('Please fill all the fields');
+      return;
+    }
+
+    const budgetData = {
+      name,
+      type,
+      amount,
+      category_id: categoryId,
+      start_date: new Date(startDate).toISOString(),
+      end_date: new Date(endDate).toISOString(),
     };
 
-    fetchCategories();
-  }, []);
-
-  const handleCreateBudget = async () => {
-    if (userId) {
-      const budgetData = {
-        name,
-        type,
-        amount,
-        category_id: categoryId, 
-        start_date: new Date(startDate).toISOString(),
-        end_date: new Date(endDate).toISOString(),
-      };
-
-      if (!name || !type || !amount || !categoryId || !startDate || !endDate) {
-        setError('Please fill all the fields');
-        return;
+    try {
+      const response = await axios.post(`http://localhost:3000/budgets/users/${userId}`, budgetData,{
+        headers: { Authorization: `Bearer ${userId}` },
+      });
+      
+      if (response.status === 201) {
+        navigate('/budgets');
       }
-
-      try {
-        console.log('Sending data to server:', budgetData);
-        const response = await axios.post(`http://localhost:3000/budgets/users/${userId}`, budgetData);
-        console.log('Server response:', response);
-        if (response.status === 201) {
-          navigate('/budgets');
-        }
-      } catch (error: any) {
-        console.error('Error creating budget:', error);
-        setError('НSomething went wrong when creating budget.');
-        if (error.response) {
-          console.error('Error response:', error.response.data);
-        }
+    } catch (error: any) {
+      console.error('Error creating budget:', error);
+      setError('Something went wrong when creating budget.');
+      if (error.response) {
+        console.error('Error response:', error.response.data);
       }
-    } else {
-      setError('You are not logged in!');
     }
   };
 
@@ -160,6 +147,7 @@ const CreateBudgetPage: React.FC = () => {
           Create Budget
         </button>
       </form>
+      <Category onCategoriesFetched={setCategories} />
     </div>
   );
 };
