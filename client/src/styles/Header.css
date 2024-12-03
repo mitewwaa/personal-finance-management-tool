@@ -1,0 +1,22 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    max-width: 400px;
+    margin-top: 50px;
+    margin-left: 100px;
+    box-sizing: border-box;
+    background: linear-gradient(to bottom right, var(--btn-color), #471c0f);
+    color: var(--primary-bg-color);
+    padding: 10px; 
+    border-radius: 10px; 
+}
+
+.header img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%; 
+    object-fit: cover;
+    margin-left: 20px;
+}

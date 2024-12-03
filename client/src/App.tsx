@@ -10,16 +10,19 @@ import BudgetPage from './components/Budgets/BudgetsPage';
 import CreateBudgetPage from './components/Budgets/CreateBudgetPage';
 
 import './App.css';
+import TransactionData from '../../server/src/shared/interfaces/TransactionData';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [userId, setUserId] = useState<string>('');
+  const [userTransactions, setUserTransactions] = useState<TransactionData[] | null>(null);
 
   const handleLogout = () => {
     localStorage.removeItem('jwt_token');
     setIsLoggedIn(false); 
     setUserId('');
+    setName('');
   };
 
   return (
@@ -28,10 +31,10 @@ const App: React.FC = () => {
         {isLoggedIn && <NavBar onLogout={handleLogout} />} {/* Рендериране на NavBar само ако потребителят е влязъл */}
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} setUserId={setUserId} />} />
+          <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} setUserId={setUserId} setName={setName} />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/dashboard" element={<Dashboard name={name} />} />
-          <Route path="/transactions" element={<TransactionsPage />} />
+          <Route path="/dashboard" element={<Dashboard name={name} transactions={userTransactions}/>} />
+          <Route path="/transactions" element={<TransactionsPage setUserTransactions={setUserTransactions}/>} />
           <Route path="/budgets" element={<BudgetPage />} />
           <Route path="/create-budget" element={<CreateBudgetPage />} />
         </Routes>

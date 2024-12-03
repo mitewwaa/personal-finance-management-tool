@@ -6,10 +6,11 @@ import axios from 'axios';
 
 interface LoginPageProps {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  setName: React.Dispatch<React.SetStateAction<string>>;
   setUserId: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId }) => {
+const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId, setName }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -26,6 +27,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId }) => {
       
       if (response.data.token) {
         localStorage.setItem('jwt_token', response.data.token); // Записване на токен в localStorage
+        setName(response.data.name);
         setUserId(response.data.userId);
         setIsLoggedIn(true); // Обновяване на състоянието веднага след успешен вход
         navigate('/dashboard');

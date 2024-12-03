@@ -12,7 +12,11 @@ import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 
-function TransactionPage() {
+interface TransactionPageProps {
+    setUserTransactions: React.Dispatch<React.SetStateAction<TransactionData[] | null>>;
+}
+
+function TransactionPage({setUserTransactions } : TransactionPageProps) {
     const [transactions, setTransactions] = useState<TransactionData[]>([]);
     const [categories, setCategories] = useState<CategoryData[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -36,6 +40,7 @@ function TransactionPage() {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setTransactions(response.data);
+            setUserTransactions(transactions);
         } catch (error) {
             console.error("Error fetching transactions:", error);
         }

@@ -1,7 +1,7 @@
 interface TransactionData {
     id: string;
     amount: number;
-    currency: string;
+    currency: 'USD' | 'EUR' | 'GBP' | 'BGN';
     type: 'income' | 'expense'; 
     user_id: string;  
     category_id: string;
