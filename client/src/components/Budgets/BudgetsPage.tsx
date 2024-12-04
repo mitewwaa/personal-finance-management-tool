@@ -43,7 +43,9 @@ const BudgetPage: React.FC = () => {
     if (userId) {
       const fetchBudgets = async () => {
         try {
-          const response = await axios.get('http://localhost:3000/budgets/');
+          const response = await axios.get('http://localhost:3000/budgets/',{
+            headers: { Authorization: `Bearer ${userId}` },
+        });
           setBudgets(response.data);
           setFilteredBudgets(response.data);
         } catch (error) {
@@ -59,15 +61,18 @@ const BudgetPage: React.FC = () => {
       const matchesType = filterCriteria.type ? budget.type === filterCriteria.type : true;
       const matchesAmount = filterCriteria.amount ? budget.amount === filterCriteria.amount : true;
       const matchesAmountLeft = filterCriteria.amountLeft ? budget.amount_left === filterCriteria.amountLeft : true;
-      
-      // Филтриране по стартова дата
+
+      const getLocalDateString = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-CA'); // Формат YYYY-MM-DD
+      };
+
       const matchesStartDate = filterCriteria.startDate
-        ? new Date(budget.start_date) >= new Date(filterCriteria.startDate)
+        ? getLocalDateString(budget.start_date) >= filterCriteria.startDate
         : true;
-      
-      // Филтриране по крайна дата
+
       const matchesEndDate = filterCriteria.endDate
-        ? new Date(budget.end_date) <= new Date(filterCriteria.endDate)
+        ? getLocalDateString(budget.end_date) <= filterCriteria.endDate
         : true;
 
       return matchesType && matchesAmount && matchesAmountLeft && matchesStartDate && matchesEndDate;

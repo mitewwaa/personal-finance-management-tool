@@ -12,7 +12,7 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange }) => {
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
 
-  useEffect(() => {
+  const handleFilterChange = () => {
     onChange({
       type,
       amount: parseFloat(amount) || 0,
@@ -20,12 +20,16 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange }) => {
       startDate,
       endDate
     });
-  }, [type, amount, amountLeft, startDate, endDate, onChange]);
+  };
+
+  useEffect(() => {
+    handleFilterChange();
+  }, [type, amount, amountLeft, startDate, endDate]);
 
   return (
     <div className="budgetFilter">
       <FaFilter className="filterIcon" />
-      <label className='filterLabel'>
+      <label className="filterLabel">
         Type
         <select value={type} onChange={(e) => setType(e.target.value)}>
           <option value="">All</option>
@@ -34,7 +38,7 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange }) => {
         </select>
       </label>
 
-      <label className='filterLabel'>
+      <label className="filterLabel">
         Amount
         <input
           type="number"
@@ -43,7 +47,7 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange }) => {
         />
       </label>
 
-      <label className='filterLabel'>
+      <label className="filterLabel">
         Amount Left
         <input
           type="number"
@@ -52,7 +56,7 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange }) => {
         />
       </label>
 
-      <label className='filterLabel'>
+      <label className="filterLabel">
         Start Date
         <input
           type="date"
@@ -61,7 +65,7 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange }) => {
         />
       </label>
 
-      <label className='filterLabel'>
+      <label className="filterLabel">
         End Date
         <input
           type="date"
