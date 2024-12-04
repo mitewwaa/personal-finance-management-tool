@@ -13,10 +13,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 
 interface TransactionPageProps {
-    setUserTransactions: React.Dispatch<React.SetStateAction<TransactionData[] | null>>;
+    setUserTransactions: React.Dispatch<React.SetStateAction<TransactionData[] >>;
 }
 
-function TransactionPage({setUserTransactions } : TransactionPageProps) {
+function TransactionPage() {
     const [transactions, setTransactions] = useState<TransactionData[]>([]);
     const [categories, setCategories] = useState<CategoryData[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -26,7 +26,7 @@ function TransactionPage({setUserTransactions } : TransactionPageProps) {
 
     useEffect(() => {
         fetchTransactions();
-    }, []);
+    });
 
     const fetchTransactions = async () => {
         try {
@@ -40,7 +40,6 @@ function TransactionPage({setUserTransactions } : TransactionPageProps) {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setTransactions(response.data);
-            setUserTransactions(transactions);
         } catch (error) {
             console.error("Error fetching transactions:", error);
         }

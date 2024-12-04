@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TransactionData from "../../../../server/src/shared/interfaces/TransactionData";
+import "../../styles/Overview.css";
 
 interface OverviewProps {
     transactions: TransactionData[] | null;
@@ -15,7 +16,6 @@ function Overview({ transactions }: OverviewProps) {
     // Fetch exchange rates (USD, EUR, GBP to BGN) on component mount
     const fetchExchangeRates = async () => {
         try {
-            // Assuming you're using an API to fetch exchange rates
             const response = await fetch('https://api.exchangerate-api.com/v4/latest/BGN');
             const data = await response.json();
             setExchangeRates(data.rates);
@@ -29,6 +29,7 @@ function Overview({ transactions }: OverviewProps) {
         const rate = exchangeRates[currency];
         return rate ? amount * rate : amount;
     };
+
     const calculateCurrentMonthStats = () => {
         if (transactions && exchangeRates) {
             const currentDate = new Date();
@@ -55,7 +56,6 @@ function Overview({ transactions }: OverviewProps) {
         }
     };
 
-    // Helper function to calculate total balance
     const calculateTotalBalance = () => {
         if (transactions && exchangeRates) {
             let balance = 0;
@@ -71,29 +71,35 @@ function Overview({ transactions }: OverviewProps) {
         }
     };
 
+
     useEffect(() => {
-        if (transactions && exchangeRates) {
-          calculateCurrentMonthStats();
-          calculateTotalBalance();
-        //   setRecentTransactionsList();
+        fetchExchangeRates();
+        console.log("rates in Overview:", exchangeRates);
+    }, []); // Fetch exchange rates only once
+
+    useEffect(() => {
+        if (transactions && Object.keys(exchangeRates).length > 0) {
+            // console.log("Starting calculations with data:", { transactions, exchangeRates });
+            calculateCurrentMonthStats();
+            calculateTotalBalance();
         }
-      }, [transactions, exchangeRates]);
-    
+    }, [transactions, exchangeRates]);
+
 
     return (
         <div className="overview">
             <div className="sum-statistics">
                 <div id="current-month-income">
                     <p>Current month:</p>
-                    <p>+{currentMonthIncome}</p>
+                    <p>+{currentMonthIncome} BGN</p>
                 </div>
                 <div id="total-balance">
-                    <p>Total Balance:</p>
-                    <p>{totalBalance}</p>
+                    <p>Total Balance:   </p>
+                    <p>{totalBalance} BGN</p>
                 </div>
                 <div id="current-month-outcome">
                     <p>Current month:</p>
-                    <p>-{currentMonthOutcome}</p>
+                    <p>-{currentMonthOutcome} BGN</p>
                 </div>
             </div>
         </div>

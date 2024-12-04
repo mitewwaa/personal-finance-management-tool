@@ -16,7 +16,6 @@ const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [userId, setUserId] = useState<string>('');
-  const [userTransactions, setUserTransactions] = useState<TransactionData[] | null>(null);
 
   const handleLogout = () => {
     localStorage.removeItem('jwt_token');
@@ -33,8 +32,8 @@ const App: React.FC = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} setUserId={setUserId} setName={setName} />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/dashboard" element={<Dashboard name={name} transactions={userTransactions}/>} />
-          <Route path="/transactions" element={<TransactionsPage setUserTransactions={setUserTransactions}/>} />
+          <Route path="/dashboard" element={<Dashboard name={name} userId={userId} />} />
+          <Route path="/transactions" element={<TransactionsPage />} />
           <Route path="/budgets" element={<BudgetPage />} />
           <Route path="/create-budget" element={<CreateBudgetPage />} />
         </Routes>
