@@ -222,7 +222,7 @@ label {
   margin-right: 10px;
 }
 
-select {
+#filter {
   width: 80%;
   padding: 8px 12px;
   border: 1px solid var(--btn-color);

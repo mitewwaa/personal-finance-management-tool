@@ -1,11 +1,70 @@
-.overview {
+#overview {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    margin-left: 250px;
+    margin-left: 100px;
+    margin-top: 50px;
 }
 
-/* .sum-statistics {
+#sum-statistics {
     display: flex;
     flex-direction: row;
-} */
+}
+
+#current-month-income {
+    padding-right: 20px;
+}
+
+#current-month-outcome {
+    padding-right: 20px;
+}
+
+#total-balance {
+    padding-right: 20px;
+}
+
+.title {
+    font-size: smaller;
+    margin-bottom: -10px;
+}
+
+.sum {
+    font-size: larger;
+    font-weight: bold;
+}
+
+#recent-transactions {
+    margin-top: 100px;
+    margin-left: -380px;
+    padding: 10px;
+}
+
+.transactions-grid {
+    display: flex; 
+    gap: 0; 
+}
+
+#outcomes, #incomes {
+    flex: 1; 
+    padding: 10px;
+    border-right: 1px solid #ccc; 
+}
+
+#incomes {
+    border-right: none; 
+}
+
+.outcome-transaction, .income-transaction {
+    padding: 8px;
+    border-bottom: 1px solid #ccc; 
+}
+
+.outcome-transaction:last-child,
+.income-transaction:last-child {
+    border-bottom: none; 
+}
+
+h5 {
+    margin-bottom: 10px;
+    text-align: center; 
+}

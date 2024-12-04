@@ -16,7 +16,7 @@ function Dashboard({ name, userId }: DashboardProps) {
 
   useEffect(() => {
     fetchTransactions();
-  });
+  }, [setUserTransactions]);
 
   const fetchTransactions = async () => {
     try {
@@ -34,9 +34,6 @@ function Dashboard({ name, userId }: DashboardProps) {
       console.error("Error fetching transactions:", error);
     }
   };
-
-
-  console.log("Fetched form dashboard", userTransactions);
 
   return (
     <div className="page">
