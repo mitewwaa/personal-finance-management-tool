@@ -8,18 +8,25 @@ import TransactionsPage from './components/Transactions/TransactionsPage';
 import Dashboard from './components/Home/Dashboard';
 import BudgetPage from './components/Budgets/BudgetsPage';
 import CreateBudgetPage from './components/Budgets/CreateBudgetPage';
+import ProtectedRoute from './components/Utils/ProtectedRoute';
 
 import './App.css';
-import TransactionData from '../../server/src/shared/interfaces/TransactionData';
 
 const App: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [name, setName] = useState<string>("");
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!localStorage.getItem('jwt_token'));
+  const [name, setName] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwt_token');
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('jwt_token');
-    setIsLoggedIn(false); 
+    setIsLoggedIn(false);
     setUserId('');
     setName('');
   };
@@ -27,15 +34,18 @@ const App: React.FC = () => {
   return (
     <Router>
       <div>
-        {isLoggedIn && <NavBar onLogout={handleLogout} />} {/* Рендериране на NavBar само ако потребителят е влязъл */}
+        {isLoggedIn && <NavBar onLogout={handleLogout} />}
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} setUserId={setUserId} setName={setName} />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/dashboard" element={<Dashboard name={name} userId={userId} />} />
-          <Route path="/transactions" element={<TransactionsPage />} />
-          <Route path="/budgets" element={<BudgetPage />} />
-          <Route path="/create-budget" element={<CreateBudgetPage />} />
+          <Route path="/dashboard" element={ <ProtectedRoute isLoggedIn={isLoggedIn}> <Dashboard name={name} userId={userId} /></ProtectedRoute>}/>
+          <Route
+            path="/transactions"
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn}><TransactionsPage /></ProtectedRoute>}/>
+          <Route path="/budgets" element={<ProtectedRoute isLoggedIn={isLoggedIn}><BudgetPage /></ProtectedRoute>}/>
+          <Route path="/create-budget" element={<ProtectedRoute isLoggedIn={isLoggedIn}><CreateBudgetPage /></ProtectedRoute>}/>
         </Routes>
       </div>
     </Router>
