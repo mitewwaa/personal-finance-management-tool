@@ -21,6 +21,8 @@ const App: React.FC = () => {
     const token = localStorage.getItem('jwt_token');
     if (token) {
       setIsLoggedIn(true);
+      console.log(name);
+      console.log(userId);
     }
   }, []);
 
@@ -43,7 +45,7 @@ const App: React.FC = () => {
           <Route
             path="/transactions"
             element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}><TransactionsPage /></ProtectedRoute>}/>
+              <ProtectedRoute isLoggedIn={isLoggedIn}><TransactionsPage userId={userId}/></ProtectedRoute>}/>
           <Route path="/budgets" element={<ProtectedRoute isLoggedIn={isLoggedIn}><BudgetPage /></ProtectedRoute>}/>
           <Route path="/create-budget" element={<ProtectedRoute isLoggedIn={isLoggedIn}><CreateBudgetPage /></ProtectedRoute>}/>
         </Routes>

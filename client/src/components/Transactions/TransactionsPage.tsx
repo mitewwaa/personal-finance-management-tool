@@ -13,10 +13,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 
 interface TransactionPageProps {
-    setUserTransactions: React.Dispatch<React.SetStateAction<TransactionData[] >>;
+    userId: string;
 }
 
-function TransactionPage() {
+function TransactionPage({ userId }: TransactionPageProps) {
     const [transactions, setTransactions] = useState<TransactionData[]>([]);
     const [categories, setCategories] = useState<CategoryData[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -25,8 +25,18 @@ function TransactionPage() {
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
     useEffect(() => {
-        fetchTransactions();
-    });
+        const token = localStorage.getItem('jwt_token');
+        if (token) {
+            axios
+                .get(`http://localhost:3000/transactions/users/${userId}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+                .then((response) => setTransactions(response.data))
+                .catch((error) => console.error("Error fetching transactions:", error));
+        } else {
+            console.error("No token found. Please log in.");
+        }
+    },[userId]);
 
     const fetchTransactions = async () => {
         try {
@@ -210,12 +220,12 @@ function TransactionPage() {
                                     hour: 'numeric',
                                     minute: 'numeric',
                                 })}</td>
-                                    <td>
-                                        <div className="update-icons">
-                                            <CiEdit onClick={() => handleEditTransaction(transaction)} />
-                                            <MdDelete onClick={() => handleDeleteTransaction(transaction.id)} />
-                                        </div>
-                                    </td>
+                                <td>
+                                    <div className="update-icons">
+                                        <CiEdit onClick={() => handleEditTransaction(transaction)} />
+                                        <MdDelete onClick={() => handleDeleteTransaction(transaction.id)} />
+                                    </div>
+                                </td>
                             </tr>
                         ))}
                     </tbody>

@@ -2,6 +2,9 @@ import React, { useCallback, useEffect, useState } from "react";
 import TransactionData from "../../../../server/src/shared/interfaces/TransactionData";
 import "../../styles/Overview.css";
 import axios from "axios";
+import { GiPayMoney, GiReceiveMoney } from "react-icons/gi";
+import Category from "../Categories/Category";
+import CategoryData from "../../../../server/src/shared/interfaces/CategoryData";
 
 interface OverviewProps {
     transactions: TransactionData[] | null;
@@ -14,6 +17,7 @@ function Overview({ transactions }: OverviewProps) {
     const [recentIncomes, setRecentIncomes] = useState<TransactionData[]>([]);
     const [recentOutcomes, setRecentOutcomes] = useState<TransactionData[]>([]);
     const [exchangeRates, setExchangeRates] = useState<{ [key: string]: number }>({});
+    const [categories, setCategories] = useState<CategoryData[]>([]);
 
     // Fetch exchange rates (USD, EUR, GBP to BGN) on component mount
     const fetchExchangeRates = async () => {
@@ -55,7 +59,7 @@ function Overview({ transactions }: OverviewProps) {
             setCurrentMonthIncome(income);
             setCurrentMonthOutcome(outcome);
         }
-    }, [transactions, exchangeRates]);
+    }, [transactions, exchangeRates, convertToBGN]);
 
     const calculateTotalBalance = useCallback(() => {
         if (transactions && exchangeRates) {
@@ -70,14 +74,14 @@ function Overview({ transactions }: OverviewProps) {
             });
             setTotalBalance(balance);
         }
-    }, [transactions, exchangeRates]);
+    }, [transactions, exchangeRates, convertToBGN]);
 
     const getRecentTransactions = useCallback(() => {
-        if (transactions && transactions.length > 2) {
+        if (transactions && transactions.length > 0) {
             const sortedTransactions = [...transactions].sort(
                 (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
             );
-    
+
             // Get the last 3 transactions
             const recents = sortedTransactions.slice(0, 4);
             let incomes: TransactionData[] = [];
@@ -103,6 +107,9 @@ function Overview({ transactions }: OverviewProps) {
         }
     }, [transactions, exchangeRates, calculateCurrentMonthStats, calculateTotalBalance, getRecentTransactions]);
 
+    const handleCategoriesFetched = useCallback((categories: CategoryData[]) => {
+        setCategories(categories);
+    }, []);;
 
     return (
         <div id="overview">
@@ -121,37 +128,57 @@ function Overview({ transactions }: OverviewProps) {
                 </div>
             </div>
             <div id="recent-transactions">
+                <Category onCategoriesFetched={handleCategoriesFetched} />
                 <h4>Recent Transactions</h4>
-                <div className="transactions-grid">
-                    <div id="outcomes">
+                <div className="transactions-container">
+                    <div className={recentOutcomes.length > 0 ? "outcomes" : "empty-outcomes"}>
                         <h5>Expenses</h5>
-                        {recentOutcomes.map((outcome) => (
+                        {recentOutcomes.length === 0 ? (
+                            <p className="notification">No recent expenses.</p> 
+                        ) : (recentOutcomes.map((outcome) => (
                             <div className="outcome-transaction">
-                                <p>{outcome.location}</p>
-                                <p>- {outcome.amount} {outcome.currency}</p>
-                                <p>{new Date(outcome.date).toLocaleString('en-GB', {
-                                    year: 'numeric',
-                                    month: 'short',
-                                    day: 'numeric',
-                                })}</p>
+                                <GiPayMoney className="icon" />
+                                <div className="transaction-info">
+                                    <p className="location">{outcome.location}</p>
+                                    <p className="category">{categories.map((cat) =>
+                                        cat.id === outcome.category_id ? cat.name : null)}</p>
+                                </div>
+                                <div className="transaction-info">
+                                    <p className="amount">- {outcome.amount} {outcome.currency}</p>
+                                    <p className="date">{new Date(outcome.date).toLocaleString('en-GB', {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric',
+                                    })}</p>
+                                </div>
                             </div>
                         )
-                        )}
+                        ))}
                     </div>
-                    <div id="incomes">
+                    <div className={recentIncomes.length > 0 ? "incomes" : "empty-incomes"}>
                         <h5>Incomes</h5>
-                        {recentIncomes.map((income) => (
+                        {recentIncomes.length === 0 ? (
+                            <p className="notification">No recent incomes.</p>
+                        ) :
+                        (recentIncomes.map((income) => (
                             <div className="income-transaction">
-                                <p>{income.location}</p>
-                                <p>+ {income.amount} {income.currency}</p>
-                                <p>{new Date(income.date).toLocaleString('en-GB', {
-                                    year: 'numeric',
-                                    month: 'short',
-                                    day: 'numeric',
-                                })}</p>
+                                <GiReceiveMoney className="icon" />
+                                <div className="transaction-info">
+                                    <p className="location">{income.location}</p>
+                                    <p className="category">{categories.map((cat) =>
+                                        cat.id === income.category_id ? cat.name : null)}</p>
+                                </div>
+                                <div className="transaction-info">
+                                    <p className="amount">+ {income.amount} {income.currency}</p>
+                                    <p className="date">{new Date(income.date).toLocaleString('en-GB', {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric',
+                                    })}</p>
+                                </div>
                             </div>
                         )
-                        )}
+                        ))}
                     </div>
                 </div>
             </div>

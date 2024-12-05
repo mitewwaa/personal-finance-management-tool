@@ -15,8 +15,18 @@ function Dashboard({ name, userId }: DashboardProps) {
   const [userTransactions, setUserTransactions] = useState<TransactionData[]>([]);
 
   useEffect(() => {
-    fetchTransactions();
-  }, [setUserTransactions]);
+    const token = localStorage.getItem('jwt_token');
+    if (token) {
+      axios
+        .get(`http://localhost:3000/transactions/users/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => setUserTransactions(response.data))
+        .catch((error) => console.error("Error fetching transactions:", error));
+    } else {
+      console.error("No token found. Please log in.");
+    }
+  }, [userId]);
 
   const fetchTransactions = async () => {
     try {
@@ -25,12 +35,12 @@ function Dashboard({ name, userId }: DashboardProps) {
         console.error("No token found. Please log in.");
         return;
       }
-
-      const response = await axios.get("http://localhost:3000/transactions", {
+      const response = await axios.get(`http://localhost:3000/transactions/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUserTransactions(response.data);
     } catch (error) {
+      console.log(userId);
       console.error("Error fetching transactions:", error);
     }
   };

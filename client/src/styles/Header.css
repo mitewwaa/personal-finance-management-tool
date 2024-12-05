@@ -5,7 +5,7 @@
     justify-content: center;
     max-width: 400px;
     margin-top: 50px;
-    margin-left: 100px;
+    margin-left: 180px;
     box-sizing: border-box;
     background: linear-gradient(to bottom right, var(--btn-color), #471c0f);
     color: var(--primary-bg-color);

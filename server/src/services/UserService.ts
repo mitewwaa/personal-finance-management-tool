@@ -102,9 +102,9 @@ class UserService {
         { expiresIn: process.env.JWT_EXPIRES_IN || "1h" }
       );
 
-      console.log({ token, name: user.dataValues.first_name });
+      console.log({ token, name: user.dataValues.first_name, id: user.dataValues.id });
 
-      return ({ token, name: user.dataValues.first_name });
+      return ({ token, name: user.dataValues.first_name, id: user.dataValues.id });
     } catch (error) {
       console.error("Error occurred while trying to login:", error);
       return null;

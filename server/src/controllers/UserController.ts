@@ -99,7 +99,7 @@ class UserController {
       console.log(email,password);
       const user = await UserService.loginUser(email, password);
       if (user && user.token) {
-        res.status(200).json({ token: user.token, name: user.name });
+        res.status(200).json({ token: user.token, name: user.name, id: user.id });
     } else {
         res.status(401).json({ message: "Invalid email or password." });
     }

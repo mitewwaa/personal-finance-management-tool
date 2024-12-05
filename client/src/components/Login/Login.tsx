@@ -28,7 +28,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId, setName
       if (response.data.token) {
         localStorage.setItem('jwt_token', response.data.token); // Записване на токен в localStorage
         setName(response.data.name);
-        setUserId(response.data.userId);
+        setUserId(response.data.id);
         setIsLoggedIn(true); // Обновяване на състоянието веднага след успешен вход
         navigate('/dashboard');
       }
