@@ -10,6 +10,7 @@ const BudgetItem: React.FC<BudgetItemProps> = ({ budget }) => {
     <li className='budgetItem'>
       <h3 className='budgetName'>{budget.name}</h3>
       <p className='budgetType'>Type: {budget.type}</p>
+      <p className="categoryName">Category: {budget.category_name}</p> 
       <div className='amountContainer'>
         <p className='amount'>Amount: {budget.amount}</p>
         <p className='amount'>Amount left: {budget.amount_left}</p>
