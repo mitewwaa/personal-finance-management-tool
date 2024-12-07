@@ -47,7 +47,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId, setName
       </div>
       <div className='form'>
         <Link to="/" className='icon'><FaArrowCircleLeft /></Link>
-        <h2 className='title'>Log In</h2>
+        <h2 className='title-form'>Log In</h2>
         <form onSubmit={handleLogin}>
           <div className='formField'>
             <label htmlFor="email" className='label'>Email</label>

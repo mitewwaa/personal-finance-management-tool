@@ -26,7 +26,7 @@
 
 .image .icon {
     align-self: flex-start;
-    color: var(--tertiary-bg-color);
+    color: var(--btn-color);
     font-size: 2rem;
     margin-left: 3rem;
     margin-bottom: 0;
@@ -48,7 +48,7 @@
     border-radius: 0 5rem 5rem 0;
 }
 
-.title {
+.title-form {
     color: var(--btn-color);
     font-size: 2rem;
     font-style: normal;

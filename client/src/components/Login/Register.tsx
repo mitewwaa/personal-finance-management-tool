@@ -110,7 +110,7 @@ const RegisterPage: React.FC = () => {
       </div>
       <div className="form">
         <Link to="/" className='icon'><FaArrowCircleLeft /></Link>
-        <h2 className="title">Register</h2>
+        <h2 className="title-form">Register</h2>
         <form onSubmit={handleRegister}>
           <div className="name">
             <div className="formField">

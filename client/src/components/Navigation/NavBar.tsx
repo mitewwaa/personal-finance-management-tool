@@ -14,28 +14,28 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout }) => {
             <ul id='navList'>
                 <li className='navItem' title='Home'>
                     <Link to="/dashboard">
-                        <FaHome className='icon' />
+                        <FaHome className='navIcon' />
                     </Link>
                 </li>
                 <li className='navItem' title='Transactions'>
                     <Link to="/transactions">
-                        <FaExchangeAlt className='icon' />
+                        <FaExchangeAlt className='navIcon' />
                     </Link>
                 </li>
                 <li className='navItem' title='Budgets'>
                     <Link to="/budgets">
-                        <FaWallet className='icon' />
+                        <FaWallet className='navIcon' />
                     </Link>
                 </li>
                 <div id='bottomNavItems'>
                     <li className='navItem' title='Profile'>
                         <Link to="/profile">
-                            <FaUserCircle className='icon' />
+                            <FaUserCircle className='navIcon' />
                         </Link>
                     </li>
                     <li className='navItem' title='Log Out' onClick={onLogout}>
                         <Link to="/">
-                            <BiLogOutCircle className='icon' />
+                            <BiLogOutCircle className='navIcon' />
                         </Link>
                     </li>
                 </div>
