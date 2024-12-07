@@ -26,10 +26,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId, setName
       const response = await axios.post("http://localhost:3000/users/login", payload);
       
       if (response.data.token) {
-        localStorage.setItem('jwt_token', response.data.token); // Записване на токен в localStorage
+        localStorage.setItem('jwt_token', response.data.token); 
         setName(response.data.name);
         setUserId(response.data.id);
-        setIsLoggedIn(true); // Обновяване на състоянието веднага след успешен вход
+        setIsLoggedIn(true); 
         navigate('/dashboard');
       }
     } catch (error: any) {
