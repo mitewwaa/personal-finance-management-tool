@@ -4,6 +4,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import Category from '../Categories/Category';
 
+import '../../styles/BudgetForm.css'
+
 const CreateBudgetPage: React.FC = () => {
   const [name, setName] = useState('');
   const [type, setType] = useState<'goal' | 'category_limit'>('goal');
@@ -15,8 +17,8 @@ const CreateBudgetPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const isEdit = location.state?.isEdit || false; // Check if we are in edit mode
-  const budgetToEdit = location.state?.budget || null; // Get the budget to edit if available
+  const isEdit = location.state?.isEdit || false; 
+  const budgetToEdit = location.state?.budget || null; 
 
   const getUserIdFromToken = (): string | null => {
     const token = localStorage.getItem('jwt_token');
@@ -85,11 +87,11 @@ const CreateBudgetPage: React.FC = () => {
   };
 
   return (
-    <div className="budgetsContainer">
-      <h1>{isEdit ? 'Edit Budget' : 'Add new budget'}</h1>
+    <div className="budgetFormContainer">
+      <h1 className='mainTitle'>{isEdit ? 'Edit Budget' : 'Add new budget'}</h1>
       {error && <div className="error">{error}</div>}
-      <form onSubmit={(e) => e.preventDefault()}>
-        <div>
+      <form onSubmit={(e) => e.preventDefault()} className='budgetForm'>
+        <div className='inputContainer'>
           <label htmlFor="name">Name</label>
           <input
             id="name"
@@ -98,7 +100,7 @@ const CreateBudgetPage: React.FC = () => {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <div>
+        <div className='inputContainer'>
           <label htmlFor="type">Type</label>
           <select
             id="type"
@@ -109,7 +111,7 @@ const CreateBudgetPage: React.FC = () => {
             <option value="category_limit">Category limit</option>
           </select>
         </div>
-        <div>
+        <div className='inputContainer'>
           <label htmlFor="amount">Amount</label>
           <input
             id="amount"
@@ -118,7 +120,7 @@ const CreateBudgetPage: React.FC = () => {
             onChange={(e) => setAmount(Number(e.target.value))}
           />
         </div>
-        <div>
+        <div className='inputContainer'>
           <label htmlFor="categoryId">Category</label>
           <select
             id="categoryId"
@@ -133,7 +135,7 @@ const CreateBudgetPage: React.FC = () => {
             ))}
           </select>
         </div>
-        <div>
+        <div className='inputContainer'>
           <label htmlFor="startDate">Start Date</label>
           <input
             id="startDate"
@@ -142,7 +144,7 @@ const CreateBudgetPage: React.FC = () => {
             onChange={(e) => setStartDate(e.target.value)}
           />
         </div>
-        <div>
+        <div className='inputContainer'>
           <label htmlFor="endDate">End Date</label>
           <input
             id="endDate"
@@ -151,7 +153,7 @@ const CreateBudgetPage: React.FC = () => {
             onChange={(e) => setEndDate(e.target.value)}
           />
         </div>
-        <button type="button" onClick={handleCreateOrUpdateBudget}>
+        <button type="button" onClick={handleCreateOrUpdateBudget} className='buttonSubmit'>
           {isEdit ? 'Update Budget' : 'Create Budget'}
         </button>
       </form>

@@ -90,7 +90,7 @@ const BudgetPage: React.FC = () => {
   };
 
   const handleAddBudget = () => {
-    setSelectedBudget(null); // Reset selected budget for creating new one
+    setSelectedBudget(null); 
     navigate('/create-budget');
   };
 
@@ -119,8 +119,11 @@ const BudgetPage: React.FC = () => {
 
   return (
     <div className="budgetsContainer">
-      <h1 className="mainTitle">Budgets</h1>
-      <button onClick={handleAddBudget}>Add new budget</button>
+      <div className='headerContainer'>
+        <h1 className="mainTitle">Budgets</h1>
+        <button onClick={handleAddBudget} className='buttonSubmit'>Add new budget</button>
+      </div>
+      
       <Category onCategoriesFetched={handleCategoriesFetched} />
       <BudgetFilter onChange={handleFilterChange} categories={categories} />
       <BudgetList 

@@ -1,0 +1,15 @@
+.budgetFormContainer{
+    width: 90%;
+    height: 100%;
+    margin: 0 2rem;
+}
+
+.budgetForm{
+    margin-left: 5rem;
+}
+
+.inputContainer{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.8rem;
+}
