@@ -1,17 +1,8 @@
 import React from 'react';
-
-interface Budget {
-  id: string;
-  name: string;
-  type: 'goal' | 'category_limit';
-  amount: number;
-  amount_left: number;
-  start_date: string;
-  end_date: string;
-}
+import BudgetData from '../../../../server/src/shared/interfaces/BudgetData'; 
 
 interface BudgetItemProps {
-  budget: Budget;
+  budget: BudgetData; 
 }
 
 const BudgetItem: React.FC<BudgetItemProps> = ({ budget }) => {
@@ -28,7 +19,6 @@ const BudgetItem: React.FC<BudgetItemProps> = ({ budget }) => {
         <p className='date'>Start Date: {new Date(budget.start_date).toLocaleDateString()}</p>
         <p className='date'>End Date: {new Date(budget.end_date).toLocaleDateString()}</p> 
       </div>
-      
     </li>
   );
 };

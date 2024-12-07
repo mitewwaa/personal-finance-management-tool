@@ -1,18 +1,9 @@
 import React from 'react';
 import BudgetItem from './BudgetItem';
-
-interface Budget {
-  id: string;
-  name: string;
-  type: 'goal' | 'category_limit';
-  amount: number;
-  amount_left: number;
-  start_date: string;
-  end_date: string;
-}
+import BudgetData from '../../../../server/src/shared/interfaces/BudgetData'; 
 
 interface BudgetListProps {
-  budgets: Budget[];
+  budgets: BudgetData[]; 
 }
 
 const BudgetList: React.FC<BudgetListProps> = ({ budgets }) => {

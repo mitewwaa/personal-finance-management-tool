@@ -1,23 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import BudgetList from './BudgetList';
 import BudgetFilter from './BudgetFilter';
-
-interface Budget {
-  id: string;
-  name: string;
-  type: 'goal' | 'category_limit';
-  amount: number;
-  amount_left: number;
-  start_date: string;
-  end_date: string;
-}
+import BudgetData from '../../../../server/src/shared/interfaces/BudgetData';  
 
 const BudgetPage: React.FC = () => {
-  const [budgets, setBudgets] = useState<Budget[]>([]);
-  const [filteredBudgets, setFilteredBudgets] = useState<Budget[]>([]);
+  const [budgets, setBudgets] = useState<BudgetData[]>([]); 
+  const [filteredBudgets, setFilteredBudgets] = useState<BudgetData[]>([]); 
   const [filterCriteria, setFilterCriteria] = useState({
     type: '',
     amount: 0,
@@ -43,9 +34,9 @@ const BudgetPage: React.FC = () => {
     if (userId) {
       const fetchBudgets = async () => {
         try {
-          const response = await axios.get('http://localhost:3000/budgets/',{
+          const response = await axios.get('http://localhost:3000/budgets/', {
             headers: { Authorization: `Bearer ${userId}` },
-        });
+          });
           setBudgets(response.data);
           setFilteredBudgets(response.data);
         } catch (error) {
@@ -68,11 +59,11 @@ const BudgetPage: React.FC = () => {
       };
 
       const matchesStartDate = filterCriteria.startDate
-        ? getLocalDateString(budget.start_date) >= filterCriteria.startDate
+        ? getLocalDateString(budget.start_date.toString()) >= filterCriteria.startDate
         : true;
 
       const matchesEndDate = filterCriteria.endDate
-        ? getLocalDateString(budget.end_date) <= filterCriteria.endDate
+        ? getLocalDateString(budget.end_date.toString()) <= filterCriteria.endDate
         : true;
 
       return matchesType && matchesAmount && matchesAmountLeft && matchesStartDate && matchesEndDate;

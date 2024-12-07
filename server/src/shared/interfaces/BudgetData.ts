@@ -1,4 +1,5 @@
 interface BudgetData {
+    id: string,
     name: string;
     type: 'goal' | 'category_limit';
     amount: number;
