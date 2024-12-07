@@ -51,38 +51,22 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange, categories }) => 
 
       <label className="filterLabel">
         Amount
-        <input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
+        <input type="number"value={amount} onChange={(e) => setAmount(e.target.value)}/>
       </label>
 
       <label className="filterLabel">
         Amount Left
-        <input
-          type="number"
-          value={amountLeft}
-          onChange={(e) => setAmountLeft(e.target.value)}
-        />
+        <input type="number" value={amountLeft} onChange={(e) => setAmountLeft(e.target.value)}/>
       </label>
 
       <label className="filterLabel">
         Start Date
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
+        <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)}/>
       </label>
 
       <label className="filterLabel">
         End Date
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
+        <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)}/>
       </label>
 
       <label className="filterLabel">

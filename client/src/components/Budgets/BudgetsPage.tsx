@@ -7,6 +7,7 @@ import BudgetFilter from './BudgetFilter';
 import BudgetData from '../../../../server/src/shared/interfaces/BudgetData';
 import CategoryData from "../../../../server/src/shared/interfaces/CategoryData"; 
 import Category from '../Categories/Category'; 
+import '../../styles/Budgets.css';
 
 const BudgetPage: React.FC = () => {
   const [budgets, setBudgets] = useState<BudgetData[]>([]);
@@ -20,6 +21,7 @@ const BudgetPage: React.FC = () => {
     endDate: '',
     categoryId: '',
   });
+  const [selectedBudget, setSelectedBudget] = useState<BudgetData | null>(null);
 
   const navigate = useNavigate();
 
@@ -88,7 +90,27 @@ const BudgetPage: React.FC = () => {
   };
 
   const handleAddBudget = () => {
+    setSelectedBudget(null); // Reset selected budget for creating new one
     navigate('/create-budget');
+  };
+
+  const handleEditBudget = (budget: BudgetData) => {
+    setSelectedBudget(budget);
+    navigate('/create-budget', { state: { isEdit: true, budget } });
+  };
+  
+
+  const handleDeleteBudget = async (budgetId: string) => {
+    if (window.confirm('Are you sure you want to delete this budget?')) {
+      try {
+        await axios.delete(`http://localhost:3000/budgets/${budgetId}`, {
+          headers: { Authorization: `Bearer ${userId}` },
+        });
+        setBudgets(budgets.filter(budget => budget.id !== budgetId));
+      } catch (error) {
+        console.error('Error deleting budget:', error);
+      }
+    }
   };
 
   const handleCategoriesFetched = (fetchedCategories: CategoryData[]) => {
@@ -100,11 +122,12 @@ const BudgetPage: React.FC = () => {
       <h1 className="mainTitle">Budgets</h1>
       <button onClick={handleAddBudget}>Add new budget</button>
       <Category onCategoriesFetched={handleCategoriesFetched} />
-      <BudgetFilter 
-        onChange={handleFilterChange} 
-        categories={categories} 
+      <BudgetFilter onChange={handleFilterChange} categories={categories} />
+      <BudgetList 
+        budgets={filteredBudgets}
+        onEdit={handleEditBudget}
+        onDelete={handleDeleteBudget}
       />
-      <BudgetList budgets={filteredBudgets} />
     </div>
   );
 };
