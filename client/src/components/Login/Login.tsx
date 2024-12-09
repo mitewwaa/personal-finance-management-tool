@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaArrowCircleLeft } from "react-icons/fa";
-import { Link, useNavigate } from 'react-router-dom';  
+import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/Form.css';
 import axios from 'axios';
 
@@ -15,7 +15,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId, setName
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId, setName
     setError('');
     try {
       const response = await axios.post("http://localhost:3000/users/login", payload);
-      
+
       if (response.data.token) {
         localStorage.setItem('jwt_token', response.data.token); // Записване на токен в localStorage
         setName(response.data.name);
@@ -43,7 +43,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId, setName
     <div className='container'>
       <div className='image'>
         <Link to="/" className='icon'><FaArrowCircleLeft /></Link>
-        <img src="./images/rb_22006.png" alt='lady-doing-finances' id='image'/>
+        <img src="./images/rb_22006.png" alt='lady-doing-finances' id='image' />
       </div>
       <div className='form'>
         <Link to="/" className='icon'><FaArrowCircleLeft /></Link>
@@ -51,23 +51,23 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId, setName
         <form onSubmit={handleLogin}>
           <div className='formField'>
             <label htmlFor="email" className='label'>Email</label>
-            <input 
-              type="email" 
-              id="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              required 
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
               className='input'
             />
           </div>
           <div className='formField'>
             <label htmlFor="password" className='label'>Password</label>
-            <input 
-              type="password" 
-              id="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              required 
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
               className='input'
             />
           </div>
@@ -76,7 +76,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId, setName
           </button>
         </form>
 
-        {error && <div className='error-message' style={{color: "red"}}>{error}</div>}
+        {error && <div className='error-message' style={{ color: "red" }}>{error}</div>}
       </div>
     </div>
   );

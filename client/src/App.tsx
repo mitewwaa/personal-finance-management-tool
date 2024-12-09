@@ -17,6 +17,8 @@ const App: React.FC = () => {
   const [name, setName] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
 
+  const linkTo = isLoggedIn ? '/dashboard' : '/login';
+
   useEffect(() => {
     const token = localStorage.getItem('jwt_token');
     if (token) {
@@ -36,18 +38,19 @@ const App: React.FC = () => {
   return (
     <Router>
       <div>
-        {isLoggedIn && <NavBar onLogout={handleLogout} />}
+      {isLoggedIn && <NavBar onLogout={handleLogout} />}
         <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} setUserId={setUserId} setName={setName} />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/dashboard" element={ <ProtectedRoute isLoggedIn={isLoggedIn}> <Dashboard name={name} userId={userId} /></ProtectedRoute>}/>
+          {!isLoggedIn && <Route path="/" element={<LandingPage />} />}
+          <Route path="/login" element={
+             <LoginPage setIsLoggedIn={setIsLoggedIn} setUserId={setUserId} setName={setName} />} />
+          {!isLoggedIn && <Route path="/register" element={<RegisterPage />} />}
+          {isLoggedIn && <Route path="/dashboard" element={<ProtectedRoute isLoggedIn={isLoggedIn}  linkTo={linkTo}> <Dashboard name={name} userId={userId} /> </ProtectedRoute>} />}
           <Route
             path="/transactions"
             element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}><TransactionsPage userId={userId}/></ProtectedRoute>}/>
-          <Route path="/budgets" element={<ProtectedRoute isLoggedIn={isLoggedIn}><BudgetPage /></ProtectedRoute>}/>
-          <Route path="/create-budget" element={<ProtectedRoute isLoggedIn={isLoggedIn}><CreateBudgetPage /></ProtectedRoute>}/>
+              <ProtectedRoute isLoggedIn={isLoggedIn}  linkTo={linkTo}><TransactionsPage userId={userId} /></ProtectedRoute>} />
+          <Route path="/budgets" element={<ProtectedRoute isLoggedIn={isLoggedIn}  linkTo={linkTo}><BudgetPage /></ProtectedRoute>} />
+          <Route path="/create-budget" element={<ProtectedRoute isLoggedIn={isLoggedIn}  linkTo={linkTo}><CreateBudgetPage /></ProtectedRoute>} />
         </Routes>
       </div>
     </Router>

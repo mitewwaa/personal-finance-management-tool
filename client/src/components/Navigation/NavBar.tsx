@@ -4,10 +4,10 @@ import { BrowserRouter as Router, Link, useNavigate } from 'react-router-dom';
 import '../../styles/NavBar.css';
 
 interface NavBarProps {
-    onLogout: () => void; // Пропс за функция за изход
+    onLogout: () => void;
   }
   
-const NavBar: React.FC<NavBarProps> = ({ onLogout }) => {
+function NavBar ({ onLogout } : NavBarProps) {
 
     return (
         <nav id='navContainer'>

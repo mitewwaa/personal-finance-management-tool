@@ -1,130 +1,27 @@
-#overview {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    margin-left: 100px;
-    margin-top: 50px;
-    position: relative;
-}
-
 #sum-statistics {
     display: flex;
     flex-direction: row;
-    position: absolute;
-    left: 60px;
-}
-
-#current-month-income {
-    padding-right: 20px;
-}
-
-#current-month-outcome {
-    padding-right: 20px;
-}
-
-#total-balance {
-    padding-right: 20px;
+    justify-content: center;
+    gap: 20px;
 }
 
 .title {
-    font-size: smaller;
-    margin-bottom: -10px;
-}
-
-.sum {
-    font-size: larger;
-    font-weight: bold;
-}
-
-#recent-transactions {
-    display: block;
-    position: absolute;
-    left: -60px;
-    margin-top: 100px;
-    padding: 10px;
-}
-
-#recent-transactions .transactions-container .empty-outcomes {
-    margin-left: 120px;
-    margin-top: -30px;
-    padding: 10px;
-}
-
-#recent-transactions .transactions-container .empty-incomes {
-    margin-top: -30px;
-    padding: 10px;
+    font-size: medium;
 }
 
 .transactions-container {
-    display: flex;
-    gap: 0;
-    height: 200px;
-}
-
-.empty-incomes,
-.empty-outcomes {
-    display: flex;
-    flex-direction: row;
-    margin-left: 100px;
-    position: relative;
-}
-
-.outcomes,
-.incomes {
-    flex: 0.5;
-    padding: 10px;
-    position: relative;
-
-}
-
-.outcomes::after {
-    content: "";
-    position: absolute;
-    top: 80px;
-    right: 0;
-    width: 1px;
-    height: 100%;
-    background-color: #ccc;
-}
-
-.incomes::after {
-    content: "";
-    position: absolute;
-    top: -320px;
-    right: 0;
-    left: 350px;
-    width: 1px;
-    height: 305%;
-    background-color: #ccc;
-}
-
-.empty-incomes::after {
-    content: "";
-    position: absolute;
-    top: -250px;
-    left: 300px;
-    width: 1px;
-    height: 250%;
-    background-color: #ccc;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 50px;
 }
 
 .outcome-transaction,
 .income-transaction {
     display: flex;
-    justify-content: space-around;
-    padding: 8px;
-    border-bottom: 1px solid #ccc;
-    width: 300px;
-    height: 60px;
-}
-
-.transaction-info {
-    align-items: flex-end;
-    margin-top: 12px;
-}
-
-.icon {
-    margin-top: 35px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
 }
 
 .location {
@@ -143,21 +40,7 @@
     margin-left: 10px;
 }
 
-h4 {
-    color: var(--btn-color);
-    font-weight: bold;
-    margin-top: -20px;
-    margin-left: 30px;
-}
 
 h5 {
-    margin-bottom: 10px;
-    text-align: center;
-    position: relative;
-}
-
-.notification {
-    margin-top: 50px;
-    margin-left: -50px;
-    position: relative;
+    align-self: center;
 }

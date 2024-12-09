@@ -4,6 +4,7 @@ import TransactionData from "../../../../server/src/shared/interfaces/Transactio
 import Header from "../Utils/Header";
 import Overview from "../Utils/Overview";
 import axios from "axios";
+import "../../styles/Dashboard.css";
 
 interface DashboardProps {
   name: string;
@@ -28,27 +29,15 @@ function Dashboard({ name, userId }: DashboardProps) {
     }
   }, [userId]);
 
-  const fetchTransactions = async () => {
-    try {
-      const token = localStorage.getItem('jwt_token');
-      if (!token) {
-        console.error("No token found. Please log in.");
-        return;
-      }
-      const response = await axios.get(`http://localhost:3000/transactions/users/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUserTransactions(response.data);
-    } catch (error) {
-      console.log(userId);
-      console.error("Error fetching transactions:", error);
-    }
-  };
-
   return (
     <div className="page">
-      <Header name={name} />
-      <Overview transactions={userTransactions} />
+      <div className="dashboard-container">
+        <Header name={name} />
+        <Overview transactions={userTransactions} />
+      </div>
+      <div className="dashboard-container">
+      </div>
+
     </div>
   );
 };

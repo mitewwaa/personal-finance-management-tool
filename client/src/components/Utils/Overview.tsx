@@ -56,10 +56,10 @@ function Overview({ transactions }: OverviewProps) {
                 }
             });
 
-            setCurrentMonthIncome(income);
-            setCurrentMonthOutcome(outcome);
+            setCurrentMonthIncome((prev) => (prev === income ? prev : income));
+            setCurrentMonthOutcome((prev) => (prev === outcome ? prev : outcome));
         }
-    }, [transactions, exchangeRates, convertToBGN]);
+    }, [transactions, convertToBGN]);
 
     const calculateTotalBalance = useCallback(() => {
         if (transactions && exchangeRates) {
@@ -72,9 +72,9 @@ function Overview({ transactions }: OverviewProps) {
                     balance -= amountInBGN;
                 }
             });
-            setTotalBalance(balance);
+            setTotalBalance((prev) => (prev === balance ? prev : balance));
         }
-    }, [transactions, exchangeRates, convertToBGN]);
+    }, [transactions, convertToBGN]);
 
     const getRecentTransactions = useCallback(() => {
         if (transactions && transactions.length > 0) {
@@ -82,22 +82,21 @@ function Overview({ transactions }: OverviewProps) {
                 (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
             );
 
-            // Get the last 3 transactions
             const recents = sortedTransactions.slice(0, 4);
             let incomes: TransactionData[] = [];
             let outcomes: TransactionData[] = [];
             recents.forEach((recent) => {
                 recent.type === "expense" ? outcomes.push(recent) : incomes.push(recent);
             });
-            setRecentIncomes(incomes);
-            setRecentOutcomes(outcomes);
+            setRecentIncomes((prev) => (prev === incomes ? prev : incomes));
+            setRecentOutcomes((prev) => (prev === outcomes ? prev : outcomes));
         }
     }, [transactions])
 
 
     useEffect(() => {
         fetchExchangeRates();
-    }, []);
+    });
 
     useEffect(() => {
         if (transactions && transactions.length > 0 && Object.keys(exchangeRates).length > 0) {
@@ -105,11 +104,11 @@ function Overview({ transactions }: OverviewProps) {
             calculateTotalBalance();
             getRecentTransactions();
         }
-    }, [transactions, exchangeRates, calculateCurrentMonthStats, calculateTotalBalance, getRecentTransactions]);
+    }, [transactions]);
 
     const handleCategoriesFetched = useCallback((categories: CategoryData[]) => {
         setCategories(categories);
-    }, []);;
+    }, []);
 
     return (
         <div id="overview">
@@ -131,10 +130,10 @@ function Overview({ transactions }: OverviewProps) {
                 <Category onCategoriesFetched={handleCategoriesFetched} />
                 <h4>Recent Transactions</h4>
                 <div className="transactions-container">
-                    <div className={recentOutcomes.length > 0 ? "outcomes" : "empty-outcomes"}>
+                    <div className="outcomes">
                         <h5>Expenses</h5>
                         {recentOutcomes.length === 0 ? (
-                            <p className="notification">No recent expenses.</p> 
+                            <p className="notification">No recent expenses.</p>
                         ) : (recentOutcomes.map((outcome) => (
                             <div className="outcome-transaction">
                                 <GiPayMoney className="icon" />
@@ -155,30 +154,30 @@ function Overview({ transactions }: OverviewProps) {
                         )
                         ))}
                     </div>
-                    <div className={recentIncomes.length > 0 ? "incomes" : "empty-incomes"}>
+                    <div className="incomes">
                         <h5>Incomes</h5>
                         {recentIncomes.length === 0 ? (
                             <p className="notification">No recent incomes.</p>
                         ) :
-                        (recentIncomes.map((income) => (
-                            <div className="income-transaction">
-                                <GiReceiveMoney className="icon" />
-                                <div className="transaction-info">
-                                    <p className="location">{income.location}</p>
-                                    <p className="category">{categories.map((cat) =>
-                                        cat.id === income.category_id ? cat.name : null)}</p>
+                            (recentIncomes.map((income) => (
+                                <div className="income-transaction">
+                                    <GiReceiveMoney className="icon" />
+                                    <div className="transaction-info">
+                                        <p className="location">{income.location}</p>
+                                        <p className="category">{categories.map((cat) =>
+                                            cat.id === income.category_id ? cat.name : null)}</p>
+                                    </div>
+                                    <div className="transaction-info">
+                                        <p className="amount">+ {income.amount} {income.currency}</p>
+                                        <p className="date">{new Date(income.date).toLocaleString('en-GB', {
+                                            year: 'numeric',
+                                            month: 'short',
+                                            day: 'numeric',
+                                        })}</p>
+                                    </div>
                                 </div>
-                                <div className="transaction-info">
-                                    <p className="amount">+ {income.amount} {income.currency}</p>
-                                    <p className="date">{new Date(income.date).toLocaleString('en-GB', {
-                                        year: 'numeric',
-                                        month: 'short',
-                                        day: 'numeric',
-                                    })}</p>
-                                </div>
-                            </div>
-                        )
-                        ))}
+                            )
+                            ))}
                     </div>
                 </div>
             </div>
