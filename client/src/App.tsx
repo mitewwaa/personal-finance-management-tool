@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import LandingPage from './components/Home/LandingPage';
 import LoginPage from './components/Login/Login';
 import RegisterPage from './components/Login/Register';
@@ -13,44 +14,66 @@ import ProtectedRoute from './components/Utils/ProtectedRoute';
 import './App.css';
 
 const App: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!localStorage.getItem('jwt_token'));
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [name, setName] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true); 
 
   const linkTo = isLoggedIn ? '/dashboard' : '/login';
 
   useEffect(() => {
     const token = localStorage.getItem('jwt_token');
+
     if (token) {
-      setIsLoggedIn(true);
-      console.log(name);
-      console.log(userId);
+      try {
+        const decodedToken: any = jwtDecode(token);
+        console.log('Decoded token:', decodedToken);
+
+        const expirationTime = decodedToken.exp * 1000;
+        if (expirationTime < Date.now()) {
+          console.log('Token has expired');
+          localStorage.removeItem('jwt_token');
+          setIsLoggedIn(false);
+        } else {
+          setIsLoggedIn(true);
+          setName(decodedToken.name);
+          setUserId(decodedToken.userId);
+        }
+      } catch (error) {
+        console.error('Token decoding failed', error);
+        localStorage.removeItem('jwt_token');
+        setIsLoggedIn(false);
+      }
+    } else {
+      setIsLoggedIn(false);
     }
+    setLoading(false);
   }, []);
 
   const handleLogout = () => {
+    console.log('Logging out...');
     localStorage.removeItem('jwt_token');
     setIsLoggedIn(false);
     setUserId('');
     setName('');
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Router>
       <div>
       {isLoggedIn && <NavBar onLogout={handleLogout} />}
         <Routes>
-          {!isLoggedIn && <Route path="/" element={<LandingPage />} />}
-          <Route path="/login" element={
-             <LoginPage setIsLoggedIn={setIsLoggedIn} setUserId={setUserId} setName={setName} />} />
-          {!isLoggedIn && <Route path="/register" element={<RegisterPage />} />}
-          {isLoggedIn && <Route path="/dashboard" element={<ProtectedRoute isLoggedIn={isLoggedIn}  linkTo={linkTo}> <Dashboard name={name} userId={userId} /> </ProtectedRoute>} />}
-          <Route
-            path="/transactions"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}  linkTo={linkTo}><TransactionsPage userId={userId} /></ProtectedRoute>} />
-          <Route path="/budgets" element={<ProtectedRoute isLoggedIn={isLoggedIn}  linkTo={linkTo}><BudgetPage /></ProtectedRoute>} />
-          <Route path="/create-budget" element={<ProtectedRoute isLoggedIn={isLoggedIn}  linkTo={linkTo}><CreateBudgetPage /></ProtectedRoute>} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} setUserId={setUserId} setName={setName} />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/dashboard" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Dashboard name={name} userId={userId} /></ProtectedRoute>} />
+          <Route path="/transactions" element={<ProtectedRoute isLoggedIn={isLoggedIn}><TransactionsPage userId={userId} /></ProtectedRoute>} />
+          <Route path="/budgets" element={<ProtectedRoute isLoggedIn={isLoggedIn}><BudgetPage /></ProtectedRoute>} />
+          <Route path="/create-budget" element={<ProtectedRoute isLoggedIn={isLoggedIn}><CreateBudgetPage /></ProtectedRoute>} />
         </Routes>
       </div>
     </Router>

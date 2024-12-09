@@ -1,29 +1,23 @@
 import React from 'react';
 import BudgetItem from './BudgetItem';
-
-interface Budget {
-  id: string;
-  name: string;
-  type: 'goal' | 'category_limit';
-  amount: number;
-  amount_left: number;
-  start_date: string;
-  end_date: string;
-}
+import BudgetData from '../../../../server/src/shared/interfaces/BudgetData';
 
 interface BudgetListProps {
-  budgets: Budget[];
+  budgets: BudgetData[];
+  onEdit: (budget: BudgetData) => void;
+  onDelete: (budgetId: string) => Promise<void>;
 }
 
-const BudgetList: React.FC<BudgetListProps> = ({ budgets }) => {
-  if (budgets.length === 0) {
-    return <p>You don't have budgets.</p>;
-  }
-
+const BudgetList: React.FC<BudgetListProps> = ({ budgets, onEdit, onDelete }) => {
   return (
-    <ul className='budgetList'>
+    <ul className="budgetList">
       {budgets.map((budget) => (
-        <BudgetItem key={budget.id} budget={budget} />
+        <BudgetItem
+          key={budget.id}
+          budget={budget}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
       ))}
     </ul>
   );

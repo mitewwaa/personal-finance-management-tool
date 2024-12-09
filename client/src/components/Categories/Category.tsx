@@ -9,20 +9,24 @@ interface CategoryProps {
 
 const Category = ({ onCategoriesFetched }: CategoryProps) => {
   const [categories, setCategories] = useState<CategoryData[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false); 
 
   useEffect(() => {
     const fetchCategories = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/categories");
-        setCategories(response.data);
-        onCategoriesFetched(response.data); // Pass categories back to parent (TransactionPage)
-      } catch (error) {
-        console.error("Error fetching categories:", error);
+      if (!isLoaded) { 
+        try {
+          const response = await axios.get("http://localhost:3000/categories");
+          setCategories(response.data);
+          onCategoriesFetched(response.data); 
+          setIsLoaded(true);
+        } catch (error) {
+          console.error("Error fetching categories:", error);
+        }
       }
     };
     fetchCategories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onCategoriesFetched]);
+  }, [onCategoriesFetched, isLoaded]);
 
   return null;
 };

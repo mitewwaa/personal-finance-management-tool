@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
-import Category from '../Categories/Category'; 
+import { useNavigate, useLocation } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import Category from '../Categories/Category';
 
-import '../../styles/Budgets.css';
+import '../../styles/BudgetForm.css'
 
 const CreateBudgetPage: React.FC = () => {
   const [name, setName] = useState('');
@@ -16,21 +16,31 @@ const CreateBudgetPage: React.FC = () => {
   const [endDate, setEndDate] = useState('');
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isEdit = location.state?.isEdit || false; 
+  const budgetToEdit = location.state?.budget || null; 
 
   const getUserIdFromToken = (): string | null => {
     const token = localStorage.getItem('jwt_token');
     if (token) {
-      try {
-        const decoded: any = jwtDecode(token);
-        return decoded.userId || null;
-      } catch (error) {
-        console.error('Error decoding token:', error);
-      }
+      const decoded: any = jwtDecode(token);
+      return decoded.userId || null;
     }
     return null;
   };
 
   const userId = getUserIdFromToken();
+
+  useEffect(() => {
+    if (budgetToEdit && isEdit) {
+      setName(budgetToEdit.name);
+      setType(budgetToEdit.type);
+      setAmount(budgetToEdit.amount);
+      setCategoryId(budgetToEdit.category_id);
+      setStartDate(new Date(budgetToEdit.start_date).toISOString().slice(0, 10));
+      setEndDate(new Date(budgetToEdit.end_date).toISOString().slice(0, 10));
+    }
+  }, [budgetToEdit, isEdit]);
 
   useEffect(() => {
     if (!userId) {
@@ -39,7 +49,7 @@ const CreateBudgetPage: React.FC = () => {
     }
   }, [userId, navigate]);
 
-  const handleCreateBudget = async () => {
+  const handleCreateOrUpdateBudget = async () => {
     if (!userId) {
       setError('You are not logged in!');
       return;
@@ -60,28 +70,28 @@ const CreateBudgetPage: React.FC = () => {
     };
 
     try {
-      const response = await axios.post(`http://localhost:3000/budgets/users/${userId}`, budgetData,{
-        headers: { Authorization: `Bearer ${userId}` },
-      });
-      
-      if (response.status === 201) {
-        navigate('/budgets');
+      if (isEdit && budgetToEdit) {
+        await axios.put(`http://localhost:3000/budgets/${budgetToEdit.id}`, budgetData, {
+          headers: { Authorization: `Bearer ${userId}` },
+        });
+      } else {
+        await axios.post(`http://localhost:3000/budgets/users/${userId}`, budgetData, {
+          headers: { Authorization: `Bearer ${userId}` },
+        });
       }
-    } catch (error: any) {
-      console.error('Error creating budget:', error);
-      setError('Something went wrong when creating budget.');
-      if (error.response) {
-        console.error('Error response:', error.response.data);
-      }
+      navigate('/budgets');
+    } catch (error) {
+      console.error('Error saving budget:', error);
+      setError('Something went wrong when saving the budget.');
     }
   };
 
   return (
-    <div className="budgetsContainer">
-      <h1>Add new budget</h1>
+    <div className="budgetFormContainer">
+      <h1 className='mainTitle'>{isEdit ? 'Edit Budget' : 'Add new budget'}</h1>
       {error && <div className="error">{error}</div>}
-      <form onSubmit={(e) => e.preventDefault()}>
-        <div>
+      <form onSubmit={(e) => e.preventDefault()} className='budgetForm'>
+        <div className='inputContainer'>
           <label htmlFor="name">Name</label>
           <input
             id="name"
@@ -90,7 +100,7 @@ const CreateBudgetPage: React.FC = () => {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <div>
+        <div className='inputContainer'>
           <label htmlFor="type">Type</label>
           <select
             id="type"
@@ -101,7 +111,7 @@ const CreateBudgetPage: React.FC = () => {
             <option value="category_limit">Category limit</option>
           </select>
         </div>
-        <div>
+        <div className='inputContainer'>
           <label htmlFor="amount">Amount</label>
           <input
             id="amount"
@@ -110,7 +120,7 @@ const CreateBudgetPage: React.FC = () => {
             onChange={(e) => setAmount(Number(e.target.value))}
           />
         </div>
-        <div>
+        <div className='inputContainer'>
           <label htmlFor="categoryId">Category</label>
           <select
             id="categoryId"
@@ -125,7 +135,7 @@ const CreateBudgetPage: React.FC = () => {
             ))}
           </select>
         </div>
-        <div>
+        <div className='inputContainer'>
           <label htmlFor="startDate">Start Date</label>
           <input
             id="startDate"
@@ -134,7 +144,7 @@ const CreateBudgetPage: React.FC = () => {
             onChange={(e) => setStartDate(e.target.value)}
           />
         </div>
-        <div>
+        <div className='inputContainer'>
           <label htmlFor="endDate">End Date</label>
           <input
             id="endDate"
@@ -143,8 +153,8 @@ const CreateBudgetPage: React.FC = () => {
             onChange={(e) => setEndDate(e.target.value)}
           />
         </div>
-        <button type="button" onClick={handleCreateBudget}>
-          Create Budget
+        <button type="button" onClick={handleCreateOrUpdateBudget} className='buttonSubmit'>
+          {isEdit ? 'Update Budget' : 'Create Budget'}
         </button>
       </form>
       <Category onCategoriesFetched={setCategories} />

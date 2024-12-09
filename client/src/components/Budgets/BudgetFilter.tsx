@@ -1,16 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaFilter } from 'react-icons/fa';
+import CategoryData from "../../../../server/src/shared/interfaces/CategoryData";
 
 interface BudgetFilterProps {
-  onChange: (criteria: { type: string; amount: number; amountLeft: number; startDate: string; endDate: string }) => void;
+  onChange: (criteria: { 
+    type: string; 
+    amount: number; 
+    amountLeft: number; 
+    startDate: string; 
+    endDate: string; 
+    categoryId: string; 
+  }) => void;
+  categories: CategoryData[];
 }
 
-const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange }) => {
+const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange, categories }) => {
   const [type, setType] = useState('');
   const [amount, setAmount] = useState<string>('0');
   const [amountLeft, setAmountLeft] = useState<string>('0');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
+  const [categoryId, setCategoryId] = useState<string>('');
 
   const handleFilterChange = () => {
     onChange({
@@ -18,13 +28,14 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange }) => {
       amount: parseFloat(amount) || 0,
       amountLeft: parseFloat(amountLeft) || 0,
       startDate,
-      endDate
+      endDate,
+      categoryId,
     });
   };
 
   useEffect(() => {
     handleFilterChange();
-  }, [type, amount, amountLeft, startDate, endDate]);
+  }, [type, amount, amountLeft, startDate, endDate, categoryId]);
 
   return (
     <div className="budgetFilter">
@@ -40,38 +51,34 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange }) => {
 
       <label className="filterLabel">
         Amount
-        <input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
+        <input type="number"value={amount} onChange={(e) => setAmount(e.target.value)}/>
       </label>
 
       <label className="filterLabel">
         Amount Left
-        <input
-          type="number"
-          value={amountLeft}
-          onChange={(e) => setAmountLeft(e.target.value)}
-        />
+        <input type="number" value={amountLeft} onChange={(e) => setAmountLeft(e.target.value)}/>
       </label>
 
       <label className="filterLabel">
         Start Date
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
+        <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)}/>
       </label>
 
       <label className="filterLabel">
         End Date
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
+        <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)}/>
+      </label>
+
+      <label className="filterLabel">
+        Category
+        <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+          <option value="">All</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
       </label>
     </div>
   );

@@ -1,7 +1,11 @@
 .budgetsContainer{
     margin: 0 2rem;
-    width: 96%;
-    height: 96%;
+}
+
+.headerContainer{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 5rem;
 }
 
 .mainTitle{
@@ -24,6 +28,11 @@
     margin-bottom: 1.2rem;
     width: 96%;
 }
+
+.budgetItem:last-child{
+    margin-bottom: 1rem;
+}
+
 .budgetName{
     color: var(--btn-color);
     align-self: center;
@@ -55,6 +64,7 @@
     height: 3rem;
     margin: 2rem 4rem;
     display: flex;
+    flex-wrap: wrap;
 }
 
 .filterIcon{

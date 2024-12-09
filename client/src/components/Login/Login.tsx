@@ -26,10 +26,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId, setName
       const response = await axios.post("http://localhost:3000/users/login", payload);
 
       if (response.data.token) {
-        localStorage.setItem('jwt_token', response.data.token); // Записване на токен в localStorage
+        localStorage.setItem('jwt_token', response.data.token); 
         setName(response.data.name);
         setUserId(response.data.id);
-        setIsLoggedIn(true); // Обновяване на състоянието веднага след успешен вход
+        setIsLoggedIn(true); 
         navigate('/dashboard');
       }
     } catch (error: any) {
@@ -47,7 +47,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId, setName
       </div>
       <div className='form'>
         <Link to="/" className='icon'><FaArrowCircleLeft /></Link>
-        <h2 className='title'>Log In</h2>
+        <h2 className='title-form'>Log In</h2>
         <form onSubmit={handleLogin}>
           <div className='formField'>
             <label htmlFor="email" className='label'>Email</label>
