@@ -39,17 +39,17 @@
 }
 
 .navItem:hover::after {
-    content: attr(data-tooltip); /* Use the data-tooltip attribute for the tooltip text */
+    content: attr(data-tooltip);
     position: absolute;
     top: 50%;
-    left: 110%; /* Position the tooltip to the right of the icon */
+    left: 110%; 
     transform: translateY(-50%);
     background-color: #333;
     color: #fff;
     padding: 5px 10px;
     border-radius: 5px;
     font-size: 12px;
-    white-space: nowrap; /* Prevent text wrapping */
+    white-space: nowrap; 
     z-index: 10;
     opacity: 1;
     visibility: visible;
@@ -63,6 +63,7 @@
 }
 
 .navIcon {
+    color: var(--btn-color);
     font-size: 20px;
     margin-right: 10px;
 }

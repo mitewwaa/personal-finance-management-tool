@@ -141,7 +141,11 @@ function Transaction({ onAddTransaction, categories, transactionToEdit, onUpdate
                 setNotification("Successfully updated transaction!");
                 const transaction = response.data;
                 onUpdateTransaction(transaction);
-                await updateBudgetAssociatedWithTransaction(transactionToEdit.category_id, transactionToEdit.amount);
+                console.log("new",newTransaction.amount);
+                console.log("to edit", transactionToEdit.amount);
+                if (newTransaction.amount != transactionToEdit.amount) {
+                    await updateBudgetAssociatedWithTransaction(transactionToEdit.category_id, transactionToEdit.amount);
+                }
             }
 
             resetForm();
