@@ -36,28 +36,10 @@ function TransactionPage({ userId }: TransactionPageProps) {
         } else {
             console.error("No token found. Please log in.");
         }
-    },[userId]);
-
-    const fetchTransactions = async () => {
-        try {
-            const token = localStorage.getItem('jwt_token');
-            if (!token) {
-                console.error("No token found. Please log in.");
-                return;
-            }
-
-            const response = await axios.get("http://localhost:3000/transactions", {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setTransactions(response.data);
-        } catch (error) {
-            console.error("Error fetching transactions:", error);
-        }
-    };
+    },[userId, isModalOpen]);
 
     const addTransaction = (newTransaction: TransactionData) => {
         setTransactions((prev) => [...prev, newTransaction]);
-        fetchTransactions();
     };
 
     const handleDeleteTransaction = async (transactionId: string) => {

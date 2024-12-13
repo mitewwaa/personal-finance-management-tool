@@ -1,0 +1,23 @@
+.pie-charts {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    border-bottom: 1.5px solid lightgray;
+    width: 600px;
+    height: 400px;
+    max-height: 100%;
+    gap: 20px;
+}
+
+.pie-charts h4 {
+    font-weight: bold;
+    color: var(--btn-color);
+}
+
+.pie-charts canvas {
+    width: 400px !important;
+    height: 300px !important;
+    max-width: 100%;
+    max-height: 100%;
+}

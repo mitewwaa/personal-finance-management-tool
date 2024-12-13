@@ -8,26 +8,16 @@ import CategoryData from "../../../../server/src/shared/interfaces/CategoryData"
 
 interface OverviewProps {
     transactions: TransactionData[] | null;
+    categories: CategoryData[];
+    exchangeRates: { [key: string]: number };
 }
 
-function Overview({ transactions }: OverviewProps) {
+function Overview({ transactions, categories, exchangeRates }: OverviewProps) {
     const [currentMonthIncome, setCurrentMonthIncome] = useState<number>(0);
     const [currentMonthOutcome, setCurrentMonthOutcome] = useState<number>(0);
     const [totalBalance, setTotalBalance] = useState<number>(0);
     const [recentIncomes, setRecentIncomes] = useState<TransactionData[]>([]);
     const [recentOutcomes, setRecentOutcomes] = useState<TransactionData[]>([]);
-    const [exchangeRates, setExchangeRates] = useState<{ [key: string]: number }>({});
-    const [categories, setCategories] = useState<CategoryData[]>([]);
-
-    // Fetch exchange rates (USD, EUR, GBP to BGN) on component mount
-    const fetchExchangeRates = async () => {
-        try {
-            const response = await axios.get('https://api.exchangerate-api.com/v4/latest/BGN');
-            setExchangeRates(response.data.rates);
-        } catch (error) {
-            console.error('Error fetching exchange rates:', error);
-        }
-    };
 
     const convertToBGN = (amount: number, currency: string): number => {
         if (currency === 'BGN') return amount;
@@ -93,11 +83,6 @@ function Overview({ transactions }: OverviewProps) {
         }
     }, [transactions])
 
-
-    useEffect(() => {
-        fetchExchangeRates();
-    });
-
     useEffect(() => {
         if (transactions && transactions.length > 0 && Object.keys(exchangeRates).length > 0) {
             calculateCurrentMonthStats();
@@ -105,10 +90,6 @@ function Overview({ transactions }: OverviewProps) {
             getRecentTransactions();
         }
     }, [transactions]);
-
-    const handleCategoriesFetched = useCallback((categories: CategoryData[]) => {
-        setCategories(categories);
-    }, []);
 
     return (
         <div id="overview">
@@ -127,7 +108,6 @@ function Overview({ transactions }: OverviewProps) {
                 </div>
             </div>
             <div id="recent-transactions">
-                <Category onCategoriesFetched={handleCategoriesFetched} />
                 <h4>Recent Transactions</h4>
                 <div className="transactions-container">
                     <div className="outcomes">

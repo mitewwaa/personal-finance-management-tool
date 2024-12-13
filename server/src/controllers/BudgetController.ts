@@ -49,6 +49,21 @@ class BudgetController {
         }
     }
 
+    static async getBudgetByCategoryId(req: Request, res: Response): Promise<void> {
+        try {
+            const categoryId: string = req.params.categoryId;
+            const budget = await BudgetService.getBudgetByCategoryId(categoryId);
+            if (budget) {
+                res.status(200).json(budget);
+            } else {
+                res.status(404).json({ message: 'Budget not found.' });
+            }
+        } catch (error) {
+            console.error('Error retrieving budget by ID:', error);
+            res.status(500).json({ message: 'Internal server error.' });
+        }
+    }
+
     static async getBudgetsByUserId(req: Request, res: Response): Promise<void> {
         try {
             const userId: string = req.params.userId;

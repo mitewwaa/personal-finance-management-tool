@@ -1,9 +1,10 @@
 .page-container {
-  background-color: #ffffff;
+  background-color: var(--primary-bg-color);
   margin-left: 40px;
   padding: 20px;
   box-sizing: border-box;
   overflow-x: hidden;
+  height: 100vh;
 }
 
 .page-container.blurred {

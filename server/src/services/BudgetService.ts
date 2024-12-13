@@ -69,6 +69,17 @@ class BudgetService {
         }
     }
 
+    static async getBudgetByCategoryId(categoryId: string): Promise<Budget | null> {
+        try {
+            return await Budget.findOne({
+                where: { category_id: categoryId },
+            });
+        } catch (error) {
+            console.error('Error getting budget by category ID:', error);
+            return null;
+        }
+    }
+
     static async getBudgetsByUserId(userId: string): Promise<Budget[] | null> {
         try {
             return await Budget.findAll({
@@ -120,13 +131,12 @@ class BudgetService {
         try {
             const budget = await Budget.findByPk(budgetId);
             if (budget) {
-                let amount_left: number = budget.dataValues.amount_left
-                amount_left -= amount;
-                if (amount_left < 0) amount_left = 0; 
-                await budget.save();
-                return await budget.update({
-                    amount_left: amount_left
-                });
+                let amount_left: number = budget.dataValues.amount_left;
+            amount_left -= amount; 
+            if (amount_left < 0) amount_left = 0; 
+            budget.set('amount_left', amount_left);
+            await budget.save();
+            return budget; 
             }
             return null;
         } catch (error) {

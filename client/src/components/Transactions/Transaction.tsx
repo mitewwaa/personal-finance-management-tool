@@ -52,6 +52,35 @@ function Transaction({ onAddTransaction, categories, transactionToEdit, onUpdate
         setTimeStamp(new Date());
     };
 
+    const updateBudgetAssociatedWithTransaction = async function (categoryId: string, amount: number) {
+        const token = localStorage.getItem('jwt_token');
+        try {
+            const response = await axios.get(`http://localhost:3000/budgets/categories/${categoryId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (response.data) {
+                try {
+                    const budgetId = response.data.id;
+                    const updatedAmount = await axios.put(`http://localhost:3000/budgets/${budgetId}/amount`, { amount }, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    }
+                    );
+                    console.log("Budget successfully updated:", updatedAmount.data);
+                    return updatedAmount.data;
+                } catch (error) {
+                    console.error("Error updating amount_left for budget associated with this category.", error);
+                }
+
+            }
+        } catch (error) {
+            console.error("Error finding budget associated with this category.", error);
+        }
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -89,8 +118,8 @@ function Transaction({ onAddTransaction, categories, transactionToEdit, onUpdate
             notes: note,
             date: formattedTimestamp,
         };
-        
-        
+
+
         try {
             if (transactionToEdit === null) {
                 const response = await axios.post('http://localhost:3000/transactions', newTransaction, {
@@ -100,7 +129,9 @@ function Transaction({ onAddTransaction, categories, transactionToEdit, onUpdate
                 });
                 console.log("Adding new transaction:", newTransaction);
                 setNotification("Successfully added transaction!");
-                onAddTransaction(response.data);
+                const transaction = response.data;
+                onAddTransaction(transaction);
+                await updateBudgetAssociatedWithTransaction(newTransaction.category_id, newTransaction.amount);
             } else {
                 const response = await axios.put(`http://localhost:3000/transactions/${transactionToEdit.id}`, newTransaction, {
                     headers: {
@@ -108,7 +139,9 @@ function Transaction({ onAddTransaction, categories, transactionToEdit, onUpdate
                     }
                 });
                 setNotification("Successfully updated transaction!");
-                onUpdateTransaction(response.data);
+                const transaction = response.data;
+                onUpdateTransaction(transaction);
+                await updateBudgetAssociatedWithTransaction(transactionToEdit.category_id, transactionToEdit.amount);
             }
 
             resetForm();
