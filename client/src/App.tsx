@@ -9,6 +9,7 @@ import TransactionsPage from './components/Transactions/TransactionsPage';
 import Dashboard from './components/Home/Dashboard';
 import BudgetPage from './components/Budgets/BudgetsPage';
 import CreateBudgetPage from './components/Budgets/CreateBudgetPage';
+import ProfilePage from './components/Profile/ProfilePage';
 import ProtectedRoute from './components/Utils/ProtectedRoute';
 
 import './App.css';
@@ -74,6 +75,7 @@ const App: React.FC = () => {
           <Route path="/transactions" element={<ProtectedRoute isLoggedIn={isLoggedIn}><TransactionsPage userId={userId} /></ProtectedRoute>} />
           <Route path="/budgets" element={<ProtectedRoute isLoggedIn={isLoggedIn}><BudgetPage /></ProtectedRoute>} />
           <Route path="/create-budget" element={<ProtectedRoute isLoggedIn={isLoggedIn}><CreateBudgetPage /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute isLoggedIn={isLoggedIn}><ProfilePage></ProfilePage></ProtectedRoute>} />
         </Routes>
       </div>
     </Router>

@@ -1,0 +1,103 @@
+.profileContainer{
+    margin-left: 4.8rem;
+}
+
+.profile {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+    margin-top: 0;
+}
+
+.leftColumn, .rightColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+.mainTitleProfile{  
+    width: 98%;
+    color: var(--btn-color);
+    font-size: 2.6rem;
+    text-align: start;
+    border-bottom: 0.1rem solid var(--tertiary-bg-color);
+    padding-bottom: 2.4rem;
+    margin-bottom: 0;
+}
+
+.secondaryTitle{
+    color: var(--font-main);
+    margin: 2rem 0;
+    font-size: 1.8rem;
+    align-self: flex-start;
+}
+
+.personalInfo, .categoryInfo {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.picContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    gap: 1rem; 
+}
+
+.profilePic {
+    width: 8rem; 
+    height: 8rem;
+    border-radius: 50%;
+}
+
+.fieldsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.field {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: start;
+}
+
+.fieldLabel {
+    font-weight: bold;
+    font-size: 1.4rem;
+    margin: 0 1rem;
+}
+
+.info {
+    font-size: 1.4rem;
+    margin: 0 1rem;
+}
+
+.categoryCarousel {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.carouselButton {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.categoryItems {
+    display: flex;
+    gap: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.categoryItem {
+    padding: 0.8rem 1.5rem;
+    background-color: var(--tertiary-bg-color);
+    color: var(--font-main);
+    border-radius: 0.5rem;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
