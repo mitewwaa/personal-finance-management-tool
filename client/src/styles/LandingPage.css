@@ -4,7 +4,6 @@
     justify-content: center;
     align-items: center;
     margin: 4.8rem;
-    margin-bottom: 0;
 }
 
 .textContainer{
@@ -95,8 +94,7 @@
 @media (max-width: 768px) {
     .pageContainer {
         flex-direction: column; 
-        margin: 2rem;
-        margin-bottom: 0;
+        margin: 6rem;
     }
 
     .textContainer {
@@ -133,8 +131,7 @@
 @media (max-width: 480px) {
 
     .pageContainer{
-        margin: 8rem;
-        margin-bottom: 0;
+        margin: 3.8rem;
     }
 
     .textContainer h1{
@@ -158,9 +155,8 @@
     }
 }
 
-@media (max-width: 370px) {
+@media (max-width: 390px) {
     .pageContainer{
-        margin: 3rem;
-        margin-bottom: 0;
+        margin: 1rem;
     }
 }
