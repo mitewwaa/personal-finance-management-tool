@@ -1,7 +1,7 @@
 .container {
     display: flex;
     justify-content: center;
-    margin: 4rem;
+    margin: 6rem;
 }
 
 .image,
@@ -137,7 +137,7 @@
 
 @media (max-width: 1024px) {
     .container {
-        margin: 8rem 2rem;
+        margin: 4rem 2rem;
     }
     
     .image,
@@ -375,7 +375,7 @@
 
 @media (max-width: 390px) {
     .container {
-        margin: 6rem 1rem;
+        margin: 4rem 1rem;
     }
     
     .form {
