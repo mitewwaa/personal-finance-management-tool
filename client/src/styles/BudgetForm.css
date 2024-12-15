@@ -5,11 +5,78 @@
 }
 
 .budgetForm{
-    margin-left: 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem;
 }
 
 .inputContainer{
     display: flex;
     flex-direction: column;
-    margin-bottom: 0.8rem;
+    gap: 0.4rem;
+    width: 28rem;
+    height: 6rem;
+}
+
+.budgetForm .label{
+    font-size: 1.4rem;
+}
+
+.inputField{
+    height: 2.4rem;
+    font-size: 1.2rem;
+    border-radius: 5rem;
+    border: 0.1rem solid var(--btn-color);
+    padding: 0 1rem;
+    color: var(--btn-color);
+}
+
+.inputField:focus {
+    outline: 0.16rem dotted var(--btn-color);
+}
+
+#endDate::-webkit-calendar-picker-indicator, #startDate::-webkit-calendar-picker-indicator{
+    background-color: var(--tertiary-bg-color);
+    height: 1.2rem;
+    width: 1.2rem;
+    border-radius: 25%;
+    cursor: pointer;
+}
+
+.categoryGroup{
+    display: flex;
+    align-items: center;
+    width: 28rem;
+}
+
+.addCategoryButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    border-radius: 5rem;
+    background-color: var(--btn-color);
+    color: var(--primary-bg-color);
+    padding: 0 1rem;
+    margin: 1rem 0 0.5rem 0.5rem;
+    height: 3.2rem;
+}
+
+.plus:hover{
+    font-size: 1.2rem;
+}
+
+.text{
+    margin: 0;
+    display: none;
+}
+
+.addCategoryButton:hover .text, .addCategoryButton:hover .plus{
+    display: inline;
+    margin-right: 0.5rem;
 }

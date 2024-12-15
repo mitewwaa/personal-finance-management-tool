@@ -104,7 +104,7 @@
 }
 
 #dateOfBirth::-webkit-calendar-picker-indicator {
-    background-color: var(--primary-bg-color);
+    background-color: var(--tertiary-bg-color);
     height: 1.2rem;
     width: 1.2rem;
     border-radius: 25%;
@@ -113,7 +113,7 @@
 
 .buttonSubmit {
     background-color: var(--btn-color);
-    color: var(--tertiary-bg-color);
+    color: var(--primary-bg-color);
     border-radius: 2rem;
     border: none;
     width: 12rem;
@@ -121,6 +121,13 @@
     font-weight: bold;
     font-size: 1.2rem;
     margin-top: 0.8rem;
+    cursor: pointer;
+}
+
+.buttonSubmit:hover{
+    color: var(--btn-color);
+    background-color: var(--primary-bg-color);
+    border: 0.2rem solid var(--btn-color);
 }
 
 .error {

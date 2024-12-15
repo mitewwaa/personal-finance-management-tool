@@ -5,6 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 import Category from '../Categories/Category';
 
 import '../../styles/BudgetForm.css'
+import { FaPlus } from 'react-icons/fa';
 
 const CreateBudgetPage: React.FC = () => {
   const [name, setName] = useState('');
@@ -92,62 +93,75 @@ const CreateBudgetPage: React.FC = () => {
       {error && <div className="error">{error}</div>}
       <form onSubmit={(e) => e.preventDefault()} className='budgetForm'>
         <div className='inputContainer'>
-          <label htmlFor="name">Name</label>
+          <label htmlFor="name" className='label'>Name</label>
           <input
             id="name"
+            className='inputField'
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </div>
         <div className='inputContainer'>
-          <label htmlFor="type">Type</label>
+          <label htmlFor="type" className='label'>Type</label>
           <select
             id="type"
+            className='inputField'
             value={type}
             onChange={(e) => setType(e.target.value as 'goal' | 'category_limit')}
           >
-            <option value="goal">Goal</option>
-            <option value="category_limit">Category limit</option>
+            <option value="goal" className='option'>Goal</option>
+            <option value="category_limit" className='option'>Category limit</option>
           </select>
         </div>
         <div className='inputContainer'>
-          <label htmlFor="amount">Amount</label>
+          <label htmlFor="amount" className='label'>Amount</label>
           <input
             id="amount"
+            className='inputField'
             type="number"
             value={amount}
             onChange={(e) => setAmount(Number(e.target.value))}
           />
         </div>
-        <div className='inputContainer'>
-          <label htmlFor="categoryId">Category</label>
-          <select
-            id="categoryId"
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-          >
-            <option value="">Select a category</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
+        <div className='categoryGroup'>
+          <div className='inputContainer'>
+            <label htmlFor="categoryId" className='label'>Category</label>
+            <select
+              id="categoryId"
+              className='inputField'
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
+            >
+              <option value="">Select a category</option>
+              {categories.length > 0 ? (
+                categories.map((category) => (
+                  <option key={category.id} value={category.id} className='option'>
+                    {category.name}
+                  </option>
+                ))
+              ) : (
+                <option value="" disabled>No categories available! Create a category!</option>
+              )}
+            </select>
+          </div>
+          <button className='addCategoryButton'><FaPlus className='plus' /><p className='text'>Add New Category</p></button>
         </div>
         <div className='inputContainer'>
-          <label htmlFor="startDate">Start Date</label>
+          <label htmlFor="startDate" className='label'>Start Date</label>
           <input
             id="startDate"
+            className='inputField'
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           />
         </div>
         <div className='inputContainer'>
-          <label htmlFor="endDate">End Date</label>
+          <label htmlFor="endDate" className='label'>End Date</label>
           <input
             id="endDate"
+            className='inputField'
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
