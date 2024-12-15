@@ -4,8 +4,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import Category from '../Categories/Category';
 
-import '../../styles/BudgetForm.css'
 import { FaPlus } from 'react-icons/fa';
+import { IoArrowBackCircle } from "react-icons/io5";
+
+import '../../styles/BudgetForm.css'
 
 const CreateBudgetPage: React.FC = () => {
   const [name, setName] = useState('');
@@ -87,9 +89,17 @@ const CreateBudgetPage: React.FC = () => {
     }
   };
 
+  const goBack = () => {
+    navigate('/budgets');
+  };
+
   return (
     <div className="budgetFormContainer">
-      <h1 className='mainTitle'>{isEdit ? 'Edit Budget' : 'Add new budget'}</h1>
+      <div className='budgetHeader'>
+        <button type='button' onClick={goBack} className='goBackButton'><IoArrowBackCircle className='backIcon' /></button>
+        <h1 className='mainTitle'>{isEdit ? 'Edit Budget' : 'Add new budget'}</h1>
+      </div>
+      
       {error && <div className="error">{error}</div>}
       <form onSubmit={(e) => e.preventDefault()} className='budgetForm'>
         <div className='inputContainer'>
