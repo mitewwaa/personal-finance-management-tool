@@ -18,7 +18,7 @@ const CreateBudgetPage: React.FC = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -90,6 +90,17 @@ const CreateBudgetPage: React.FC = () => {
       setError('Something went wrong when saving the budget.');
     }
   };
+ 
+  const openModal = () => {
+    if (!isModalOpen) {
+      setIsModalOpen(true);
+    }
+  };
+  
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setError(null);
+  };
 
   const handleCategoryCreated = (newCategory: { id: string; name: string }) => {
     setCategories((prevCategories) => [...prevCategories, newCategory]);
@@ -146,7 +157,7 @@ const CreateBudgetPage: React.FC = () => {
             categoryId={categoryId}
             setCategoryId={setCategoryId}
           />
-          <button type="button" className='addCategoryButton' onClick={() => setIsModalOpen(true)}>
+          <button type="button" className='addCategoryButton' onClick={openModal}>
             <FaPlus className='plus' />
             <p className='text'>Add New Category</p>
           </button>
@@ -178,8 +189,8 @@ const CreateBudgetPage: React.FC = () => {
       <Category onCategoriesFetched={setCategories} />
 
       <CategoryModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
         onCategoryCreated={handleCategoryCreated}
       />
     </div>

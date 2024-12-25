@@ -13,6 +13,7 @@ const ProfilePage: React.FC = () => {
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -71,12 +72,13 @@ const ProfilePage: React.FC = () => {
   };
 
   const closeModal = () => {
+    setError(null);
     setIsModalOpen(false);
   };
 
   const handleSaveChanges = async () => {
     if (!editForm) return;
-
+  
     try {
       const token = localStorage.getItem('jwt_token');
       await axios.put(`http://localhost:3000/users/${editForm.id}`, editForm, {
@@ -85,18 +87,22 @@ const ProfilePage: React.FC = () => {
         },
       });
       setUser(editForm);
-      setIsModalOpen(false);
+      setSuccessMessage('Your profile has been updated successfully!');
+      
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setSuccessMessage(null);
+      }, 3000);
     } catch (error) {
-      setError('Error updating user data');
+      setError('Error updating data');
+      setTimeout(() => {
+        setError(null);
+      },2000);
     }
-  };
+  };  
 
   if (loading) {
     return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
   }
 
   return (
@@ -152,11 +158,13 @@ const ProfilePage: React.FC = () => {
       <Category onCategoriesFetched={handleCategoriesFetched} />
 
       <EditProfileModal 
-        isOpen={isModalOpen} 
-        onRequestClose={closeModal} 
-        editForm={editForm || {}} 
-        setEditForm={setEditForm} 
-        onSaveChanges={handleSaveChanges} 
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        editForm={editForm || {}}
+        setEditForm={setEditForm}
+        onSaveChanges={handleSaveChanges}
+        successMessage={successMessage} 
+        error={error}
       />
       
     </div>

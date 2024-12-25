@@ -77,3 +77,19 @@
 .filterLabel{
     margin-left: 2rem;
 }
+
+@media (max-width: 1024px) {
+    
+}
+
+@media screen and (max-width: 768px) {
+     
+}
+
+@media screen and (max-width: 480px) {
+    
+}
+
+@media (max-width: 390px) {
+   
+}

@@ -7,19 +7,20 @@ import { jwtDecode } from "jwt-decode";
 import "../../styles/CustomModal.css";
 
 interface CategoryModalProps {
-  isModalOpen: boolean;
-  setIsModalOpen: (isOpen: boolean) => void;
+  isOpen: boolean;
+  onRequestClose: () => void;
   onCategoryCreated: (category: { id: string; name: string }) => void;
 }
 
 const CategoryModal: React.FC<CategoryModalProps> = ({
-  isModalOpen,
-  setIsModalOpen,
+  isOpen,
+  onRequestClose,
   onCategoryCreated,
 }) => {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newCategoryType, setNewCategoryType] = useState<"income" | "expense">("income");
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const getUserIdFromToken = (): string | null => {
     const token = localStorage.getItem("jwt_token");
@@ -49,10 +50,16 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
         { name: newCategoryName, type: newCategoryType }
       );
 
-      onCategoryCreated(response.data);
-      setIsModalOpen(false);
+      setSuccessMessage("Category created successfully!");
       setNewCategoryName("");
       setError(null);
+
+      onCategoryCreated(response.data);
+
+      setTimeout(() => {
+        onRequestClose();
+        setSuccessMessage(null);
+      }, 3000);
     } catch (error: any) {
       console.error("Error creating category:", error);
       if (error.response) {
@@ -63,12 +70,15 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
     }
   };
 
-  if (!isModalOpen) return null;
+  const handleCloseModal = () => {
+    setError(null);
+    onRequestClose();
+  };
 
   return (
-    <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} className="customModal" appElement={document.getElementById("root") || undefined} >
+    <Modal isOpen={isOpen} onRequestClose={handleCloseModal} className="customModal" appElement={document.getElementById("root") || undefined} >
       <div className="modalHeader">
-        <button className="cancelButton" onClick={() => setIsModalOpen(false)}><MdOutlineCancel /></button>
+        <button className="cancelButton" onClick={handleCloseModal}><MdOutlineCancel /></button>
         <h2 className="mainTitleModal">Create New Category</h2>
       </div>
       <div className="modalContent">
@@ -95,6 +105,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
           </select>
         </div>
         {error && <div className="error">{error}</div>}
+        {successMessage && <div className="success">{successMessage}</div>}
         <button className="saveButton" onClick={handleCreateCategory}>Create Category</button>
       </div>
     </Modal>

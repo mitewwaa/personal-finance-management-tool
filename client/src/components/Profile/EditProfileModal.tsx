@@ -10,9 +10,12 @@ interface EditProfileModalProps {
   editForm: any;
   setEditForm: (form: any) => void;
   onSaveChanges: () => void;
+  successMessage: string | null;
+  error: string | null;
+  
 }
 
-const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onRequestClose, editForm, setEditForm, onSaveChanges }) => {
+const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onRequestClose, editForm, setEditForm, onSaveChanges, successMessage, error }) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditForm({ ...editForm, [e.target.name]: e.target.value });
@@ -66,6 +69,8 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onRequestCl
           />
         </div>
       </div>
+      {error && <div className="error">{error}</div>}
+      {successMessage && <div className="success">{successMessage}</div>}
       <button className="saveButton" onClick={onSaveChanges}>Save Changes</button>
     </Modal>
   );

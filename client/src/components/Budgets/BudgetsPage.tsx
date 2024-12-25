@@ -57,11 +57,8 @@ const BudgetPage: React.FC = () => {
     const filtered = budgets.map((budget) => {
       const category = categories.find(cat => cat.id === budget.category_id);
       const categoryName = category ? category.name : 'Unknown';
-  
       return { ...budget, category_name: categoryName };
-      
     }).filter((budget) => {
-
       const matchesType = filterCriteria.type ? budget.type === filterCriteria.type : true;
       const matchesAmount = filterCriteria.amount ? budget.amount === filterCriteria.amount : true;
       const matchesAmountLeft = filterCriteria.amountLeft ? budget.amount_left === filterCriteria.amountLeft : true;
@@ -101,6 +98,7 @@ const BudgetPage: React.FC = () => {
     setSelectedBudget(budget);
     navigate('/create-budget', { state: { isEdit: true, budget } });
   };
+  
 
   const handleDeleteBudget = async (budgetId: string) => {
     if (window.confirm('Are you sure you want to delete this budget?')) {
