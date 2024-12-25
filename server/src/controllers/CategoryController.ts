@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import CategoryService from "../services/CategoryService";
 import CategoryData from "../shared/interfaces/CategoryData";
+import Category from "../models/Category";
 
 class CategoryController {
   static async createCategory(req: Request, res: Response): Promise<void> {
@@ -46,9 +47,13 @@ class CategoryController {
   ): Promise<void> {
     try {
       const userId: string = req.params.userId;
-      const categories = await CategoryService.getCategoriesByUserId(userId);
-      if (categories && categories.length > 0) {
-        res.status(200).json(categories);
+      const userCategories: Category[] | null  = await CategoryService.getCategoriesByUserId(userId);
+      const defaultCategories = await CategoryService.getDefaultCategories();
+    
+      const allCategories = [...(userCategories || []), ...defaultCategories];
+
+      if (allCategories && allCategories.length > 0) {
+        res.status(200).json(allCategories);
       } else {
         res.status(404).json({ message: "No categories found for this user." });
       }

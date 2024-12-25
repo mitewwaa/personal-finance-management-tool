@@ -9,13 +9,18 @@ interface CategoryProps {
 
 const Category = ({ onCategoriesFetched }: CategoryProps) => {
   const [categories, setCategories] = useState<CategoryData[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false); 
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const getUserIdFromToken = (): string | null => {
     const token = localStorage.getItem('jwt_token');
     if (token) {
-      const decoded: any = jwtDecode(token);
-      return decoded.userId || null;
+      try {
+        const decoded: any = jwtDecode(token);
+        return decoded.userId || null;
+      } catch (err) {
+        console.error("Error decoding JWT token:", err);
+        return null;
+      }
     }
     return null;
   };
@@ -24,9 +29,10 @@ const Category = ({ onCategoriesFetched }: CategoryProps) => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      if (!isLoaded && userId) { 
+      if (!isLoaded && userId) {
         try {
-          const response = await axios.get<CategoryData[]>(`http://localhost:3000/categories/user/${userId}`);
+          const response = await axios.get<CategoryData[]>(`http://localhost:3000/categories/users/${userId}`);
+          console.log("Fetched categories:", response.data);
           setCategories(response.data);
           onCategoriesFetched(response.data); 
           setIsLoaded(true);

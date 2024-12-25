@@ -20,8 +20,6 @@ const App: React.FC = () => {
   const [userId, setUserId] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true); 
 
-  const linkTo = isLoggedIn ? '/dashboard' : '/login';
-
   useEffect(() => {
     const token = localStorage.getItem('jwt_token');
 

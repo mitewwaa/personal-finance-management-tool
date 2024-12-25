@@ -3,6 +3,37 @@ import User from "../models/User";
 import CategoryData from "../shared/interfaces/CategoryData";
 
 class CategoryService {
+  static async createDefaultCategories(): Promise<void> {
+    try {
+      const defaultCategories = [
+        { name: "Salary", type: "income" },
+        { name: "Investment", type: "income" },
+        { name: "Business", type: "income" },
+        { name: "Bonus", type: "income" },
+        { name: "Food & Drink", type: "expense" },
+        { name: "Utilities", type: "expense" },
+        { name: "Entertainment", type: "expense" },
+        { name: "Lifestyle", type: "expense" },
+        { name: "Housing", type: "expense" },
+        { name: "Transportation", type: "expense" },
+        { name: "Taxes", type: "expense" },
+        { name: "Miscellaneous", type: "expense" },
+        { name: "Unknown", type: "expense" },
+      ];
+
+      for (const category of defaultCategories) {
+        await Category.findOrCreate({
+          where: { name: category.name, type: category.type, user_id: null },
+          defaults: category,
+        });
+      }
+
+      console.log("Default categories created or already exist.");
+    } catch (error) {
+      console.error("Error creating default categories:", error);
+    }
+  }
+
   static async createCategory(
     categoryData: CategoryData
   ): Promise<Category | null> {
@@ -20,6 +51,19 @@ class CategoryService {
       return null;
     }
   }
+
+  static async getDefaultCategories(): Promise<Category[]> {
+    try {
+      const defaultCategories = await Category.findAll({
+        where: { user_id: null },
+        order: [["name", "ASC"]],
+      });
+      return defaultCategories;
+    } catch (error) {
+      console.error("Error fetching default categories:", error);
+      return [];
+    }
+  }  
 
   static async getCategoryById(categoryId: string): Promise<Category | null> {
     try {
