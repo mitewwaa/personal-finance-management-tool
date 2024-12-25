@@ -6,18 +6,37 @@ import Category from "../models/Category";
 class CategoryController {
   static async createCategory(req: Request, res: Response): Promise<void> {
     try {
-      const categoryData: CategoryData = req.body;
+      const { name, type } = req.body;
+      const userId: string = req.params.userId;
+  
+      if (!userId) {
+        res.status(401).json({ message: "You are not authenticated." });
+        return;
+      }
+  
+      if (!name || !type) {
+        res.status(400).json({ message: "Name and type are required." });
+        return;
+      }
+  
+      const categoryData = {
+        name,
+        type,
+        user_id: userId,
+      };
+  
       const newCategory = await CategoryService.createCategory(categoryData);
+  
       if (newCategory) {
         res.status(201).json(newCategory);
       } else {
-        res.status(400).json({ message: "Failed to create category." });
+        res.status(400).json({ message: "Category creation failed." });
       }
     } catch (error) {
       console.error("Error creating category:", error);
-      res.status(500).json({ message: "Internal server error." });
+      res.status(500).json({ message: "Server error." });
     }
-  }
+  }  
 
   static async assignCategoryToUser(
     req: Request,

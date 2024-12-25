@@ -3,7 +3,7 @@ import CategoryController from '../controllers/CategoryController';
 
 const router = express.Router();
 
-router.post('/', CategoryController.createCategory);
+router.post('/:userId', CategoryController.createCategory);
 router.get('/', CategoryController.getAllCategories);
 router.get('/:categoryId', CategoryController.getCategoryById);
 router.put('/users/:userId/:categoryId', CategoryController.assignCategoryToUser);

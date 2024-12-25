@@ -5,9 +5,8 @@ import UserData from '../../../../server/src/shared/interfaces/UserData';
 import { jwtDecode } from 'jwt-decode';
 import CategoryData from '../../../../server/src/shared/interfaces/CategoryData';
 import Category from '../Categories/Category';
-import Modal from 'react-modal';
+import EditProfileModal from './EditProfileModal';
 
-import { MdOutlineCancel } from 'react-icons/md';
 import '../../styles/Profile.css';
 
 const ProfilePage: React.FC = () => {
@@ -40,7 +39,7 @@ const ProfilePage: React.FC = () => {
           }
         });
         setUser(response.data);
-        setEditForm(response.data); // Set initial values for the edit form
+        setEditForm(response.data);
         setLoading(false);
       } catch (error) {
         setError('Error fetching user data');
@@ -73,12 +72,6 @@ const ProfilePage: React.FC = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (editForm) {
-      setEditForm({ ...editForm, [e.target.name]: e.target.value });
-    }
   };
 
   const handleSaveChanges = async () => {
@@ -158,55 +151,14 @@ const ProfilePage: React.FC = () => {
       )}
       <Category onCategoriesFetched={handleCategoriesFetched} />
 
-      <Modal isOpen={isModalOpen} onRequestClose={closeModal} className="profileModal" appElement={document.getElementById('root') || undefined}>
-        <div className='editProfileHeader'>
-          <button className="cancelButton" onClick={closeModal}><MdOutlineCancel /></button>
-          <h2 className='mainTitleProfile'>Edit Profile</h2>
-        </div>
-        <div className="modalContent">
-          <div className="fieldModal">
-            <label className="fieldLabel">First Name</label>
-            <input
-              type="text"
-              name="first_name"
-              value={editForm?.first_name || ''}
-              onChange={handleInputChange}
-              className="editInput"
-            />
-          </div>
-          <div className="fieldModal">
-            <label className="fieldLabel">Last Name</label>
-            <input
-              type="text"
-              name="last_name"
-              value={editForm?.last_name || ''}
-              onChange={handleInputChange}
-              className="editInput"
-            />
-          </div>
-          <div className="fieldModal">
-            <label className="fieldLabel">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={editForm?.email || ''}
-              onChange={handleInputChange}
-              className="editInput"
-            />
-          </div>
-          <div className="fieldModal">
-            <label className="fieldLabel">Date of Birth</label>
-            <input
-              type="date"
-              name="date_of_birth"
-              value={editForm?.date_of_birth ? new Date(editForm.date_of_birth).toISOString().split('T')[0] : ''}
-              onChange={handleInputChange}
-              className="editInput"
-            />
-          </div>
-        </div>
-        <button className="saveButton" onClick={handleSaveChanges}>Save Changes</button>
-      </Modal>
+      <EditProfileModal 
+        isOpen={isModalOpen} 
+        onRequestClose={closeModal} 
+        editForm={editForm || {}} 
+        setEditForm={setEditForm} 
+        onSaveChanges={handleSaveChanges} 
+      />
+      
     </div>
   );
 };

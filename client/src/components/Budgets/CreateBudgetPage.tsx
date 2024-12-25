@@ -3,12 +3,11 @@ import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import Category from '../Categories/Category';
-
 import { FaPlus } from 'react-icons/fa';
 import { IoArrowBackCircle } from "react-icons/io5";
-
-import '../../styles/BudgetForm.css'
+import '../../styles/BudgetForm.css';
 import CategoryDropdown from '../Categories/CategoryDropdown';
+import CategoryModal from '../Categories/CategoryModal';
 
 const CreateBudgetPage: React.FC = () => {
   const [name, setName] = useState('');
@@ -19,10 +18,12 @@ const CreateBudgetPage: React.FC = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
-  const isEdit = location.state?.isEdit || false; 
-  const budgetToEdit = location.state?.budget || null; 
+  const isEdit = location.state?.isEdit || false;
+  const budgetToEdit = location.state?.budget || null;
 
   const getUserIdFromToken = (): string | null => {
     const token = localStorage.getItem('jwt_token');
@@ -90,6 +91,10 @@ const CreateBudgetPage: React.FC = () => {
     }
   };
 
+  const handleCategoryCreated = (newCategory: { id: string; name: string }) => {
+    setCategories((prevCategories) => [...prevCategories, newCategory]);
+  };
+
   const goBack = () => {
     navigate('/budgets');
   };
@@ -100,7 +105,7 @@ const CreateBudgetPage: React.FC = () => {
         <button type='button' onClick={goBack} className='goBackButton'><IoArrowBackCircle className='backIcon' /></button>
         <h1 className='mainTitle'>{isEdit ? 'Edit Budget' : 'Add new budget'}</h1>
       </div>
-      
+
       {error && <div className="error">{error}</div>}
       <form onSubmit={(e) => e.preventDefault()} className='budgetForm'>
         <div className='inputContainer'>
@@ -136,12 +141,15 @@ const CreateBudgetPage: React.FC = () => {
           />
         </div>
         <div className='categoryGroup'>
-            <CategoryDropdown
-              categories={categories}
-              categoryId={categoryId}
-              setCategoryId={setCategoryId}
-            />
-          <button className='addCategoryButton'><FaPlus className='plus' /><p className='text'>Add New Category</p></button>
+          <CategoryDropdown
+            categories={categories}
+            categoryId={categoryId}
+            setCategoryId={setCategoryId}
+          />
+          <button type="button" className='addCategoryButton' onClick={() => setIsModalOpen(true)}>
+            <FaPlus className='plus' />
+            <p className='text'>Add New Category</p>
+          </button>
         </div>
         <div className='inputContainer'>
           <label htmlFor="startDate" className='label'>Start Date</label>
@@ -168,6 +176,12 @@ const CreateBudgetPage: React.FC = () => {
         </button>
       </form>
       <Category onCategoriesFetched={setCategories} />
+
+      <CategoryModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        onCategoryCreated={handleCategoryCreated}
+      />
     </div>
   );
 };

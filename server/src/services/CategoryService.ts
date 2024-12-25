@@ -35,22 +35,23 @@ class CategoryService {
   }
 
   static async createCategory(
-    categoryData: CategoryData
+    categoryData: Omit<CategoryData, 'id'>
   ): Promise<Category | null> {
     try {
-      const { name, type } = categoryData;
-
+      const { name, type, user_id } = categoryData;
+  
       const newCategory = await Category.create({
         name,
         type,
+        user_id,
       });
-
+  
       return newCategory;
     } catch (error) {
       console.error("Error creating category:", error);
       return null;
     }
-  }
+  }  
 
   static async getDefaultCategories(): Promise<Category[]> {
     try {
