@@ -32,7 +32,6 @@ const Category = ({ onCategoriesFetched }: CategoryProps) => {
       if (!isLoaded && userId) {
         try {
           const response = await axios.get<CategoryData[]>(`http://localhost:3000/categories/users/${userId}`);
-          console.log("Fetched categories:", response.data);
           setCategories(response.data);
           onCategoriesFetched(response.data); 
           setIsLoaded(true);

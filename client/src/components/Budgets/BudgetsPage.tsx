@@ -54,9 +54,13 @@ const BudgetPage: React.FC = () => {
   }, [userId]);
 
   useEffect(() => {
-    const filtered = budgets.filter((budget) => {
+    const filtered = budgets.map((budget) => {
       const category = categories.find(cat => cat.id === budget.category_id);
       const categoryName = category ? category.name : 'Unknown';
+  
+      return { ...budget, category_name: categoryName };
+      
+    }).filter((budget) => {
 
       const matchesType = filterCriteria.type ? budget.type === filterCriteria.type : true;
       const matchesAmount = filterCriteria.amount ? budget.amount === filterCriteria.amount : true;

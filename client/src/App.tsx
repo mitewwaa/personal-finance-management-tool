@@ -22,12 +22,11 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('jwt_token');
-
+  
     if (token) {
       try {
         const decodedToken: any = jwtDecode(token);
-        console.log('Decoded token:', decodedToken);
-
+  
         const expirationTime = decodedToken.exp * 1000;
         if (expirationTime < Date.now()) {
           console.log('Token has expired');
@@ -48,10 +47,12 @@ const App: React.FC = () => {
     }
     setLoading(false);
   }, []);
+  
 
   const handleLogout = () => {
     console.log('Logging out...');
     localStorage.removeItem('jwt_token');
+    localStorage.removeItem('categories');
     setIsLoggedIn(false);
     setUserId('');
     setName('');

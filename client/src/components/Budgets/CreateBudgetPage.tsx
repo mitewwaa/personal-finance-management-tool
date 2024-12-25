@@ -8,6 +8,7 @@ import { FaPlus } from 'react-icons/fa';
 import { IoArrowBackCircle } from "react-icons/io5";
 
 import '../../styles/BudgetForm.css'
+import CategoryDropdown from '../Categories/CategoryDropdown';
 
 const CreateBudgetPage: React.FC = () => {
   const [name, setName] = useState('');
@@ -135,26 +136,11 @@ const CreateBudgetPage: React.FC = () => {
           />
         </div>
         <div className='categoryGroup'>
-          <div className='inputContainer'>
-            <label htmlFor="categoryId" className='label'>Category</label>
-            <select
-              id="categoryId"
-              className='inputField'
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
-            >
-              <option value="">Select a category</option>
-              {categories.length > 0 ? (
-                categories.map((category) => (
-                  <option key={category.id} value={category.id} className='option'>
-                    {category.name}
-                  </option>
-                ))
-              ) : (
-                <option value="" disabled>No categories available! Create a category!</option>
-              )}
-            </select>
-          </div>
+            <CategoryDropdown
+              categories={categories}
+              categoryId={categoryId}
+              setCategoryId={setCategoryId}
+            />
           <button className='addCategoryButton'><FaPlus className='plus' /><p className='text'>Add New Category</p></button>
         </div>
         <div className='inputContainer'>

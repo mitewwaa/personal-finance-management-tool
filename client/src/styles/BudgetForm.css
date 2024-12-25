@@ -1,6 +1,6 @@
 .budgetFormContainer{
     width: 90%;
-    height: 100%;
+    height: auto;
     margin: 0 2rem;
 }
 
@@ -60,6 +60,7 @@
     border: 0.1rem solid var(--btn-color);
     padding: 0 1rem;
     color: var(--btn-color);
+    background-color: #fff;
 }
 
 .inputField:focus {
