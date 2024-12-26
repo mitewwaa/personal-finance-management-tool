@@ -5,29 +5,36 @@
 .headerContainer{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-left: 5rem;
+}
+
+.headerContainer .buttonSubmit{
+    margin: 1.6rem 0;
 }
 
 .mainTitle{
     color: var(--font-main);
-    font-size: 2.6rem;
+    font-size: 2.4rem;
 }
 
 .budgetList{
     list-style: none;
     width: 96%;
     height: 96%;
+    margin: 0;
 }
 
 .budgetItem{
-    background-color: var(--tertiary-bg-color);
-    border-radius: 5rem;
     display: flex;
     flex-direction: column;
     align-items: start;
-    padding: 2rem;
+    padding: 1.2rem 2rem;
     margin-bottom: 1.2rem;
     width: 96%;
+    background-color: var(--primary-bg-color);
+    border-radius: 5rem;
+    border: 0.2rem solid var(--btn-color);
 }
 
 .budgetItem:last-child{
@@ -36,46 +43,142 @@
 
 .budgetName{
     color: var(--btn-color);
+    font-size: 1.4rem;
     align-self: center;
-    margin: 0;
+    margin: 0 0 1rem;
 }
 
-.budgetType{
-    color: var(--font-main);
-}
-
-.amountContainer, .dateContainer{
+.budgetInfo{
     width: 96%;
     display: flex;
     justify-content: space-between;
 }
 
-.amount:last-child{
+.budgetInfo:last-child{
     align-self: flex-end;
+}
+
+.budgetType, .categoryName{
+    color: var(--font-main);
+    font-size: 1rem;
+}
+
+.amountContainer, .dateContainer{
+    width: 96%;
+    height: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5rem 0;
+}
+
+.amount{
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.amount:last-child{
+    align-self: center flex-end;
+}
+
+.budgetDate{
+    color: rgb(134, 134, 134);
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0;
 }
 
 .date:last-child{
-    align-self: flex-end;
+    align-self: center flex-end;
+}
+
+.buttonsContainer{
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    margin: 0.6rem 0;
+    width: 96.4%;
+}
+
+.btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.64rem;
+    border: none;
+    border-radius: 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    min-width: 2rem;
+    max-width: 24rem;
+    height: 2rem;
+    padding: 0 0.8rem;
+    cursor: pointer;
+}
+
+.editBtn{
+    color: var(--btn-color);
+    background-color: var(--primary-bg-color);
+    border: 0.2rem solid var(--btn-color);
+}
+
+.editBtn:hover{
+    color: var(--primary-bg-color);
+    background-color: var(--btn-color);
+    border-color: var(--secondary-bg-color);
+}
+
+.deleteBtn{
+    background-color: rgb(248, 54, 54);
+    color: var(--primary-bg-color);
+}
+
+.deleteBtn .text{
+    display: none;
+}
+
+.deleteBtn:hover .text{
+    display: block;
+}
+
+.expenseBtn{
+    color: var(--primary-bg-color);
+    background-color: var(--btn-color);
+}
+
+.expenseBtn:hover{
+    color: var(--btn-color);
+    background-color: var(--primary-bg-color);
+    border: 0.2rem solid var(--secondary-bg-color);
+}
+
+.btnIcon{
+    font-size: 1.4rem;
 }
 
 .budgetFilter{
-    background-color: var(--tertiary-bg-color) ;
+    background-color: var(--btn-color);
+    color: var(--primary-bg-color);
     border-radius: 5rem;
-    width: 92%;
-    height: 3rem;
-    margin: 2rem 4rem;
+    width: 96%;
+    height: auto;
+    min-height: 3rem;
+    margin: 2rem 3rem;
     display: flex;
     flex-wrap: wrap;
 }
 
 .filterIcon{
     margin-left: 1.2rem;
-    color: var(--btn-color);
+    color: var(--primary-bg-color);
     align-self: center;
 }
 
 .filterLabel{
-    margin-left: 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-left: 1.2rem;
 }
 
 @media (max-width: 1024px) {
