@@ -71,12 +71,14 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn, setUserId, setName
               className='input'
             />
           </div>
+
+          {error && <div className='error-message' style={{ color: "red" }}>{error}</div>}
+
           <button type="submit" className='buttonSubmit' disabled={loading}>
             {loading ? 'Logging in...' : 'Log In'}
           </button>
         </form>
 
-        {error && <div className='error-message' style={{ color: "red" }}>{error}</div>}
       </div>
     </div>
   );

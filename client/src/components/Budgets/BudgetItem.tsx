@@ -10,10 +10,10 @@ interface BudgetItemProps {
 }
 
 const BudgetItem: React.FC<BudgetItemProps> = ({ budget, onEdit, onDelete, updateBudget }) => {
-  const [showModal, setShowModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const toggleModal = () => {
-    setShowModal(prevState => !prevState);
+    setIsModalOpen(!isModalOpen);
   };
 
   return (
@@ -32,8 +32,13 @@ const BudgetItem: React.FC<BudgetItemProps> = ({ budget, onEdit, onDelete, updat
       <button onClick={() => onEdit(budget)}>Edit</button>
       <button onClick={() => onDelete(budget.id)}>Delete</button>
       <button onClick={toggleModal}>Add Expense</button> 
-      
-      {showModal && <AddTransactionToBudget budget={budget} onClose={toggleModal} updateBudget={updateBudget}/>}
+
+      <AddTransactionToBudget
+        budget={budget}
+        isOpen={isModalOpen}
+        onRequestClose={toggleModal}
+        updateBudget={updateBudget}
+      />
     </li>
   );
 };

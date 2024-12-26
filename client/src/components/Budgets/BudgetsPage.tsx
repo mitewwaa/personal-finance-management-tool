@@ -113,15 +113,6 @@ const BudgetPage: React.FC = () => {
     }
   };
 
-  const handleTransactionAdded = (updatedBudget: BudgetData) => {
-    setBudgets(prevBudgets => 
-      prevBudgets.map(budget => 
-        budget.id === updatedBudget.id ? updatedBudget : budget
-      )
-    );
-    setSelectedBudget(updatedBudget);
-  };
-
   const handleCategoriesFetched = (fetchedCategories: CategoryData[]) => {
     setCategories(fetchedCategories); 
   };
