@@ -113,10 +113,27 @@ const BudgetPage: React.FC = () => {
     }
   };
 
+  const handleTransactionAdded = (updatedBudget: BudgetData) => {
+    setBudgets(prevBudgets => 
+      prevBudgets.map(budget => 
+        budget.id === updatedBudget.id ? updatedBudget : budget
+      )
+    );
+    setSelectedBudget(updatedBudget);
+  };
+
   const handleCategoriesFetched = (fetchedCategories: CategoryData[]) => {
     setCategories(fetchedCategories); 
   };
 
+  const updateBudget = (budgetId: string, newAmountLeft: number) => {
+    setBudgets(prevBudgets => 
+      prevBudgets.map(budget =>
+        budget.id === budgetId ? { ...budget, amount_left: newAmountLeft } : budget
+      )
+    );
+  };
+  
   return (
     <div className="budgetsContainer">
       <div className='headerContainer'>
@@ -130,7 +147,9 @@ const BudgetPage: React.FC = () => {
         budgets={filteredBudgets}
         onEdit={handleEditBudget}
         onDelete={handleDeleteBudget}
+        updateBudget={updateBudget}
       />
+
     </div>
   );
 };

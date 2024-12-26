@@ -6,9 +6,10 @@ interface BudgetListProps {
   budgets: BudgetData[];
   onEdit: (budget: BudgetData) => void;
   onDelete: (budgetId: string) => Promise<void>;
+  updateBudget: (budgetId: string, newAmountLeft: number) => void;
 }
 
-const BudgetList: React.FC<BudgetListProps> = ({ budgets, onEdit, onDelete }) => {
+const BudgetList: React.FC<BudgetListProps> = ({ budgets, onEdit, onDelete, updateBudget }) => {
   return (
     <ul className="budgetList">
       {budgets.map((budget) => (
@@ -17,6 +18,7 @@ const BudgetList: React.FC<BudgetListProps> = ({ budgets, onEdit, onDelete }) =>
           budget={budget}
           onEdit={onEdit}
           onDelete={onDelete}
+          updateBudget={updateBudget}
         />
       ))}
     </ul>
