@@ -39,47 +39,46 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange, categories }) => 
 
   return (
     <div className="budgetFilter">
-      <FaFilter className="filterIcon" />
-      <label className="filterLabel">
-        Type
-        <select value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="">All</option>
-          <option value="goal">Goal</option>
-          <option value="category_limit">Category Limit</option>
-        </select>
-      </label>
-
-      <label className="filterLabel">
-        Amount
-        <input type="number"value={amount} onChange={(e) => setAmount(e.target.value)}/>
-      </label>
-
-      <label className="filterLabel">
-        Amount Left
-        <input type="number" value={amountLeft} onChange={(e) => setAmountLeft(e.target.value)}/>
-      </label>
-
-      <label className="filterLabel">
-        Start Date
-        <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)}/>
-      </label>
-
-      <label className="filterLabel">
-        End Date
-        <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)}/>
-      </label>
-
-      <label className="filterLabel">
-        Category
-        <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
-          <option value="">All</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-      </label>
+      <div className='budgetFilterContainer'>
+        <FaFilter className="filterIcon" />
+        <div className='filters'>
+          <div className="filterLabel">
+            <label className="budgetFilterLabel">Type</label>
+            <select value={type} onChange={(e) => setType(e.target.value)}>
+                <option value="">All</option>
+                <option value="goal">Goal</option>
+                <option value="category_limit">Category Limit</option>
+            </select>
+          </div>
+         <div className="filterLabel">
+            <label className="budgetFilterLabel">Amount</label>
+            <input type="number"value={amount} onChange={(e) => setAmount(e.target.value)}/>
+         </div>
+         <div className="filterLabel">
+            <label className="budgetFilterLabel">Amount Left</label>
+            <input type="number" value={amountLeft} onChange={(e) => setAmountLeft(e.target.value)}/>
+         </div>
+          <div className="filterLabel">
+            <label className="budgetFilterLabel">Start Date</label>
+            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)}/>
+          </div>
+          <div className="filterLabel">
+            <label className="budgetFilterLabel">End Date</label>
+            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)}/>
+          </div>
+          <div className="filterLabel">
+            <label className="budgetFilterLabel">Category</label>
+            <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+                <option value="">All</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+          </div>
+        </div>
+      </div>  
     </div>
   );
 };

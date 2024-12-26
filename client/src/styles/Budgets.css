@@ -1,5 +1,5 @@
 .budgetsContainer{
-    margin: 0 2rem;
+    margin: 0 1rem 0 1rem;
 }
 
 .headerContainer{
@@ -161,15 +161,28 @@
     background-color: var(--btn-color);
     color: var(--primary-bg-color);
     border-radius: 5rem;
+    margin: 2rem 3rem;
+    width: 95%;
+}
+
+.budgetFilterContainer{
+    display: flex;
+    gap: 1rem;
+}
+
+.filters{
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    align-items: center;
     width: 96%;
     height: auto;
     min-height: 3rem;
-    margin: 2rem 3rem;
-    display: flex;
-    flex-wrap: wrap;
+    padding: 0.5rem;
 }
 
 .filterIcon{
+    font-size: 1.6rem;
     margin-left: 1.2rem;
     color: var(--primary-bg-color);
     align-self: center;
@@ -178,21 +191,149 @@
 .filterLabel{
     font-size: 1rem;
     font-weight: bold;
-    margin-left: 1.2rem;
+}
+
+.filterLabel input, .filterLabel select{
+    color: var(--btn-color);
+    font-size: 1rem;
+    padding: 0.2rem 0.5rem;
+    border: none;
+    border-radius: 2rem;
+    min-width: 4rem;
+    max-width: 7.2rem;
+    height: auto;
+}
+
+.budgetFilterLabel{
+    margin: 0 0 0.2rem 0.4rem;
 }
 
 @media (max-width: 1024px) {
-    
+
+    .headerContainer .buttonSubmit{
+        border-radius: 2rem;
+        width: 12rem;
+        height: 3rem;
+        font-size: 1.2rem;
+    }
+
+    .mainTitle {
+        font-size: 2rem;
+    }
+
+    .budgetList {
+        width: 92%;
+        height: auto;
+    }
+
+    .budgetItem {
+        width: 94%;
+        padding: 1rem;
+    }
+
+    .buttonsContainer {
+        gap: 0.8rem;
+    }
+
+    .budgetFilterContainer {
+        gap: 0.5rem;
+        padding: 0.2rem;
+    }
 }
 
 @media screen and (max-width: 768px) {
-     
+    .headerContainer {
+        margin-left: 4rem;
+    }
+
+    .headerContainer .buttonSubmit{
+        border-radius: 2rem;
+        width: 12rem;
+        height: 3rem;
+        font-size: 1.2rem;
+    }
+
+    .budgetList {
+        width: 88%;
+        height: auto;
+        padding-left: 2rem;
+    }
+
+    .budgetItem {
+        width: 104%;
+        padding: 1rem 1.5rem;
+    }
+
+    .buttonsContainer {
+        gap: 0.5rem;
+        margin: 0.6rem 0;
+        width: 96.4%;
+    }
+    
+    .btn{
+        gap: 0.4rem;
+        font-size: 0.8rem;
+    }
+    
+    .btnIcon{
+        font-size: 1.2rem;
+    }
+
+    .budgetFilterContainer {
+        gap: 0.5rem;
+    }
+
+    .filterLabel input,
+    .filterLabel select {
+        min-width: 6rem;
+    }
 }
 
 @media screen and (max-width: 480px) {
-    
+    .mainTitle {
+        font-size: 1.8rem;
+    }
+
+    .budgetItem {
+        padding: 1rem;
+        width: 100%;
+    }
+
+    .budgetName {
+        font-size: 1.24rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .budgetInfo, .amountContainer, .dateContainer{
+        width: 98%;
+    }
+
+    .buttonsContainer { 
+        gap: 0.5rem;
+    }
+
+    .filterLabel input,
+    .filterLabel select {
+        min-width: 5rem;
+    }
+
+    .budgetFilter {
+        margin: 1.8rem 2.4rem;
+    }
 }
 
 @media (max-width: 390px) {
-   
+    .budgetItem {
+        padding: 0.8rem;
+    }
+
+    .btn {
+        font-size: 0.9rem;
+    }
+
+    .filterLabel input,
+    .filterLabel select {
+        min-width: 4rem;
+        font-size: 0.9rem;
+    }
 }

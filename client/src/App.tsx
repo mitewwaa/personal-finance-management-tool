@@ -66,18 +66,21 @@ const App: React.FC = () => {
     <Router>
       <div>
       {isLoggedIn && <NavBar onLogout={handleLogout} />}
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} setUserId={setUserId} setName={setName} />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/dashboard" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Dashboard name={name} userId={userId} /></ProtectedRoute>} />
-          <Route path="/transactions" element={<ProtectedRoute isLoggedIn={isLoggedIn}><TransactionsPage userId={userId} /></ProtectedRoute>} />
-          <Route path="/budgets" element={<ProtectedRoute isLoggedIn={isLoggedIn}><BudgetPage /></ProtectedRoute>} />
-          <Route path="/create-budget" element={<ProtectedRoute isLoggedIn={isLoggedIn}><CreateBudgetPage /></ProtectedRoute>} />
-          <Route path="/profile" element={<ProtectedRoute isLoggedIn={isLoggedIn}><ProfilePage></ProfilePage></ProtectedRoute>} />
-        </Routes>
+        <div className='pageContent'>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} setUserId={setUserId} setName={setName} />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/dashboard" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Dashboard name={name} userId={userId} /></ProtectedRoute>} />
+            <Route path="/transactions" element={<ProtectedRoute isLoggedIn={isLoggedIn}><TransactionsPage userId={userId} /></ProtectedRoute>} />
+            <Route path="/budgets" element={<ProtectedRoute isLoggedIn={isLoggedIn}><BudgetPage /></ProtectedRoute>} />
+            <Route path="/create-budget" element={<ProtectedRoute isLoggedIn={isLoggedIn}><CreateBudgetPage /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute isLoggedIn={isLoggedIn}><ProfilePage></ProfilePage></ProtectedRoute>} />
+          </Routes>
+        </div>
       </div>
     </Router>
+        
   );
 };
 

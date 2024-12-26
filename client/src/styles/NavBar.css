@@ -4,17 +4,17 @@
     justify-content: flex-start;
     align-items: flex-start;
     background-color: #eeecec;
-    padding: 10px;
-    padding-bottom: 20px;
+    padding: 0.7rem;
+    padding-bottom: 1rem;
     position: fixed;
     top: 0;
     left: 0;
     height: 100%;
-    width: 25x;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    gap: 20px;
-    width: 25px; 
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    width: 1.8rem;
+    box-shadow: 0.1rem 0 0.3rem rgba(0, 0, 0, 0.1);
+    gap: 1.6rem;
+    width: 1.8rem; 
+    box-shadow: 0.1rem 0 0.3rem rgba(0, 0, 0, 0.1);
     z-index: 1000; 
 }
 
@@ -24,7 +24,7 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    gap: 20px;
+    gap: 1.3rem;
     flex-grow: 0.95;
 }
 
@@ -34,7 +34,7 @@
     align-items: center;
     position: relative;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 0.9rem;
     color: #333;
 }
 
@@ -46,9 +46,9 @@
     transform: translateY(-50%);
     background-color: #333;
     color: #fff;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 12px;
+    padding: 0.28rem 0.6rem;
+    border-radius: 0.3rem;
+    font-size: 0.7rem;
     white-space: nowrap; 
     z-index: 10;
     opacity: 1;
@@ -64,25 +64,24 @@
 
 .navIcon {
     color: var(--btn-color);
-    font-size: 20px;
-    margin-right: 10px;
+    font-size: 1.4rem;
+    margin-right: 0.8rem;
 }
 
 .pageContent {
-    margin-left: 220px;
-    padding: 20px;
+    padding: 1rem;
 }
 
 #bottomNavItems {
     margin-top: auto; 
     display: flex;
     flex-direction: column; 
-    gap: 20px; 
+    gap: 1.2rem; 
     align-items: flex-start; 
 }
 
 #bottom .navItem {
-    font-size: 14px; 
+    font-size: 0.8rem; 
     display: flex;
     align-items: center; 
     color: #333;

@@ -110,3 +110,149 @@
     display: inline;
     margin-right: 0.5rem;
 }
+
+@media (max-width: 1024px) {
+    .budgetFormContainer {
+        width: 95%;
+        margin: 0 1rem;
+    }
+
+    .inputContainer {
+        width: 26rem;
+        height: 5.5rem;
+    }
+
+    .budgetForm .label {
+        font-size: 1.3rem;
+    }
+
+    .inputField {
+        height: 2.2rem;
+        font-size: 1.1rem;
+        padding: 0 0.9rem;
+    }
+
+    .categoryGroup {
+        width: 26rem;
+    }
+
+    .addCategoryButton {
+        font-size: 1.1rem;
+        padding: 0 0.9rem;
+        height: 2.8rem;
+    }
+
+    .budgetFormContainer .buttonSubmit {
+        width: 12rem;
+        height: 2.8rem;
+        font-size: 1.4rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .budgetFormContainer {
+        width: 98%;
+        margin: 0 0.5rem;
+    }
+
+    .inputContainer {
+        width: 24rem;
+        height: 5rem;
+    }
+
+    .budgetForm .label {
+        font-size: 1.2rem;
+    }
+
+    .inputField {
+        height: 2rem;
+        font-size: 1rem;
+        padding: 0 0.8rem;
+    }
+
+    .categoryGroup {
+        width: 24rem;
+    }
+
+    .addCategoryButton {
+        font-size: 1rem;
+        padding: 0 0.8rem;
+        height: 2.6rem;
+    }
+
+    .budgetFormContainer .buttonSubmit {
+        width: 11.2rem;
+        height: 2.4rem;
+        font-size: 1.24rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .budgetFormContainer {
+        width: 100%;
+        margin: 0;
+    }
+
+    .inputContainer {
+        width: 22rem;
+        height: 4.5rem;
+    }
+
+    .budgetForm .label {
+        font-size: 1rem;
+    }
+
+    .inputField {
+        height: 1.8rem;
+        font-size: 0.9rem;
+        padding: 0 0.6rem;
+    }
+
+    .categoryGroup {
+        width: 22rem;
+    }
+
+    .addCategoryButton {
+        font-size: 0.9rem;
+        padding: 0 0.56rem;
+        height: 2rem;
+    }
+
+    .budgetFormContainer .buttonSubmit {
+        width: 10rem;
+        height: 2rem;
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 390px) {
+    .budgetFormContainer {
+        width: 100%;
+        margin: 0;
+    }
+
+    .inputContainer {
+        width: 20rem;
+        height: 4rem;
+    }
+
+    .budgetForm .label {
+        font-size: 0.9rem;
+    }
+
+    .inputField {
+        height: 1.6rem;
+        font-size: 0.8rem;
+        padding: 0 0.5rem;
+    }
+
+    .categoryGroup {
+        width: 20rem;
+    }
+
+    .addCategoryButton {
+        font-size: 0.8rem;
+        padding: 0 0.5rem;
+        height: 2.2rem;
+    }
+}
