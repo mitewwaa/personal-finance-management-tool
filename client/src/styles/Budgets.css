@@ -1,31 +1,31 @@
-.budgetsContainer{
+.budgetsContainer {
     margin: 0 1rem 0 1rem;
 }
 
-.headerContainer{
+.headerContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-left: 5rem;
 }
 
-.headerContainer .buttonSubmit{
+.headerContainer .buttonSubmit {
     margin: 1.6rem 0;
 }
 
-.mainTitle{
+.mainTitle {
     color: var(--font-main);
     font-size: 2.4rem;
 }
 
-.budgetList{
+.budgetList {
     list-style: none;
     width: 96%;
     height: 96%;
     margin: 0;
 }
 
-.budgetItem{
+.budgetItem {
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -37,33 +37,35 @@
     border: 0.2rem solid var(--btn-color);
 }
 
-.budgetItem:last-child{
+.budgetItem:last-child {
     margin-bottom: 1rem;
 }
 
-.budgetName{
+.budgetName {
     color: var(--btn-color);
     font-size: 1.4rem;
     align-self: center;
     margin: 0 0 1rem;
 }
 
-.budgetInfo{
+.budgetInfo {
     width: 96%;
     display: flex;
     justify-content: space-between;
 }
 
-.budgetInfo:last-child{
+.budgetInfo:last-child {
     align-self: flex-end;
 }
 
-.budgetType, .categoryName{
+.budgetType,
+.categoryName {
     color: var(--font-main);
     font-size: 1rem;
 }
 
-.amountContainer, .dateContainer{
+.amountContainer,
+.dateContainer {
     width: 96%;
     height: 2rem;
     display: flex;
@@ -72,28 +74,28 @@
     margin: 0.5rem 0;
 }
 
-.amount{
+.amount {
     font-size: 1.2rem;
     font-weight: bold;
     margin: 0;
 }
 
-.amount:last-child{
+.amount:last-child {
     align-self: center flex-end;
 }
 
-.budgetDate{
+.budgetDate {
     color: rgb(134, 134, 134);
     font-size: 1rem;
     font-weight: bold;
     margin: 0;
 }
 
-.date:last-child{
+.date:last-child {
     align-self: center flex-end;
 }
 
-.buttonsContainer{
+.buttonsContainer {
     display: flex;
     justify-content: flex-end;
     gap: 0.6rem;
@@ -101,7 +103,7 @@
     width: 96.4%;
 }
 
-.btn{
+.btn {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -117,47 +119,79 @@
     cursor: pointer;
 }
 
-.editBtn{
+.editBtn {
     color: var(--btn-color);
     background-color: var(--primary-bg-color);
     border: 0.2rem solid var(--btn-color);
 }
 
-.editBtn:hover{
+.editBtn:hover {
     color: var(--primary-bg-color);
     background-color: var(--btn-color);
     border-color: var(--secondary-bg-color);
 }
 
-.deleteBtn{
+.deleteBtn {
     background-color: rgb(248, 54, 54);
     color: var(--primary-bg-color);
 }
 
-.deleteBtn .text{
+.deleteBtn .text {
     display: none;
 }
 
-.deleteBtn:hover .text{
+.deleteBtn:hover .text {
     display: block;
 }
 
-.expenseBtn{
+.expenseBtn {
     color: var(--primary-bg-color);
     background-color: var(--btn-color);
 }
 
-.expenseBtn:hover{
+.expenseBtn:hover {
     color: var(--btn-color);
     background-color: var(--primary-bg-color);
     border: 0.2rem solid var(--secondary-bg-color);
 }
 
-.btnIcon{
+.btnIcon {
     font-size: 1.4rem;
 }
 
-.budgetFilter{
+.progressBarContainer {
+    align-self: center;
+    display: flex;
+    width: 100%;
+    margin: 0.6rem 0;
+}
+
+.progressBar {
+    align-self: end;
+    width: 88%;
+    height: 1rem;
+    background-color: #e0e0e0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 0.2rem;
+}
+
+.progressBarFill {
+    height: 100%;
+    background-color: #bf2369;
+    transition: width 0.3s ease;
+}
+
+.txt {
+    width: 10%;
+    color: rgb(134, 134, 134);
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0;
+    align-self: center;
+}
+
+.budgetFilter {
     background-color: var(--btn-color);
     color: var(--primary-bg-color);
     border-radius: 5rem;
@@ -165,12 +199,12 @@
     width: 95%;
 }
 
-.budgetFilterContainer{
+.budgetFilterContainer {
     display: flex;
     gap: 1rem;
 }
 
-.filters{
+.filters {
     display: flex;
     gap: 0.8rem;
     flex-wrap: wrap;
@@ -181,19 +215,20 @@
     padding: 0.5rem;
 }
 
-.filterIcon{
+.filterIcon {
     font-size: 1.6rem;
     margin-left: 1.2rem;
     color: var(--primary-bg-color);
     align-self: center;
 }
 
-.filterLabel{
+.filterLabel {
     font-size: 1rem;
     font-weight: bold;
 }
 
-.filterLabel input, .filterLabel select{
+.filterLabel input,
+.filterLabel select {
     color: var(--btn-color);
     font-size: 1rem;
     padding: 0.2rem 0.5rem;
@@ -204,13 +239,13 @@
     height: auto;
 }
 
-.budgetFilterLabel{
+.budgetFilterLabel {
     margin: 0 0 0.2rem 0.4rem;
 }
 
 @media (max-width: 1024px) {
 
-    .headerContainer .buttonSubmit{
+    .headerContainer .buttonSubmit {
         border-radius: 2rem;
         width: 12rem;
         height: 3rem;
@@ -239,6 +274,14 @@
         gap: 0.5rem;
         padding: 0.2rem;
     }
+
+    .progressBar {
+        width: 85%;
+    }
+
+    .txt {
+        width: 15%;
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -246,7 +289,7 @@
         margin-left: 4rem;
     }
 
-    .headerContainer .buttonSubmit{
+    .headerContainer .buttonSubmit {
         border-radius: 2rem;
         width: 12rem;
         height: 3rem;
@@ -269,13 +312,13 @@
         margin: 0.6rem 0;
         width: 96.4%;
     }
-    
-    .btn{
+
+    .btn {
         gap: 0.4rem;
         font-size: 0.8rem;
     }
-    
-    .btnIcon{
+
+    .btnIcon {
         font-size: 1.2rem;
     }
 
@@ -286,6 +329,14 @@
     .filterLabel input,
     .filterLabel select {
         min-width: 6rem;
+    }
+
+    .progressBar {
+        width: 78%;
+    }
+
+    .txt {
+        width: 22%;
     }
 }
 
@@ -304,11 +355,13 @@
         margin-bottom: 0.6rem;
     }
 
-    .budgetInfo, .amountContainer, .dateContainer{
+    .budgetInfo,
+    .amountContainer,
+    .dateContainer {
         width: 98%;
     }
 
-    .buttonsContainer { 
+    .buttonsContainer {
         gap: 0.5rem;
     }
 
@@ -319,6 +372,14 @@
 
     .budgetFilter {
         margin: 1.8rem 2.4rem;
+    }
+
+    .progressBar {
+        width: 72%;
+    }
+
+    .txt {
+        width: 28%;
     }
 }
 
@@ -335,5 +396,13 @@
     .filterLabel select {
         min-width: 4rem;
         font-size: 0.9rem;
+    }
+
+    .progressBar {
+        width: 70%;
+    }
+
+    .txt {
+        width: 30%;
     }
 }

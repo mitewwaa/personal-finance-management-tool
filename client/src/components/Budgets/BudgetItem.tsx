@@ -30,14 +30,28 @@ const BudgetItem: React.FC<BudgetItemProps> = ({ budget, onEdit, onDelete, updat
     }
   };
 
-  const budgetTypeText = getBudgetTypeText(budget.type);
+  const calculateProgress = () => {
+    const usedAmount = budget.amount - budget.amount_left;
+    return (usedAmount / budget.amount) * 100;
+  };
+
+  const progress = calculateProgress();
 
   return (
     <li className="budgetItem">
       <h3 className="budgetName">{budget.name}</h3>
-      <div className='budgetInfo'>  
-        <p className="budgetType">Type: {budgetTypeText}</p>
+      <div className="budgetInfo">
+        <p className="budgetType">Type: {getBudgetTypeText(budget.type)}</p>
         <p className="categoryName">Category: {budget.category_name}</p>
+      </div>
+      <div className="progressBarContainer">
+        <div className="progressBar">
+          <div
+            className="progressBarFill"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+        <p className='txt'>{progress.toFixed(2)}% used</p>
       </div>
       <div className="amountContainer">
         <p className="amount">Amount: {budget.amount}</p>
@@ -47,10 +61,17 @@ const BudgetItem: React.FC<BudgetItemProps> = ({ budget, onEdit, onDelete, updat
         <p className="budgetDate">Start Date: {new Date(budget.start_date).toLocaleDateString()}</p>
         <p className="budgetDate">End Date: {new Date(budget.end_date).toLocaleDateString()}</p>
       </div>
-      <div className='buttonsContainer'>
-      <button onClick={() => onDelete(budget.id)} className='deleteBtn btn'> <MdDelete className='btnIcon'/><p className='text'>Delete</p></button>
-        <button onClick={() => onEdit(budget)} className='editBtn btn'><CiEdit className='btnIcon'/> Edit</button>
-        <button onClick={toggleModal} className='expenseBtn btn'><FaPlus className='btnIcon' /> Add Expense</button> 
+      <div className="buttonsContainer">
+        <button onClick={() => onDelete(budget.id)} className="deleteBtn btn">
+          <MdDelete className="btnIcon" />
+          <p className="text">Delete</p>
+        </button>
+        <button onClick={() => onEdit(budget)} className="editBtn btn">
+          <CiEdit className="btnIcon" /> Edit
+        </button>
+        <button onClick={toggleModal} className="expenseBtn btn">
+          <FaPlus className="btnIcon" /> Add Expense
+        </button>
       </div>
 
       <AddTransactionToBudget
