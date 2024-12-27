@@ -12,7 +12,17 @@ import '../../styles/Budgets.css';
 const BudgetPage: React.FC = () => {
   const [budgets, setBudgets] = useState<BudgetData[]>([]);
   const [categories, setCategories] = useState<CategoryData[]>([]);
-  const [filteredBudgets, setFilteredBudgets] = useState<BudgetData[]>([]);
+  
+  type FilteredBudgets = {
+    active: BudgetData[];
+    expired: BudgetData[];
+  };
+  
+  const [filteredBudgets, setFilteredBudgets] = useState<FilteredBudgets>({
+    active: [],
+    expired: [],
+  });
+  
   const [filterCriteria, setFilterCriteria] = useState({
     type: '',
     amount: 0,
@@ -55,26 +65,30 @@ const BudgetPage: React.FC = () => {
   }, [userId]);
 
   useEffect(() => {
+    const today = new Date();
+    
     const handleFilterChange = budgets.map((budget) => {
-      const category = categories.find(cat => cat.id === budget.category_id);
+      const category = categories.find((cat) => cat.id === budget.category_id);
       const categoryName = category ? category.name : 'Unknown';
       return { ...budget, category_name: categoryName };
-    })
-    .filter((budget) => {
-      const matchesType = filterCriteria.type ? budget.type === filterCriteria.type : true;
-      const matchesAmount = filterCriteria.amount ? budget.amount === filterCriteria.amount : true;
-      const matchesAmountLeft = filterCriteria.amountLeft ? budget.amount_left === filterCriteria.amountLeft : true;
-
-      const today = new Date();
-        const isExpired = new Date(budget.end_date) < today;
-        const matchesExpired = filterCriteria.showExpired ? isExpired : true;
-
-        return matchesType && matchesAmount && matchesAmountLeft && matchesExpired;
-      });
-
-    setFilteredBudgets(handleFilterChange);
+    });
+  
+    // Филтриране на активни и изтекли бюджети
+    const activeBudgets = handleFilterChange.filter((budget) => {
+      const isExpired = new Date(budget.end_date) < today;
+      const matchesExpired = filterCriteria.showExpired ? isExpired : true;
+  
+      return !isExpired && matchesExpired; // Активни бюджети
+    });
+  
+    const expiredBudgets = handleFilterChange.filter((budget) => {
+      const isExpired = new Date(budget.end_date) < today;
+      return isExpired; // Изтекли бюджети
+    });
+  
+    setFilteredBudgets({ active: activeBudgets, expired: expiredBudgets });
   }, [budgets, categories, filterCriteria]);
-
+  
   const handleFilterChange = (criteria: typeof filterCriteria) => {
     setFilterCriteria(criteria);
   };
@@ -117,20 +131,37 @@ const BudgetPage: React.FC = () => {
   
   return (
     <div className="budgetsContainer">
-      <div className='headerContainer'>
+      <div className="headerContainer">
         <h1 className="mainTitle">Budgets</h1>
-        <button onClick={handleAddBudget} className='buttonSubmit'>Add new budget</button>
+        <button onClick={handleAddBudget} className="buttonSubmit">Add new budget</button>
       </div>
-      
+  
       <Category onCategoriesFetched={handleCategoriesFetched} />
       <BudgetFilter onChange={handleFilterChange} categories={categories} />
-      <BudgetList 
-        budgets={filteredBudgets}
-        onEdit={handleEditBudget}
-        onDelete={handleDeleteBudget}
-        updateBudget={updateBudget}
-      />
+  
+      {filteredBudgets.active && filteredBudgets.active.length > 0 && (
+        <div>
+          <h2 className='stateTitle'>Active Budgets</h2>
+          <BudgetList
+            budgets={filteredBudgets.active}
+            onEdit={handleEditBudget}
+            onDelete={handleDeleteBudget}
+            updateBudget={updateBudget}
+          />
+        </div>
+      )}
 
+      {filteredBudgets.expired && filteredBudgets.expired.length > 0 && (
+        <div>
+          <h2 className='stateTitle'>Expired Budgets</h2>
+          <BudgetList
+            budgets={filteredBudgets.expired}
+            onEdit={handleEditBudget}
+            onDelete={handleDeleteBudget}
+            updateBudget={updateBudget}
+          />
+        </div>
+      )}
     </div>
   );
 };
