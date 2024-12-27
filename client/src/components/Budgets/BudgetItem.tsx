@@ -14,6 +14,7 @@ interface BudgetItemProps {
 
 const BudgetItem: React.FC<BudgetItemProps> = ({ budget, onEdit, onDelete, updateBudget }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const isExpired = new Date(budget.end_date) < new Date();
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -38,7 +39,7 @@ const BudgetItem: React.FC<BudgetItemProps> = ({ budget, onEdit, onDelete, updat
   const progress = calculateProgress();
 
   return (
-    <li className="budgetItem">
+    <li className={`budgetItem ${isExpired ? 'expired' : ''}`}>
       <h3 className="budgetName">{budget.name}</h3>
       <div className="budgetInfo">
         <p className="budgetType">Type: {getBudgetTypeText(budget.type)}</p>

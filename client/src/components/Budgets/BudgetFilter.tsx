@@ -10,6 +10,7 @@ interface BudgetFilterProps {
     startDate: string; 
     endDate: string; 
     categoryId: string; 
+    showExpired: boolean;
   }) => void;
   categories: CategoryData[];
 }
@@ -21,6 +22,7 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange, categories }) => 
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [categoryId, setCategoryId] = useState<string>('');
+  const [showExpired, setShowExpired] = useState(false);
 
   const handleFilterChange = () => {
     onChange({
@@ -30,18 +32,20 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange, categories }) => 
       startDate,
       endDate,
       categoryId,
+      showExpired,
     });
   };
 
   useEffect(() => {
     handleFilterChange();
-  }, [type, amount, amountLeft, startDate, endDate, categoryId]);
+  }, [type, amount, amountLeft, startDate, endDate, categoryId, showExpired]);
 
   return (
     <div className="budgetFilter">
       <div className='budgetFilterContainer'>
         <FaFilter className="filterIcon" />
         <div className='filters'>
+          {/* Existing Filters */}
           <div className="filterLabel">
             <label className="budgetFilterLabel">Type</label>
             <select value={type} onChange={(e) => setType(e.target.value)}>
@@ -50,21 +54,21 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange, categories }) => 
                 <option value="category_limit">Category Limit</option>
             </select>
           </div>
-         <div className="filterLabel">
+          <div className="filterLabel">
             <label className="budgetFilterLabel">Amount</label>
-            <input type="number"value={amount} onChange={(e) => setAmount(e.target.value)}/>
-         </div>
-         <div className="filterLabel">
+            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
+          </div>
+          <div className="filterLabel">
             <label className="budgetFilterLabel">Amount Left</label>
-            <input type="number" value={amountLeft} onChange={(e) => setAmountLeft(e.target.value)}/>
-         </div>
+            <input type="number" value={amountLeft} onChange={(e) => setAmountLeft(e.target.value)} />
+          </div>
           <div className="filterLabel">
             <label className="budgetFilterLabel">Start Date</label>
-            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)}/>
+            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
           </div>
           <div className="filterLabel">
             <label className="budgetFilterLabel">End Date</label>
-            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)}/>
+            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
           </div>
           <div className="filterLabel">
             <label className="budgetFilterLabel">Category</label>
@@ -75,7 +79,17 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange, categories }) => 
                     {category.name}
                   </option>
                 ))}
-              </select>
+            </select>
+          </div>
+          <div className='filterLabel'>
+            <div className='group'>
+              <label className='budgetFilterLabel'>Show expired budgets</label>
+              <input
+                  type="checkbox"
+                  checked={showExpired}
+                  onChange={(e) => setShowExpired(e.target.checked)}
+              />
+            </div>
           </div>
         </div>
       </div>  

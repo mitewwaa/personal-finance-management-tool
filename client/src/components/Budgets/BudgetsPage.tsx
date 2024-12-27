@@ -20,6 +20,7 @@ const BudgetPage: React.FC = () => {
     startDate: '',
     endDate: '',
     categoryId: '',
+    showExpired: false,
   });
   const [selectedBudget, setSelectedBudget] = useState<BudgetData | null>(null);
 
@@ -54,35 +55,24 @@ const BudgetPage: React.FC = () => {
   }, [userId]);
 
   useEffect(() => {
-    const filtered = budgets.map((budget) => {
+    const handleFilterChange = budgets.map((budget) => {
       const category = categories.find(cat => cat.id === budget.category_id);
       const categoryName = category ? category.name : 'Unknown';
       return { ...budget, category_name: categoryName };
-    }).filter((budget) => {
+    })
+    .filter((budget) => {
       const matchesType = filterCriteria.type ? budget.type === filterCriteria.type : true;
       const matchesAmount = filterCriteria.amount ? budget.amount === filterCriteria.amount : true;
       const matchesAmountLeft = filterCriteria.amountLeft ? budget.amount_left === filterCriteria.amountLeft : true;
 
-      const getLocalDateString = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-CA');
-      };
+      const today = new Date();
+        const isExpired = new Date(budget.end_date) < today;
+        const matchesExpired = filterCriteria.showExpired ? isExpired : true;
 
-      const matchesStartDate = filterCriteria.startDate
-        ? getLocalDateString(budget.start_date.toString()) >= filterCriteria.startDate
-        : true;
+        return matchesType && matchesAmount && matchesAmountLeft && matchesExpired;
+      });
 
-      const matchesEndDate = filterCriteria.endDate
-        ? getLocalDateString(budget.end_date.toString()) <= filterCriteria.endDate
-        : true;
-
-      const matchesCategory = filterCriteria.categoryId 
-        ? budget.category_id === filterCriteria.categoryId 
-        : true;
-
-      return matchesType && matchesAmount && matchesAmountLeft && matchesStartDate && matchesEndDate && matchesCategory;
-    });
-    setFilteredBudgets(filtered);
+    setFilteredBudgets(handleFilterChange);
   }, [budgets, categories, filterCriteria]);
 
   const handleFilterChange = (criteria: typeof filterCriteria) => {
