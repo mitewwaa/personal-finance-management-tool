@@ -60,24 +60,32 @@ class CategoryController {
     }
   }
 
-  static async getCategoriesByUserId(
-    req: Request,
-    res: Response
-  ): Promise<void> {
+  static async getDefaultCategories(req: Request, res: Response): Promise<void> {
     try {
-      const userId: string = req.params.userId;
-      const userCategories: Category[] | null  = await CategoryService.getCategoriesByUserId(userId);
       const defaultCategories = await CategoryService.getDefaultCategories();
-    
-      const allCategories = [...(userCategories || []), ...defaultCategories];
-
-      if (allCategories && allCategories.length > 0) {
-        res.status(200).json(allCategories);
+      if (defaultCategories && defaultCategories.length > 0) {
+        res.status(200).json(defaultCategories);
       } else {
-        res.status(404).json({ message: "No categories found for this user." });
+        res.status(404).json({ message: "No default categories found." });
       }
     } catch (error) {
-      console.error("Error retrieving categories for user:", error);
+      console.error("Error retrieving default categories:", error);
+      res.status(500).json({ message: "Internal server error." });
+    }
+  }
+
+  static async getCategoriesByUserId(req: Request, res: Response): Promise<void> {
+    try {
+      const userId: string = req.params.userId;
+      const userCategories = await CategoryService.getCategoriesByUserId(userId);
+  
+      if (userCategories && userCategories.length > 0) {
+        res.status(200).json(userCategories);
+      } else {
+        res.status(404).json({ message: "No user categories found." });
+      }
+    } catch (error) {
+      console.error("Error retrieving user categories:", error);
       res.status(500).json({ message: "Internal server error." });
     }
   }
@@ -100,17 +108,31 @@ class CategoryController {
 
   static async getAllCategories(req: Request, res: Response): Promise<void> {
     try {
-        const categories = await CategoryService.getAllCategories();
-        if (categories && categories.length > 0) {
-            res.status(200).json(categories);
-        } else {
-            res.status(404).json({ message: 'No categories found.' });
-        }
+      console.log("Headers received:", req.headers.authorization);
+    console.log("User ID from params:", req.params.userId);
+    
+      const userId: string = req.params.userId;
+  
+      if (!userId) {
+        res.status(401).json({ message: "You are not authenticated." });
+        return;
+      }
+  
+      const defaultCategories = await CategoryService.getDefaultCategories();
+      const userCategories = await CategoryService.getCategoriesByUserId(userId);
+  
+      const allCategories = [...defaultCategories, ...userCategories];
+  
+      if (allCategories.length > 0) {
+        res.status(200).json(allCategories);
+      } else {
+        res.status(404).json({ message: "No categories found." });
+      }
     } catch (error) {
-        console.error('Error retrieving categories:', error);
-        res.status(500).json({ message: 'Internal server error.' });
+      console.error("Error retrieving categories:", error);
+      res.status(500).json({ message: "Internal server error." });
     }
-}
+  }
 
   static async updateCategory(req: Request, res: Response): Promise<void> {
     try {

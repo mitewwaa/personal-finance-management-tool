@@ -25,23 +25,34 @@ const Category = ({ onCategoriesFetched }: CategoryProps) => {
     return null;
   };
 
+  console.log(getUserIdFromToken());
   const userId = getUserIdFromToken();
 
   useEffect(() => {
     const fetchCategories = async () => {
+      console.log("Fetching categories...");
       if (!isLoaded && userId) {
         try {
-          const response = await axios.get<CategoryData[]>(`http://localhost:3000/categories/users/${userId}`);
+          const response = await axios.get<CategoryData[]>(`http://localhost:3000/categories/${userId}`,
+            {
+              headers: {
+                Authorization: `Bearer: ${userId}`
+              }
+            }
+          );
+          console.log("Fetched Categories:", response.data);
           setCategories(response.data);
-          onCategoriesFetched(response.data); 
+          onCategoriesFetched(response.data);
           setIsLoaded(true);
         } catch (error) {
           console.error("Error fetching categories:", error);
         }
+      } else {
+        console.log("Fetch skipped: isLoaded =", isLoaded, "userId =", userId);
       }
     };
     fetchCategories();
-  }, [onCategoriesFetched, isLoaded, userId]);
+  }, [onCategoriesFetched, isLoaded, userId]);  
 
   return null;
 };

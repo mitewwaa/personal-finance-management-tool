@@ -99,30 +99,31 @@ class CategoryService {
     }
   }
 
-  static async getCategoriesByUserId(
-    userId: string
-  ): Promise<Category[] | null> {
+  static async getCategoriesByUserId(userId: string): Promise<Category[]> {
     try {
       const categories = await Category.findAll({
         where: { user_id: userId },
-        order: [["name", "ASC"]], // Sort alphabetically by name
+        order: [["name", "ASC"]],
       });
-      return categories;
+      return categories; // Винаги връща масив
     } catch (error) {
       console.error("Error getting categories by user ID:", error);
-      return null;
+      return []; // Вместо null, връщаме празен масив
+    }
+  }  
+
+  static async getAllCategories(userId: string): Promise<Category[]> {
+    try {
+      const defaultCategories = await this.getDefaultCategories();
+      const userCategories = await this.getCategoriesByUserId(userId);
+  
+      return [...defaultCategories, ...userCategories];
+    } catch (error) {
+      console.error("Error retrieving all categories:", error);
+      return [];
     }
   }
-
-  static async getAllCategories(): Promise<Category[] | null> {
-    try {
-        const categories = await Category.findAll();
-        return categories;
-    } catch (error) {
-        console.error('Error fetching all categories:', error);
-        return null;
-    }
-}
+  
 
   static async updateCategory(
     categoryId: string,
