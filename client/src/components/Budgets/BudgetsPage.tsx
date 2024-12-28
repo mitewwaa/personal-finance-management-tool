@@ -73,17 +73,16 @@ const BudgetPage: React.FC = () => {
       return { ...budget, category_name: categoryName };
     });
   
-    // Филтриране на активни и изтекли бюджети
     const activeBudgets = handleFilterChange.filter((budget) => {
       const isExpired = new Date(budget.end_date) < today;
       const matchesExpired = filterCriteria.showExpired ? isExpired : true;
   
-      return !isExpired && matchesExpired; // Активни бюджети
+      return !isExpired && matchesExpired;
     });
   
     const expiredBudgets = handleFilterChange.filter((budget) => {
       const isExpired = new Date(budget.end_date) < today;
-      return isExpired; // Изтекли бюджети
+      return isExpired;
     });
   
     setFilteredBudgets({ active: activeBudgets, expired: expiredBudgets });

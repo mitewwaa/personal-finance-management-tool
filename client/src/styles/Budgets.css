@@ -53,6 +53,10 @@
     border: 0.2rem dotted var(--font-main);
 }
   
+.expired .expenseBtn{
+    display: none;
+}
+
 .budgetName {
     color: var(--btn-color);
     font-size: 1.4rem;
