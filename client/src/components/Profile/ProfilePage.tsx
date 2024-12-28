@@ -22,6 +22,7 @@ const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
 
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  
   useEffect(() => {
     const fetchUserProfile = async () => {
       const token = localStorage.getItem('jwt_token');
@@ -77,7 +78,6 @@ const ProfilePage: React.FC = () => {
 
   const openProfileModal = () => {
     setIsProfileModalOpen(true);
-    setIsCategoryModalOpen(false);  // Затваря категория модала, ако е отворен
   };
   
   const closeProfileModal = () => {
@@ -86,7 +86,6 @@ const ProfilePage: React.FC = () => {
   
   const openCategoryModal = () => {
     setIsCategoryModalOpen(true);
-    setIsProfileModalOpen(false);  // Затваря профил модала, ако е отворен
   };
   
   const closeCategoryModal = () => {
@@ -94,9 +93,7 @@ const ProfilePage: React.FC = () => {
   };
   
   const handleCategoryCreated = (category: { id: string; name: string }) => {
-    // Добави новата категория към състоянието на категориите
     setCategories([...categories, category]);
-    closeCategoryModal();
   };
 
   const handleSaveChanges = async () => {
@@ -121,6 +118,22 @@ const ProfilePage: React.FC = () => {
       setTimeout(() => {
         setError(null);
       },2000);
+    }
+  };
+
+  const handleCategoryDelete = async (categoryId: string) => {
+    try {
+      const token = localStorage.getItem('jwt_token');
+      await axios.delete(`http://localhost:3000/categories/${categoryId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      
+      setCategories(categories.filter((category) => category.id !== categoryId));
+      setSuccessMessage('Category deleted successfully!');
+    } catch (error) {
+      setError('Error deleting category');
     }
   };
 
@@ -163,7 +176,10 @@ const ProfilePage: React.FC = () => {
           <div className="rightColumn">
             <h2 className="secondaryTitle">Categories</h2>
             <div className="categoryInfo">
-              <CategoryCarousel categories={categories} />
+              <CategoryCarousel 
+                categories={categories} 
+                onCategoryDelete={handleCategoryDelete}
+              />
             </div>
             <div className='categories'>
               <button type="button" className='addCategoryButton' onClick={openCategoryModal}>

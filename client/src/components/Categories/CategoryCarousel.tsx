@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import CategoryData from '../../../../server/src/shared/interfaces/CategoryData';
+import { MdDelete } from 'react-icons/md';
 
 type CategoryCarouselProps = {
   categories: { id: string; name: string }[];
+  onCategoryDelete: (categoryId: string) => void;
 };
 
-const CategoryCarousel: React.FC<CategoryCarouselProps> = ({ categories }) => {
+const CategoryCarousel: React.FC<CategoryCarouselProps> = ({ categories, onCategoryDelete }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
 
@@ -53,6 +54,12 @@ const CategoryCarousel: React.FC<CategoryCarouselProps> = ({ categories }) => {
               {visibleCategories.map((category, index) => (
                 <div key={category.id + "_" + index} className="categoryItem">
                   {category.name}
+                  <div className='categoryBtns'>
+                    <button className="deleteBtn btn" onClick={() => onCategoryDelete(category.id)}> 
+                      <MdDelete className="btnIcon" /> 
+                      <p className='text'>Delete</p>
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
