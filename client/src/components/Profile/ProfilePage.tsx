@@ -8,6 +8,7 @@ import Category from '../Categories/Category';
 import EditProfileModal from './EditProfileModal';
 
 import '../../styles/Profile.css';
+import CategoryCarousel from '../Categories/CategoryCarousel';
 
 const ProfilePage: React.FC = () => {
   const [user, setUser] = useState<UserData | null>(null);
@@ -18,6 +19,7 @@ const ProfilePage: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [editForm, setEditForm] = useState<UserData | null>(null);
+  const [isAutoPlay, setIsAutoPlay] = useState<boolean>(true);
 
   const navigate = useNavigate();
 
@@ -55,16 +57,25 @@ const ProfilePage: React.FC = () => {
     setCategories(categories);
   };
 
-  const nextCategory = () => {
-    if (currentIndex < categories.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+   useEffect(() => {
+    if (isAutoPlay) {
+      const interval = setInterval(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % categories.length);
+      }, 3000); // Автоматично превъртане на всеки 3 секунди
+      return () => clearInterval(interval);
     }
+  }, [categories.length, isAutoPlay]);
+
+  const nextCategory = () => {
+    setIsAutoPlay(false); // Спира автоматичното превъртане при ръчно действие
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % categories.length);
   };
 
   const prevCategory = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
+    setIsAutoPlay(false);
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + categories.length) % categories.length
+    );
   };
 
   const openModal = () => {
@@ -140,21 +151,12 @@ const ProfilePage: React.FC = () => {
           <div className="rightColumn">
             <h2 className="secondaryTitle">Categories</h2>
             <div className="categoryInfo">
-              <div className="categoryCarousel">
-                <button className="carouselButton left" onClick={prevCategory}>←</button>
-                <div className="categoryItems" style={{ transform: `translateX(-${currentIndex * 170}px)` }}>
-                  {categories.map((category, index) => (
-                    <div key={index} className="categoryItem">
-                      {category.name}
-                    </div>
-                  ))}
-                </div>
-                <button className="carouselButton right" onClick={nextCategory}>→</button>
-              </div>
+              <CategoryCarousel categories={categories} />
             </div>
           </div>
         </div>
       )}
+      
       <Category onCategoriesFetched={handleCategoriesFetched} />
 
       <EditProfileModal 
