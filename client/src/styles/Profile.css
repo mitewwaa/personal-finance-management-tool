@@ -60,6 +60,13 @@
     border-radius: 2rem;
     width: 7.2rem;
     height: 2rem;
+    cursor: pointer;
+}
+
+.editButton:hover{
+    background-color: var(--primary-bg-color);
+    color: var(--btn-color);
+    border: 0.1rem solid var(--btn-color);
 }
 
 .fieldsContainer {
@@ -136,3 +143,20 @@
     box-shadow: 0 0.1rem 0.4rem rgba(0, 0, 0, 0.1);
   }
   
+  .txtProfile{
+    color: rgb(134, 134, 134);
+    font-size: 1.16rem;
+    font-weight: bold;
+    margin: 0;
+    align-self: center;
+  }
+
+  .categories .addCategoryButton .text{
+    display: inline;
+    margin-left: 0.5rem;
+  }
+
+  .categories .addCategoryButton:hover .plus,  .categories .addCategoryButton:hover .text{
+    display: inline;
+    margin-right: 0;
+  }

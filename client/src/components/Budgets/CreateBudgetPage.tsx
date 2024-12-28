@@ -18,7 +18,7 @@ const CreateBudgetPage: React.FC = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -92,13 +92,13 @@ const CreateBudgetPage: React.FC = () => {
   };
  
   const openModal = () => {
-    if (!isModalOpen) {
-      setIsModalOpen(true);
+    if (!isCategoryModalOpen) {
+      setIsCategoryModalOpen(true);
     }
   };
   
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsCategoryModalOpen(false);
     setError(null);
   };
 
@@ -189,7 +189,7 @@ const CreateBudgetPage: React.FC = () => {
       <Category onCategoriesFetched={setCategories} />
 
       <CategoryModal
-        isOpen={isModalOpen}
+        isCategoryModalOpen={isCategoryModalOpen}
         onRequestClose={closeModal}
         onCategoryCreated={handleCategoryCreated}
       />

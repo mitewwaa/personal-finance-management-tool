@@ -30,7 +30,6 @@ const Category = ({ onCategoriesFetched }: CategoryProps) => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      console.log("Fetching categories...");
       if (!isLoaded && userId) {
         try {
           const response = await axios.get<CategoryData[]>(`http://localhost:3000/categories/${userId}`,
@@ -40,15 +39,13 @@ const Category = ({ onCategoriesFetched }: CategoryProps) => {
               }
             }
           );
-          console.log("Fetched Categories:", response.data);
+
           setCategories(response.data);
           onCategoriesFetched(response.data);
           setIsLoaded(true);
         } catch (error) {
           console.error("Error fetching categories:", error);
         }
-      } else {
-        console.log("Fetch skipped: isLoaded =", isLoaded, "userId =", userId);
       }
     };
     fetchCategories();

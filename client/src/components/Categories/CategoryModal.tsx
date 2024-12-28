@@ -7,18 +7,18 @@ import { jwtDecode } from "jwt-decode";
 import "../../styles/CustomModal.css";
 
 interface CategoryModalProps {
-  isOpen: boolean;
+  isCategoryModalOpen: boolean;
   onRequestClose: () => void;
   onCategoryCreated: (category: { id: string; name: string }) => void;
 }
 
 const CategoryModal: React.FC<CategoryModalProps> = ({
-  isOpen,
+  isCategoryModalOpen,
   onRequestClose,
   onCategoryCreated,
 }) => {
   const [newCategoryName, setNewCategoryName] = useState("");
-  const [newCategoryType, setNewCategoryType] = useState<"income" | "expense">("income");
+  const [newCategoryType, setNewCategoryType] = useState<"income" | "expense">("expense");
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -76,20 +76,21 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={handleCloseModal} className="customModal" appElement={document.getElementById("root") || undefined} >
+    <Modal isOpen={isCategoryModalOpen} onRequestClose={handleCloseModal} className="customModal" appElement={document.getElementById("root") || undefined} >
       <div className="modalHeader">
         <button className="cancelButton" onClick={handleCloseModal}><MdOutlineCancel /></button>
         <h2 className="mainTitleModal">Create New Category</h2>
       </div>
       <div className="modalContent">
         <div className="fieldModal">
-          <label className="fieldLabel">Category Name</label>
+          <label className="fieldLabel" htmlFor="categoryName">Category Name</label>
           <input
             type="text"
             value={newCategoryName}
             onChange={(e) => setNewCategoryName(e.target.value)}
             placeholder="Enter category name"
             className="editInput"
+            id="categoryName"
           />
         </div>
         <div className="fieldModal">
@@ -97,11 +98,11 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
           <select
             id="newCategoryType"
             value={newCategoryType}
-            onChange={(e) => setNewCategoryType(e.target.value as "income" | "expense")}
+            onChange={(e) => setNewCategoryType(e.target.value as "expense" | "income" )}
             className="editInput"
           >
-            <option value="income">Income</option>
             <option value="expense">Expense</option>
+            <option value="income">Income</option>
           </select>
         </div>
         {error && <div className="error">{error}</div>}

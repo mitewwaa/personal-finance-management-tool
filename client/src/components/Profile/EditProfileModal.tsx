@@ -29,40 +29,44 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onRequestCl
       </div>
       <div className="modalContent">
         <div className="fieldModal">
-          <label className="fieldLabel">First Name</label>
+          <label className="fieldLabel" htmlFor='firstName'>First Name</label>
           <input
             type="text"
-            name="first_name"
+            name="firstName"
+            id="firstName"
             value={editForm?.first_name || ''}
             onChange={handleInputChange}
             className="editInput"
           />
         </div>
         <div className="fieldModal">
-          <label className="fieldLabel">Last Name</label>
+          <label className="fieldLabel" htmlFor='lastName'>Last Name</label>
           <input
             type="text"
-            name="last_name"
+            name="lastName"
+            id="lastName"
             value={editForm?.last_name || ''}
             onChange={handleInputChange}
             className="editInput"
           />
         </div>
         <div className="fieldModal">
-          <label className="fieldLabel">Email</label>
+          <label className="fieldLabel" htmlFor='email'>Email</label>
           <input
             type="email"
             name="email"
+            id="email"
             value={editForm?.email || ''}
             onChange={handleInputChange}
             className="editInput"
           />
         </div>
         <div className="fieldModal">
-          <label className="fieldLabel">Date of Birth</label>
+          <label className="fieldLabel" htmlFor='dateOfBirth'>Date of Birth</label>
           <input
             type="date"
-            name="date_of_birth"
+            name="dateOfBirth"
+            id='dateOfBirth'
             value={editForm?.date_of_birth ? new Date(editForm.date_of_birth).toISOString().split('T')[0] : ''}
             onChange={handleInputChange}
             className="editInput"

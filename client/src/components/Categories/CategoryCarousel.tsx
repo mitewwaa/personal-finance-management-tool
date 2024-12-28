@@ -1,75 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import CategoryData from '../../../../server/src/shared/interfaces/CategoryData';
 
-
 type CategoryCarouselProps = {
-  categories: CategoryData[];
+  categories: { id: string; name: string }[];
 };
 
 const CategoryCarousel: React.FC<CategoryCarouselProps> = ({ categories }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
-  const visibleCount = 3;
+
+  const visibleCount = categories.length > 2 ? 3 : categories.length;
+
+  const showArrows = categories.length > 3;
 
   useEffect(() => {
     if (isAutoPlay) {
       const interval = setInterval(() => {
-        setCurrentIndex((prevIndex) =>
-          (prevIndex + visibleCount) % categories.length
-        );
+        setCurrentIndex((prevIndex) => (prevIndex + visibleCount) % categories.length);
       }, 3000);
       return () => clearInterval(interval);
     }
-  }, [isAutoPlay, categories.length]);
+  }, [isAutoPlay, categories.length, visibleCount]);
 
   const nextCategory = () => {
     setIsAutoPlay(false);
-    setCurrentIndex((prevIndex) =>
-      (prevIndex + visibleCount) % categories.length
-    );
+    setCurrentIndex((prevIndex) => (prevIndex + visibleCount) % categories.length);
   };
 
   const prevCategory = () => {
     setIsAutoPlay(false);
-    setCurrentIndex((prevIndex) =>
-      (prevIndex - visibleCount + categories.length) % categories.length
-    );
+    setCurrentIndex((prevIndex) => (prevIndex - visibleCount + categories.length) % categories.length);
   };
 
-  const visibleCategories = categories.slice(
-    currentIndex,
-    currentIndex + visibleCount
-  );
+  const visibleCategories = categories.slice(currentIndex, currentIndex + visibleCount);
 
-  // If there are not enough categories at the end, take from the start
   if (visibleCategories.length < visibleCount) {
-    visibleCategories.push(
-      ...categories.slice(0, visibleCount - visibleCategories.length)
-    );
+    visibleCategories.push(...categories.slice(0, visibleCount - visibleCategories.length));
   }
 
   return (
     <div className="categoryInfo">
       {categories.length > 0 ? (
         <div className="categoryCarousel">
-          <button className="carouselButton left" onClick={prevCategory}>
-            ←
-          </button>
+          {showArrows && (
+            <button className="carouselButton left" onClick={prevCategory}>
+              ←
+            </button>
+          )}
+
           <div className="carouselViewport">
             <div className="categoryItems">
-              {visibleCategories.map((category) => (
-                <div key={category.id} className="categoryItem">
+              {visibleCategories.map((category, index) => (
+                <div key={category.id + "_" + index} className="categoryItem">
                   {category.name}
                 </div>
               ))}
             </div>
           </div>
-          <button className="carouselButton right" onClick={nextCategory}>
-            →
-          </button>
+
+          {showArrows && (
+            <button className="carouselButton right" onClick={nextCategory}>
+              →
+            </button>
+          )}
         </div>
       ) : (
-        <p>No categories available</p>
+        <p className="txtProfile">You haven't created any categories yet.</p>
       )}
     </div>
   );

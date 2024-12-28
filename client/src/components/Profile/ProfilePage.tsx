@@ -4,25 +4,24 @@ import { useNavigate } from 'react-router-dom';
 import UserData from '../../../../server/src/shared/interfaces/UserData';
 import { jwtDecode } from 'jwt-decode';
 import CategoryData from '../../../../server/src/shared/interfaces/CategoryData';
-import Category from '../Categories/Category';
-import EditProfileModal from './EditProfileModal';
-
-import '../../styles/Profile.css';
 import CategoryCarousel from '../Categories/CategoryCarousel';
+import EditProfileModal from './EditProfileModal';
+import '../../styles/Profile.css';
+import { FaPlus } from 'react-icons/fa';
+import CategoryModal from '../Categories/CategoryModal';
 
 const ProfilePage: React.FC = () => {
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [categories, setCategories] = useState<CategoryData[]>([]);
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [categoryId, setCategoryId] = useState('');
+  const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [editForm, setEditForm] = useState<UserData | null>(null);
-  const [isAutoPlay, setIsAutoPlay] = useState<boolean>(true);
-
   const navigate = useNavigate();
 
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   useEffect(() => {
     const fetchUserProfile = async () => {
       const token = localStorage.getItem('jwt_token');
@@ -53,38 +52,51 @@ const ProfilePage: React.FC = () => {
     fetchUserProfile();
   }, [navigate]);
 
-  const handleCategoriesFetched = (categories: CategoryData[]) => {
-    setCategories(categories);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const token = localStorage.getItem('jwt_token');
+      if (!token || !user) return;
+
+      const userId = user.id;
+
+      try {
+        const response = await axios.get<{ id: string; name: string }[]>(`http://localhost:3000/categories/users/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setCategories(response.data);
+      } catch (error) {
+        setError('Error fetching categories');
+      }
+    };
+
+    fetchCategories();
+  }, [user]);
+
+  const openProfileModal = () => {
+    setIsProfileModalOpen(true);
+    setIsCategoryModalOpen(false);  // Затваря категория модала, ако е отворен
   };
-
-   useEffect(() => {
-    if (isAutoPlay) {
-      const interval = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % categories.length);
-      }, 3000); // Автоматично превъртане на всеки 3 секунди
-      return () => clearInterval(interval);
-    }
-  }, [categories.length, isAutoPlay]);
-
-  const nextCategory = () => {
-    setIsAutoPlay(false); // Спира автоматичното превъртане при ръчно действие
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % categories.length);
+  
+  const closeProfileModal = () => {
+    setIsProfileModalOpen(false);
   };
-
-  const prevCategory = () => {
-    setIsAutoPlay(false);
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + categories.length) % categories.length
-    );
+  
+  const openCategoryModal = () => {
+    setIsCategoryModalOpen(true);
+    setIsProfileModalOpen(false);  // Затваря профил модала, ако е отворен
   };
-
-  const openModal = () => {
-    setIsModalOpen(true);
+  
+  const closeCategoryModal = () => {
+    setIsCategoryModalOpen(false);
   };
-
-  const closeModal = () => {
-    setError(null);
-    setIsModalOpen(false);
+  
+  const handleCategoryCreated = (category: { id: string; name: string }) => {
+    // Добави новата категория към състоянието на категориите
+    setCategories([...categories, category]);
+    closeCategoryModal();
   };
 
   const handleSaveChanges = async () => {
@@ -101,7 +113,7 @@ const ProfilePage: React.FC = () => {
       setSuccessMessage('Your profile has been updated successfully!');
       
       setTimeout(() => {
-        setIsModalOpen(false);
+        setIsProfileModalOpen(false);
         setSuccessMessage(null);
       }, 3000);
     } catch (error) {
@@ -110,7 +122,7 @@ const ProfilePage: React.FC = () => {
         setError(null);
       },2000);
     }
-  };  
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -126,7 +138,7 @@ const ProfilePage: React.FC = () => {
             <div className="personalInfo">
               <div className="picContainer">
                 <img src="images/profilePic.svg" className="profilePic" alt="Profile" />
-                <button className="editButton" onClick={openModal}>Edit Profile</button>
+                <button className="editButton" onClick={openProfileModal}>Edit Profile</button>
               </div>
               <div className="fieldsContainer">
                 <div className="field">
@@ -153,22 +165,30 @@ const ProfilePage: React.FC = () => {
             <div className="categoryInfo">
               <CategoryCarousel categories={categories} />
             </div>
+            <div className='categories'>
+              <button type="button" className='addCategoryButton' onClick={openCategoryModal}>
+                <FaPlus className='plus' />
+                <p className='text'>Add New Category</p>
+              </button>
+            </div>
           </div>
         </div>
       )}
-      
-      <Category onCategoriesFetched={handleCategoriesFetched} />
 
       <EditProfileModal 
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
+        isOpen={isProfileModalOpen}
+        onRequestClose={closeProfileModal}
         editForm={editForm || {}}
         setEditForm={setEditForm}
         onSaveChanges={handleSaveChanges}
         successMessage={successMessage} 
         error={error}
       />
-      
+      <CategoryModal
+        isCategoryModalOpen={isCategoryModalOpen}
+        onRequestClose={closeCategoryModal}
+        onCategoryCreated={handleCategoryCreated}
+      />
     </div>
   );
 };
