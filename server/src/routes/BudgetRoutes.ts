@@ -11,7 +11,7 @@ router.get('/users/:userId', BudgetController.getBudgetsByUserId);
 router.put('/:budgetId/amount', BudgetController.updateAmountLeft);
 router.put('/:budgetId', BudgetController.updateBudget);
 router.delete('/:budgetId', BudgetController.deleteBudget);
-
+router.get('/users/:userId/insights', BudgetController.getBudgetInsights);
 
 
 export default router;

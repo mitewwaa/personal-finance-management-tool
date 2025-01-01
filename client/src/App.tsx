@@ -75,7 +75,7 @@ const App: React.FC = () => {
             <Route path="/transactions" element={<ProtectedRoute isLoggedIn={isLoggedIn}><TransactionsPage userId={userId} /></ProtectedRoute>} />
             <Route path="/budgets" element={<ProtectedRoute isLoggedIn={isLoggedIn}><BudgetPage /></ProtectedRoute>} />
             <Route path="/create-budget" element={<ProtectedRoute isLoggedIn={isLoggedIn}><CreateBudgetPage /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute isLoggedIn={isLoggedIn}><ProfilePage></ProfilePage></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute isLoggedIn={isLoggedIn}><ProfilePage setIsLoggedIn={setIsLoggedIn} /></ProtectedRoute>} />
           </Routes>
         </div>
       </div>

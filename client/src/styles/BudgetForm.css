@@ -2,6 +2,8 @@
     width: 90%;
     height: auto;
     margin: 0 2rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .budgetHeader{
@@ -110,6 +112,11 @@
 .addCategoryButton:hover .text, .addCategoryButton:hover .plus{
     display: inline;
     margin-right: 0.5rem;
+}
+
+.budgetFormContainer .error, .budgetFormContainer .success{
+    align-self: center;
+    max-width: 65%;
 }
 
 @media (max-width: 1024px) {

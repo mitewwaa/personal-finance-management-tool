@@ -3,25 +3,30 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import UserData from '../../../../server/src/shared/interfaces/UserData';
 import { jwtDecode } from 'jwt-decode';
-import CategoryData from '../../../../server/src/shared/interfaces/CategoryData';
 import CategoryCarousel from '../Categories/CategoryCarousel';
 import EditProfileModal from './EditProfileModal';
 import '../../styles/Profile.css';
 import { FaPlus } from 'react-icons/fa';
 import CategoryModal from '../Categories/CategoryModal';
+import BudgetInsights from '../Budgets/BudgetInsights';
 
-const ProfilePage: React.FC = () => {
+interface ProfilePageProps {
+  setIsLoggedIn: (loggedIn: boolean) => void;
+}
+
+const ProfilePage: React.FC<ProfilePageProps> = ({ setIsLoggedIn }) => {
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [categoryId, setCategoryId] = useState('');
   const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
-  const [editForm, setEditForm] = useState<UserData | null>(null);
-  const navigate = useNavigate();
-
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const [editForm, setEditForm] = useState<UserData | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('jwt_token'));
+
+  const navigate = useNavigate();
   
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -91,7 +96,38 @@ const ProfilePage: React.FC = () => {
   const closeCategoryModal = () => {
     setIsCategoryModalOpen(false);
   };
-  
+
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleDeleteProfile = async () => {
+    try {
+      const token = localStorage.getItem('jwt_token');
+      if (!token || !user) return;
+
+      const userId = user.id;
+
+      await axios.delete(`http://localhost:3000/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      localStorage.removeItem('jwt_token');
+      setIsLoggedIn(false); // Актуализиране на глобалния state
+      setUser(null);
+      navigate('/login');
+      alert('Profile deleted successfully');
+    } catch (error) {
+      setError('Error deleting profile');
+    }
+  };
+
   const handleCategoryCreated = (category: { id: string; name: string }) => {
     setCategories([...categories, category]);
   };
@@ -152,6 +188,7 @@ const ProfilePage: React.FC = () => {
               <div className="picContainer">
                 <img src="images/profilePic.svg" className="profilePic" alt="Profile" />
                 <button className="editButton" onClick={openProfileModal}>Edit Profile</button>
+                <button className="deleteButton" onClick={openDeleteModal}>Delete Profile</button>
               </div>
               <div className="fieldsContainer">
                 <div className="field">
@@ -187,6 +224,19 @@ const ProfilePage: React.FC = () => {
                 <p className='text'>Add New Category</p>
               </button>
             </div>
+          </div>
+          <div className='insights'>
+            <BudgetInsights userId={user.id}></BudgetInsights>
+          </div>
+        </div>
+      )}
+
+      {isDeleteModalOpen && (
+        <div className="deleteModal">
+          <div className="deleteModalContent">
+            <h3>Are you sure you want to delete your profile?</h3>
+            <button onClick={handleDeleteProfile} className='confirmBtn'>Yes, Delete</button>
+            <button onClick={closeDeleteModal} className='cancelBtn'>Cancel</button>
           </div>
         </div>
       )}

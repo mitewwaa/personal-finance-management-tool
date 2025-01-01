@@ -25,7 +25,6 @@ const Category = ({ onCategoriesFetched }: CategoryProps) => {
     return null;
   };
 
-  console.log(getUserIdFromToken());
   const userId = getUserIdFromToken();
 
   useEffect(() => {

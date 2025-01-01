@@ -45,7 +45,6 @@ const BudgetFilter: React.FC<BudgetFilterProps> = ({ onChange, categories }) => 
       <div className='budgetFilterContainer'>
         <FaFilter className="filterIcon" />
         <div className='filters'>
-          {/* Existing Filters */}
           <div className="filterLabel">
             <label className="budgetFilterLabel">Type</label>
             <select value={type} onChange={(e) => setType(e.target.value)}>

@@ -94,3 +94,45 @@ select.editInput>option:hover::before{
     margin:  0 0 1rem 0;
     border-bottom: 0.1rem solid var(--btn-color);
 } 
+
+@media (max-width: 768px) {
+    .customModal {
+        width: 60%;
+        max-width: 35rem;
+        
+    }
+
+    .fieldModal {
+        grid-template-columns: 1fr; /* Преминаваме към едноредови формуляри */
+    }
+
+    .editInput {
+        width: 90%;
+        height: 2rem;
+        padding: 0.2rem 1rem;
+        margin-top: 0.5rem;
+    }
+    
+    select.editInput{
+        width: 100.2%;
+        height: 2.543rem;
+    }
+
+    .customModal{
+        padding-left: 0.8rem;
+    }
+
+    .fieldModal{
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .cancelButton {
+        padding: 0 0.4rem;
+    }
+
+    .customModal{
+        padding-left: 0.6rem;
+    }
+}
