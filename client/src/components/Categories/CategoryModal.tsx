@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Modal from "react-modal";
 import { MdOutlineCancel } from "react-icons/md";
@@ -10,17 +10,27 @@ interface CategoryModalProps {
   isCategoryModalOpen: boolean;
   onRequestClose: () => void;
   onCategoryCreated: (category: { id: string; name: string }) => void;
+  categoryToEdit?: { id: string; name: string } | null;
+  onCategoryEdited?: (category: { id: string; name: string }) => void;
 }
 
 const CategoryModal: React.FC<CategoryModalProps> = ({
   isCategoryModalOpen,
   onRequestClose,
   onCategoryCreated,
+  categoryToEdit,
+  onCategoryEdited,
 }) => {
-  const [newCategoryName, setNewCategoryName] = useState("");
-  const [newCategoryType, setNewCategoryType] = useState<"income" | "expense">("expense");
+  const [categoryName, setCategoryName] = useState("");
+  const [categoryType, setCategoryType] = useState<"income" | "expense">("expense");
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (categoryToEdit) {
+      setCategoryName(categoryToEdit.name);
+    }
+  }, [categoryToEdit]);
 
   const getUserIdFromToken = (): string | null => {
     const token = localStorage.getItem("jwt_token");
@@ -33,8 +43,8 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
 
   const userId = getUserIdFromToken();
 
-  const handleCreateCategory = async () => {
-    if (!newCategoryName) {
+  const handleSaveCategory = async () => {
+    if (!categoryName) {
       setError("Category name cannot be empty.");
       return;
     }
@@ -45,25 +55,32 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
         return;
       }
 
-      const response = await axios.post(
-        `http://localhost:3000/categories/${userId}`,
-        { name: newCategoryName, type: newCategoryType }
-      );
+      if (categoryToEdit) {
+        const response = await axios.put(
+          `http://localhost:3000/categories/${categoryToEdit.id}`,
+          { name: categoryName, type: categoryType }
+        );
+        onCategoryEdited && onCategoryEdited(response.data);
+      } else {
+        const response = await axios.post(
+          `http://localhost:3000/categories/${userId}`,
+          { name: categoryName, type: categoryType }
+        );
+        onCategoryCreated(response.data);
+      }
 
-      setSuccessMessage("Category created successfully!");
-      setNewCategoryName("");
+      setSuccessMessage("Category saved successfully!");
+      setCategoryName("");
       setError(null);
-
-      onCategoryCreated(response.data);
 
       setTimeout(() => {
         onRequestClose();
         setSuccessMessage(null);
       }, 3000);
     } catch (error: any) {
-      console.error("Error creating category:", error);
+      console.error("Error saving category:", error);
       if (error.response) {
-        setError(error.response.data.message || "Something went wrong while creating the category.");
+        setError(error.response.data.message || "Something went wrong.");
       } else {
         setError("Network error. Please try again.");
       }
@@ -76,29 +93,29 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isCategoryModalOpen} onRequestClose={handleCloseModal} className="customModal" appElement={document.getElementById("root") || undefined} >
+    <Modal isOpen={isCategoryModalOpen} onRequestClose={handleCloseModal} className="customModal" appElement={document.getElementById("root") || undefined}>
       <div className="modalHeader">
         <button className="cancelButton" onClick={handleCloseModal}><MdOutlineCancel /></button>
-        <h2 className="mainTitleModal">Create New Category</h2>
+        <h2 className="mainTitleModal">{categoryToEdit ? `Edit Category: ${categoryToEdit.name}` : "Create a New Category"}</h2>
       </div>
       <div className="modalContent">
         <div className="fieldModal">
           <label className="fieldLabel" htmlFor="categoryName">Category Name</label>
           <input
             type="text"
-            value={newCategoryName}
-            onChange={(e) => setNewCategoryName(e.target.value)}
+            value={categoryName}
+            onChange={(e) => setCategoryName(e.target.value)}
             placeholder="Enter category name"
             className="editInput"
             id="categoryName"
           />
         </div>
         <div className="fieldModal">
-          <label htmlFor="newCategoryType" className="fieldLabel">Type</label>
+          <label htmlFor="categoryType" className="fieldLabel">Type</label>
           <select
-            id="newCategoryType"
-            value={newCategoryType}
-            onChange={(e) => setNewCategoryType(e.target.value as "expense" | "income" )}
+            id="categoryType"
+            value={categoryType}
+            onChange={(e) => setCategoryType(e.target.value as "expense" | "income")}
             className="editInput"
           >
             <option value="expense">Expense</option>
@@ -107,7 +124,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
         </div>
         {error && <div className="error">{error}</div>}
         {successMessage && <div className="success">{successMessage}</div>}
-        <button className="saveButton" onClick={handleCreateCategory}>Create Category</button>
+        <button className="saveButton" onClick={handleSaveCategory}>{categoryToEdit ? "Save Changes" : "Create Category"}</button>
       </div>
     </Modal>
   );

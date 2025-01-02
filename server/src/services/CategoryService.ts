@@ -105,10 +105,10 @@ class CategoryService {
         where: { user_id: userId },
         order: [["name", "ASC"]],
       });
-      return categories; // Винаги връща масив
+      return categories;
     } catch (error) {
       console.error("Error getting categories by user ID:", error);
-      return []; // Вместо null, връщаме празен масив
+      return [];
     }
   }  
 

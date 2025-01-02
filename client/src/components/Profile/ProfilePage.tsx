@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import UserData from '../../../../server/src/shared/interfaces/UserData';
 import { jwtDecode } from 'jwt-decode';
 import CategoryCarousel from '../Categories/CategoryCarousel';
-import EditProfileModal from './EditProfileModal';
-import '../../styles/Profile.css';
-import { FaPlus } from 'react-icons/fa';
 import CategoryModal from '../Categories/CategoryModal';
-import BudgetInsights from '../Budgets/BudgetInsights';
+import EditProfileModal from './EditProfileModal';
+import { FaPlus } from 'react-icons/fa';
+import BudgetInsights from '../Insights/BudgetInsights';
+
+import '../../styles/Profile.css';
 
 interface ProfilePageProps {
   setIsLoggedIn: (loggedIn: boolean) => void;
@@ -24,8 +25,8 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ setIsLoggedIn }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [editForm, setEditForm] = useState<UserData | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('jwt_token'));
-
+  const [categoryToEdit, setCategoryToEdit] = useState<{ id: string; name: string } | null>(null);
+  
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -119,7 +120,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ setIsLoggedIn }) => {
       });
 
       localStorage.removeItem('jwt_token');
-      setIsLoggedIn(false); // Актуализиране на глобалния state
+      setIsLoggedIn(false);
       setUser(null);
       navigate('/login');
       alert('Profile deleted successfully');
@@ -159,20 +160,48 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ setIsLoggedIn }) => {
 
   const handleCategoryDelete = async (categoryId: string) => {
     try {
+      const { data: budgets } = await axios.get(`http://localhost:3000/budgets/categories/${categoryId}`);
+      
+      if (budgets.length > 0) {
+        alert('You can not delete this category because there is a budget associated with it!');
+        return;
+      }
+  
       const token = localStorage.getItem('jwt_token');
-      await axios.delete(`http://localhost:3000/categories/${categoryId}`, {
+      const response = await axios.delete(`http://localhost:3000/categories/${categoryId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      
-      setCategories(categories.filter((category) => category.id !== categoryId));
-      setSuccessMessage('Category deleted successfully!');
-    } catch (error) {
-      setError('Error deleting category');
+  
+      if (response.status === 200) {
+        setCategories(categories.filter((category) => category.id !== categoryId));
+        setSuccessMessage('Category was successfully deleted!');
+      } else {
+        alert('The deletion of the category was unsuccessful.');
+      }
+    } catch (error: any) {
+      if (error.response) {
+        if (error.response.status === 404 && error.response.data.message === 'There is a budget associated with this category or the category was not found.') {
+          alert('You can not delete this category because there is a budget associated with it!');
+        } else {
+          alert(`Error: ${error.response.data.message || error.response.statusText}`);
+        }
+      } else {
+        alert('An error occurred while deleting the category');
+      }
     }
-  };
+  };  
 
+  const handleCategoryEdit = (categoryId: string, categoryName: string) => {
+    setCategoryToEdit({ id: categoryId, name: categoryName });
+    setIsCategoryModalOpen(true);
+  };
+  
+  const handleCategoryEdited = (updatedCategory: { id: string; name: string }) => {
+    setCategories(categories.map((category) => (category.id === updatedCategory.id ? updatedCategory : category)));
+  };
+  
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -213,9 +242,10 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ setIsLoggedIn }) => {
           <div className="rightColumn">
             <h2 className="secondaryTitle">Categories</h2>
             <div className="categoryInfo">
-              <CategoryCarousel 
-                categories={categories} 
+              <CategoryCarousel
+                categories={categories}
                 onCategoryDelete={handleCategoryDelete}
+                onCategoryEdit={handleCategoryEdit}
               />
             </div>
             <div className='categories'>
@@ -225,7 +255,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ setIsLoggedIn }) => {
               </button>
             </div>
           </div>
-          <div className='insights'>
+          <div id='insights' className='insights'>
             <BudgetInsights userId={user.id}></BudgetInsights>
           </div>
         </div>
@@ -254,6 +284,8 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ setIsLoggedIn }) => {
         isCategoryModalOpen={isCategoryModalOpen}
         onRequestClose={closeCategoryModal}
         onCategoryCreated={handleCategoryCreated}
+        categoryToEdit={categoryToEdit}
+        onCategoryEdited={handleCategoryEdited}
       />
     </div>
   );

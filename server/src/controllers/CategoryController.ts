@@ -79,7 +79,7 @@ class CategoryController {
       const userId: string = req.params.userId;
       const userCategories = await CategoryService.getCategoriesByUserId(userId);
   
-      if (userCategories && userCategories.length > 0) {
+      if (userCategories) {
         res.status(200).json(userCategories);
       } else {
         res.status(404).json({ message: "No user categories found." });
@@ -160,7 +160,7 @@ class CategoryController {
       if (isDeleted) {
         res.status(200).json({ message: "Category deleted successfully." });
       } else {
-        res.status(404).json({ message: "Category not found." });
+        res.status(404).json({ message: "There is a budget associated with this category or the category was not found." });
       }
     } catch (error) {
       console.error("Error deleting category:", error);

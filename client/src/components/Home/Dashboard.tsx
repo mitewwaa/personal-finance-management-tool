@@ -7,6 +7,7 @@ import "../../styles/Dashboard.css";
 import Category from "../Categories/Category";
 import CategoryData from "../../../../server/src/shared/interfaces/CategoryData";
 import StatisticsChart from "../Utils/StatisticsChart";
+import InsightsPreview, {Insight} from "../Insights/InsightsPreview";
 
 interface DashboardProps {
   name: string;
@@ -18,6 +19,7 @@ function Dashboard({ name, userId }: DashboardProps) {
   const [userTransactions, setUserTransactions] = useState<TransactionData[]>([]);
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const [exchangeRates, setExchangeRates] = useState<{ [key: string]: number }>({});
+  const [insights, setInsights] = useState<Insight[]>([]);
 
   useEffect(() => {
     const token = localStorage.getItem('jwt_token');
@@ -52,6 +54,28 @@ function Dashboard({ name, userId }: DashboardProps) {
     }
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem('jwt_token');
+
+    const fetchInsights = async () => {
+      if (token) {
+            axios.get(`http://localhost:3000/budgets/users/${userId}/insights`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            })
+            .then(response => {
+                setInsights(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching budget insights:', error);
+            });
+        } else {
+            console.error('JWT token is missing');
+        }
+      }
+    fetchInsights();
+  }, []);
 
   return (
     <div className="page">
@@ -63,11 +87,16 @@ function Dashboard({ name, userId }: DashboardProps) {
           (<p className="loading">No recent transactions...</p>)}
       </div>
       <div className="right-dashboard-container">
-        {userTransactions.length > 0 && categories.length > 0 ? (
-          <StatisticsChart transactions={userTransactions} categories={categories} exchangeRates={exchangeRates} />
-        ) : (
-          <p className="loading">Loading data...</p>
-        )}
+        <div className="top">
+          {userTransactions.length > 0 && categories.length > 0 ? (
+            <StatisticsChart transactions={userTransactions} categories={categories} exchangeRates={exchangeRates} />
+          ) : (
+            <p className="loading">Loading data...</p>
+          )}
+        </div>
+        <div className="bottom">
+          <InsightsPreview insights={insights} />
+        </div>
       </div>
 
     </div>

@@ -36,7 +36,7 @@ class BudgetService {
                 name,
                 type,
                 amount,
-                amount_left: amount,  // Initialize amount_left with amount when creating the budget
+                amount_left: amount,
                 user_id: userId,
                 category_id: category_id,
                 start_date,
@@ -84,7 +84,7 @@ class BudgetService {
         try {
             return await Budget.findAll({
                 where: { user_id: userId },
-                order: [['start_date', 'ASC']],  // Sort by start_date
+                order: [['start_date', 'ASC']],
             });
         } catch (error) {
             console.error('Error getting budgets by user ID:', error);
@@ -126,17 +126,15 @@ class BudgetService {
         }
     }
 
-    // Update remaining amount in budget (amount_left) after a transaction
     static async updateAmountLeft(budgetId: string, amount: number): Promise<Budget | null> {
         try {
             const budget = await Budget.findByPk(budgetId);
             if (budget) {
                 let amount_left: number = budget.dataValues.amount_left;
-            amount_left -= amount; 
-            if (amount_left < 0) amount_left = 0; 
-            budget.set('amount_left', amount_left);
-            await budget.save();
-            return budget; 
+                amount_left -= amount; 
+                budget.set('amount_left', amount_left);
+                await budget.save();
+                return budget; 
             }
             return null;
         } catch (error) {

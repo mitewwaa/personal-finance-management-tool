@@ -154,7 +154,8 @@
 
 .categoryItem {
     min-width: 8rem;
-    height: 5rem;
+    min-height: 5rem;
+    max-height: 12rem;
     background-color: var(--primary-bg-color);
     display: flex;
     flex-direction: column;
@@ -164,6 +165,16 @@
     border: 0.2rem solid var(--btn-color);
     border-radius: 0.8rem;
     box-shadow: 0 0.1rem 0.4rem rgba(0, 0, 0, 0.1);
+}
+
+.categoryItem .deleteBtn:hover .text{
+    display: none;
+}
+
+.categoryItem .deleteBtn:hover{
+    background-color: whitesmoke;
+    color: #d32f2f;
+    border: 1px solid #d32f2f;
 }
 
 .txtProfile {

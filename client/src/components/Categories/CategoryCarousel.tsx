@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { MdDelete } from 'react-icons/md';
+import { FaEdit } from 'react-icons/fa';
 
 type CategoryCarouselProps = {
   categories: { id: string; name: string }[];
   onCategoryDelete: (categoryId: string) => void;
+  onCategoryEdit: (categoryId: string, newName: string) => void;
 };
 
-const CategoryCarousel: React.FC<CategoryCarouselProps> = ({ categories, onCategoryDelete }) => {
+const CategoryCarousel: React.FC<CategoryCarouselProps> = ({ categories, onCategoryDelete, onCategoryEdit }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
 
   const visibleCount = categories.length > 2 ? 3 : categories.length;
-
   const showArrows = categories.length > 3;
 
   useEffect(() => {
@@ -34,7 +35,6 @@ const CategoryCarousel: React.FC<CategoryCarouselProps> = ({ categories, onCateg
   };
 
   const visibleCategories = categories.slice(currentIndex, currentIndex + visibleCount);
-
   if (visibleCategories.length < visibleCount) {
     visibleCategories.push(...categories.slice(0, visibleCount - visibleCategories.length));
   }
@@ -55,10 +55,8 @@ const CategoryCarousel: React.FC<CategoryCarouselProps> = ({ categories, onCateg
                 <div key={category.id + "_" + index} className="categoryItem">
                   {category.name}
                   <div className='categoryBtns'>
-                    <button className="deleteBtn btn" onClick={() => onCategoryDelete(category.id)}> 
-                      <MdDelete className="btnIcon" /> 
-                      <p className='text'>Delete</p>
-                    </button>
+                    <button className="deleteBtn btn" onClick={() => onCategoryDelete(category.id)}> <MdDelete className="btnIcon" /> <p className='text'>Delete</p> </button>
+                    <button className="editBtn btn" onClick={() => onCategoryEdit(category.id, category.name)}> <FaEdit className="btnIcon" /> <p className='text'>Edit</p> </button>
                   </div>
                 </div>
               ))}

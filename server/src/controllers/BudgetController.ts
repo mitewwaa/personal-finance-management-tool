@@ -52,14 +52,15 @@ class BudgetController {
   static async getBudgetByCategoryId(req: Request, res: Response): Promise<void> {
     try {
       const categoryId: string = req.params.categoryId;
-      const budget = await BudgetService.getBudgetByCategoryId(categoryId);
-      if (budget) {
-        res.status(200).json(budget);
+      const budgets = await BudgetService.getBudgetByCategoryId(categoryId);
+
+      if (budgets) {
+        res.status(200).json(budgets);
       } else {
-        res.status(404).json({ message: "Budget not found." });
+        res.status(200).json([]);
       }
     } catch (error) {
-      console.error("Error retrieving budget by ID:", error);
+      console.error("Error retrieving budgets by category ID:", error);
       res.status(500).json({ message: "Internal server error." });
     }
   }
@@ -68,7 +69,7 @@ class BudgetController {
     try {
       const userId: string = req.params.userId;
       const budgets = await BudgetService.getBudgetsByUserId(userId);
-      if (budgets && budgets.length > 0) {
+      if (budgets) {
         res.status(200).json(budgets);
       } else {
         res.status(404).json({ message: "No budgets found for this user." });
@@ -133,7 +134,7 @@ class BudgetController {
       const userId: string = req.params.userId;
       const budgets = await BudgetService.getBudgetsByUserId(userId);
 
-      if (budgets && budgets.length > 0) {
+      if (budgets) {
         const insights = await Promise.all(
           budgets.map(async (budget) => {
             const totalDays = (new Date(budget.dataValues.end_date).getTime() - new Date(budget.dataValues.start_date).getTime()) / (1000 * 3600 * 24);
