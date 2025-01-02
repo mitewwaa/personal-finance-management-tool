@@ -66,27 +66,60 @@ const BudgetPage: React.FC = () => {
 
   useEffect(() => {
     const today = new Date();
-    
-    const handleFilterChange = budgets.map((budget) => {
+  
+    // Подготвяме бюджетите с имената на категориите
+    const updatedBudgets = budgets.map((budget) => {
       const category = categories.find((cat) => cat.id === budget.category_id);
       const categoryName = category ? category.name : 'Unknown';
       return { ...budget, category_name: categoryName };
     });
   
-    const activeBudgets = handleFilterChange.filter((budget) => {
+    // Филтрираме активните бюджети
+    const filteredActiveBudgets = updatedBudgets.filter((budget) => {
       const isExpired = new Date(budget.end_date) < today;
-      const matchesExpired = filterCriteria.showExpired ? isExpired : true;
+      const budgetStartDate = new Date(budget.start_date).setHours(0, 0, 0, 0);
+      const budgetEndDate = new Date(budget.end_date).setHours(0, 0, 0, 0);
+      const filterStartDate = filterCriteria.startDate ? new Date(filterCriteria.startDate).setHours(0, 0, 0, 0) : '';
+      const filterEndDate = filterCriteria.endDate ? new Date(filterCriteria.endDate).setHours(0, 0, 0, 0) : '';
   
-      return !isExpired && matchesExpired;
+      return (
+        (filterCriteria.type === '' || budget.type === filterCriteria.type) &&
+        (filterCriteria.amount === 0 || budget.amount === filterCriteria.amount) &&
+        (filterCriteria.amountLeft === 0 || budget.amount_left === filterCriteria.amountLeft) &&
+        (filterStartDate === '' || budgetStartDate === filterStartDate) &&
+        (filterEndDate === '' || budgetEndDate === filterEndDate) &&
+        (filterCriteria.categoryId === '' || budget.category_id === filterCriteria.categoryId) &&
+        !isExpired // Активни бюджети
+      );
     });
   
-    const expiredBudgets = handleFilterChange.filter((budget) => {
+    // Филтрираме изтеклите бюджети
+    const filteredExpiredBudgets = updatedBudgets.filter((budget) => {
       const isExpired = new Date(budget.end_date) < today;
-      return isExpired;
+      const budgetStartDate = new Date(budget.start_date).setHours(0, 0, 0, 0);
+      const budgetEndDate = new Date(budget.end_date).setHours(0, 0, 0, 0);
+      const filterStartDate = filterCriteria.startDate ? new Date(filterCriteria.startDate).setHours(0, 0, 0, 0) : '';
+      const filterEndDate = filterCriteria.endDate ? new Date(filterCriteria.endDate).setHours(0, 0, 0, 0) : '';
+  
+      return (
+        isExpired && // Изтекли бюджети
+        filterCriteria.showExpired && // Показване на изтекли бюджети, ако showExpired е true
+        (filterCriteria.type === '' || budget.type === filterCriteria.type) &&
+        (filterCriteria.amount === 0 || budget.amount === filterCriteria.amount) &&
+        (filterCriteria.amountLeft === 0 || budget.amount_left === filterCriteria.amountLeft) &&
+        (filterStartDate === '' || budgetStartDate === filterStartDate) &&
+        (filterEndDate === '' || budgetEndDate === filterEndDate) &&
+        (filterCriteria.categoryId === '' || budget.category_id === filterCriteria.categoryId)
+      );
     });
   
-    setFilteredBudgets({ active: activeBudgets, expired: expiredBudgets });
+    // Обновяваме филтрираните бюджети
+    setFilteredBudgets({
+      active: filterCriteria.showExpired ? [] : filteredActiveBudgets, // Ако showExpired е true, не показваме активни бюджети
+      expired: filteredExpiredBudgets,
+    });
   }, [budgets, categories, filterCriteria]);
+  
   
   const handleFilterChange = (criteria: typeof filterCriteria) => {
     setFilterCriteria(criteria);
