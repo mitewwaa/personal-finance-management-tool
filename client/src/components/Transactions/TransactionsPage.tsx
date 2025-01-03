@@ -42,7 +42,7 @@ function TransactionPage({ userId }: TransactionPageProps) {
         setTransactions((prev) => [...prev, newTransaction]);
     };
 
-    const handleDeleteTransaction = async (transactionId: string) => {
+    const handleDeleteTransaction = async (transactionId: string, categoryId: string, amount: number) => {
         const token = localStorage.getItem('jwt_token');
         if (!token) {
             console.error("No token found. Please log in.");
@@ -58,6 +58,7 @@ function TransactionPage({ userId }: TransactionPageProps) {
             setTransactions((prevTransactions) =>
                 prevTransactions.filter((transaction) => transaction.id !== transactionId)
             );
+            updateBudgetOnDeleteTransaction(categoryId, amount)
         } catch (error) {
             console.error("Error deleting transaction:", error);
         }
@@ -129,6 +130,36 @@ function TransactionPage({ userId }: TransactionPageProps) {
         setTransactionToEdit(null);
         setIsModalOpen(false);
     };
+
+    const updateBudgetOnDeleteTransaction = async function (categoryId: string, amount: number) {
+            const token = localStorage.getItem('jwt_token');
+            amount = amount * (-1);
+            try {
+                const response = await axios.get(`http://localhost:3000/budgets/categories/${categoryId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (response.data) {
+                    try {
+                        const budgetId = response.data.id;
+                        const updatedAmount = await axios.put(`http://localhost:3000/budgets/${budgetId}/amount`, { amount }, {
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        }
+                        );
+                        console.log("Budget successfully updated:", updatedAmount.data);
+                        return updatedAmount.data;
+                    } catch (error) {
+                        console.error("Error updating amount_left for budget associated with this category.", error);
+                    }
+    
+                }
+            } catch (error) {
+                console.error("Error finding budget associated with this category.", error);
+            }
+        }
 
     const displayedTransactions = filterTransactions(transactions);
 
@@ -205,7 +236,7 @@ function TransactionPage({ userId }: TransactionPageProps) {
                                 <td>
                                     <div className="update-icons">
                                         <CiEdit onClick={() => handleEditTransaction(transaction)} />
-                                        <MdDelete onClick={() => handleDeleteTransaction(transaction.id)} />
+                                        <MdDelete onClick={() => handleDeleteTransaction(transaction.id, transaction.category_id, transaction.amount)} />
                                     </div>
                                 </td>
                             </tr>
